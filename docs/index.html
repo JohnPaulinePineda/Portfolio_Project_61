@@ -7614,7 +7614,35 @@ a.anchor-link {
 </div>
 <div class="jp-InputArea jp-Cell-inputArea"><div class="jp-InputPrompt jp-InputArea-prompt">
 </div><div class="jp-RenderedHTMLCommon jp-RenderedMarkdown jp-MarkdownOutput" data-mime-type="text/markdown">
-<h2 id="1.1.-Data-Background-">1.1. Data Background <a class="anchor" id="1.1"></a><a class="anchor-link" href="#1.1.-Data-Background-">¶</a></h2>
+<h2 id="1.1.-Data-Background-">1.1. Data Background <a class="anchor" id="1.1"></a><a class="anchor-link" href="#1.1.-Data-Background-">¶</a></h2><p>An open <a href="https://www.kaggle.com/datasets/jainaru/thyroid-disease-data/data">Thyroid Disease Dataset</a> from <a href="https://www.kaggle.com/">Kaggle</a> (with all credits attributed to <a href="https://www.kaggle.com/jainaru">Jai Naru</a> and <a href="https://www.kaggle.com/datasets/abuchionwuegbusi/thyroid-cancer-recurrence-prediction/data">Abuchi Onwuegbusi</a>) was used for the analysis as consolidated from the following primary sources:</p>
+<ol>
+<li>Reference Repository entitled <strong>Differentiated Thyroid Cancer Recurrence</strong> from <a href="https://archive.ics.uci.edu/dataset/915/differentiated+thyroid+cancer+recurrence">UC Irvine Machine Learning Repository</a></li>
+<li>Research Paper entitled <strong>Machine Learning for Risk Stratification of Thyroid Cancer Patients: a 15-year Cohort Study</strong> from the <a href="https://link.springer.com/article/10.1007/s00405-023-08299-w">European Archives of Oto-Rhino-Laryngology</a></li>
+</ol>
+<p>This study hypothesized that the various clinicopathological characteristics influence differentiated thyroid cancer recurrence between patients.</p>
+<p>The dichotomous categorical variable for the study is:</p>
+<ul>
+<li><span style="color: #FF0000">Recurred</span> - Status of the patient (Yes, Recurrence of differentiated thyroid cancer | No, No recurrence of differentiated thyroid cancer)</li>
+</ul>
+<p>The predictor variables for the study are:</p>
+<ul>
+<li><span style="color: #FF0000">Age</span> - Patient's age (Years)</li>
+<li><span style="color: #FF0000">Gender</span> - Patient's sex (M | F)</li>
+<li><span style="color: #FF0000">Smoking</span> - Indication of smoking (Yes | No)</li>
+<li><span style="color: #FF0000">Hx Smoking</span> - Indication of smoking history (Yes | No)</li>
+<li><span style="color: #FF0000">Hx Radiotherapy</span> - Indication of radiotherapy history for any condition (Yes | No)</li>
+<li><span style="color: #FF0000">Thyroid Function</span> - Status of thyroid function (Clinical Hyperthyroidism, Hypothyroidism | Subclinical Hyperthyroidism, Hypothyroidism | Euthyroid)</li>
+<li><span style="color: #FF0000">Physical Examination</span> - Findings from physical examination including palpation of the thyroid gland and surrounding structures (Normal | Diffuse Goiter | Multinodular Goiter | Single Nodular Goiter Left, Right)</li>
+<li><span style="color: #FF0000">Adenopathy</span> - Indication of enlarged lymph nodes in the neck region (No | Right | Extensive | Left | Bilateral | Posterior)</li>
+<li><span style="color: #FF0000">Pathology</span> - Specific thyroid cancer type as determined by pathology examination of biopsy samples (Follicular | Hurthel Cell | Micropapillary | Papillary)</li>
+<li><span style="color: #FF0000">Focality</span> - Indication if the cancer is limited to one location or present in multiple locations (Uni-Focal | Multi-Focal)</li>
+<li><span style="color: #FF0000">Risk</span> - Risk category of the cancer based on various factors, such as tumor size, extent of spread, and histological type (Low | Intermediate | High)</li>
+<li><span style="color: #FF0000">T</span> - Tumor classification based on its size and extent of invasion into nearby structures (T1a | T1b | T2 | T3a | T3b | T4a | T4b)</li>
+<li><span style="color: #FF0000">N</span> - Nodal classification indicating the involvement of lymph nodes (N0 | N1a | N1b)</li>
+<li><span style="color: #FF0000">M</span> - Metastasis classification indicating the presence or absence of distant metastases (M0 | M1)</li>
+<li><span style="color: #FF0000">Stage</span> - Overall stage of the cancer, typically determined by combining T, N, and M classifications (I | II | III | IVa | IVb)</li>
+<li><span style="color: #FF0000">Response</span> - Cancer's response to treatment (Biochemical Incomplete | Indeterminate | Excellent | Structural Incomplete)</li>
+</ul>
 </div>
 </div>
 </div>
@@ -7625,7 +7653,1071 @@ a.anchor-link {
 </div>
 <div class="jp-InputArea jp-Cell-inputArea"><div class="jp-InputPrompt jp-InputArea-prompt">
 </div><div class="jp-RenderedHTMLCommon jp-RenderedMarkdown jp-MarkdownOutput" data-mime-type="text/markdown">
-<h2 id="1.2.-Data-Description-">1.2. Data Description <a class="anchor" id="1.2"></a><a class="anchor-link" href="#1.2.-Data-Description-">¶</a></h2>
+<h2 id="1.2.-Data-Description-">1.2. Data Description <a class="anchor" id="1.2"></a><a class="anchor-link" href="#1.2.-Data-Description-">¶</a></h2><ol>
+<li>The initial tabular dataset was comprised of 383 observations and 17 variables (including 1 target and 16 predictors).<ul>
+<li><strong>383 rows</strong> (observations)</li>
+<li><strong>17 columns</strong> (variables)<ul>
+<li><strong>1/17 target</strong> (categorical)<ul>
+<li><span style="color: #FF0000">Recurred</span></li>
+</ul>
+</li>
+<li><strong>1/17 predictor</strong> (numeric)<ul>
+<li><span style="color: #FF0000">Age</span></li>
+</ul>
+</li>
+<li><strong>16/17 predictor</strong> (categorical)<ul>
+<li><span style="color: #FF0000">Gender</span></li>
+<li><span style="color: #FF0000">Smoking</span></li>
+<li><span style="color: #FF0000">Hx_Smoking</span></li>
+<li><span style="color: #FF0000">Hx_Radiotherapy</span></li>
+<li><span style="color: #FF0000">Thyroid_Function</span></li>
+<li><span style="color: #FF0000">Physical_Examination</span></li>
+<li><span style="color: #FF0000">Adenopathy</span></li>
+<li><span style="color: #FF0000">Pathology</span></li>
+<li><span style="color: #FF0000">Focality</span></li>
+<li><span style="color: #FF0000">Risk</span></li>
+<li><span style="color: #FF0000">T</span></li>
+<li><span style="color: #FF0000">N</span></li>
+<li><span style="color: #FF0000">M</span></li>
+<li><span style="color: #FF0000">Stage</span></li>
+<li><span style="color: #FF0000">Response</span></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+</ol>
+</div>
+</div>
+</div>
+</div><div class="jp-Cell jp-CodeCell jp-Notebook-cell jp-mod-noOutputs" id="cell-id=bdddd95d-21ce-4cc5-a83c-e6f477ca6d5b">
+<div class="jp-Cell-inputWrapper" tabindex="0">
+<div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
+</div>
+<div class="jp-InputArea jp-Cell-inputArea">
+<div class="jp-InputPrompt jp-InputArea-prompt">In [1]:</div>
+<div class="jp-CodeMirrorEditor jp-Editor jp-InputArea-editor" data-type="inline">
+<div class="cm-editor cm-s-jupyter">
+<div class="highlight hl-ipython3"><pre><span></span><span class="c1">##################################</span>
+<span class="c1"># Loading Python Libraries</span>
+<span class="c1">##################################</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">numpy</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">np</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">pandas</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">pd</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">seaborn</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">sns</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">matplotlib.pyplot</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">plt</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">joblib</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">itertools</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">os</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">pickle</span>
+<span class="o">%</span><span class="k">matplotlib</span> inline
+
+<span class="kn">from</span><span class="w"> </span><span class="nn">operator</span><span class="w"> </span><span class="kn">import</span> <span class="n">add</span><span class="p">,</span><span class="n">mul</span><span class="p">,</span><span class="n">truediv</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">sklearn.experimental</span><span class="w"> </span><span class="kn">import</span> <span class="n">enable_iterative_imputer</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">sklearn.impute</span><span class="w"> </span><span class="kn">import</span> <span class="n">IterativeImputer</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">sklearn.preprocessing</span><span class="w"> </span><span class="kn">import</span> <span class="n">OrdinalEncoder</span><span class="p">,</span> <span class="n">StandardScaler</span><span class="p">,</span> <span class="n">OrdinalEncoder</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">scipy</span><span class="w"> </span><span class="kn">import</span> <span class="n">stats</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">scipy.stats</span><span class="w"> </span><span class="kn">import</span> <span class="n">pointbiserialr</span><span class="p">,</span> <span class="n">chi2_contingency</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">scipy.spatial.distance</span><span class="w"> </span><span class="kn">import</span> <span class="n">cdist</span>
+
+<span class="kn">from</span><span class="w"> </span><span class="nn">sklearn.pipeline</span><span class="w"> </span><span class="kn">import</span> <span class="n">Pipeline</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">sklearn.compose</span><span class="w"> </span><span class="kn">import</span> <span class="n">ColumnTransformer</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">sklearn.neighbors</span><span class="w"> </span><span class="kn">import</span> <span class="n">LocalOutlierFactor</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">sklearn.ensemble</span><span class="w"> </span><span class="kn">import</span> <span class="n">IsolationForest</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">sklearn.neural_network</span><span class="w"> </span><span class="kn">import</span> <span class="n">MLPClassifier</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">sklearn.svm</span><span class="w"> </span><span class="kn">import</span> <span class="n">SVC</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">sklearn.metrics</span><span class="w"> </span><span class="kn">import</span> <span class="n">silhouette_score</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">sklearn.model_selection</span><span class="w"> </span><span class="kn">import</span> <span class="n">train_test_split</span><span class="p">,</span> <span class="n">GridSearchCV</span><span class="p">,</span> <span class="n">RepeatedStratifiedKFold</span><span class="p">,</span> <span class="n">KFold</span><span class="p">,</span> <span class="n">cross_val_score</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">sklearn.tree</span><span class="w"> </span><span class="kn">import</span> <span class="n">DecisionTreeClassifier</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">sklearn.decomposition</span><span class="w"> </span><span class="kn">import</span> <span class="n">TruncatedSVD</span>
+
+<span class="kn">from</span><span class="w"> </span><span class="nn">pyod.models.knn</span><span class="w"> </span><span class="kn">import</span> <span class="n">KNN</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">pyod.models.hbos</span><span class="w"> </span><span class="kn">import</span> <span class="n">HBOS</span>
+
+<span class="kn">import</span><span class="w"> </span><span class="nn">prince</span>
+</pre></div>
+</div>
+</div>
+</div>
+</div>
+</div><div class="jp-Cell jp-CodeCell jp-Notebook-cell jp-mod-noOutputs" id="cell-id=4e486bba-813a-4d7e-8df3-fa6ca1695bdd">
+<div class="jp-Cell-inputWrapper" tabindex="0">
+<div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
+</div>
+<div class="jp-InputArea jp-Cell-inputArea">
+<div class="jp-InputPrompt jp-InputArea-prompt">In [2]:</div>
+<div class="jp-CodeMirrorEditor jp-Editor jp-InputArea-editor" data-type="inline">
+<div class="cm-editor cm-s-jupyter">
+<div class="highlight hl-ipython3"><pre><span></span><span class="c1">##################################</span>
+<span class="c1"># Defining file paths</span>
+<span class="c1">##################################</span>
+<span class="n">DATASETS_ORIGINAL_PATH</span> <span class="o">=</span> <span class="sa">r</span><span class="s2">"datasets\original"</span>
+</pre></div>
+</div>
+</div>
+</div>
+</div>
+</div><div class="jp-Cell jp-CodeCell jp-Notebook-cell jp-mod-noOutputs" id="cell-id=2be1f460-702f-4eb1-a322-6e349fdb87b9">
+<div class="jp-Cell-inputWrapper" tabindex="0">
+<div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
+</div>
+<div class="jp-InputArea jp-Cell-inputArea">
+<div class="jp-InputPrompt jp-InputArea-prompt">In [3]:</div>
+<div class="jp-CodeMirrorEditor jp-Editor jp-InputArea-editor" data-type="inline">
+<div class="cm-editor cm-s-jupyter">
+<div class="highlight hl-ipython3"><pre><span></span><span class="c1">##################################</span>
+<span class="c1"># Loading the dataset</span>
+<span class="c1"># from the DATASETS_ORIGINAL_PATH</span>
+<span class="c1">##################################</span>
+<span class="n">thyroid_cancer</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">read_csv</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="s2">".."</span><span class="p">,</span> <span class="n">DATASETS_ORIGINAL_PATH</span><span class="p">,</span> <span class="s2">"Thyroid_Diff.csv"</span><span class="p">))</span>
+</pre></div>
+</div>
+</div>
+</div>
+</div>
+</div><div class="jp-Cell jp-CodeCell jp-Notebook-cell" id="cell-id=6182ec03-6ba9-46e3-b91d-9570b7bd7ef3">
+<div class="jp-Cell-inputWrapper" tabindex="0">
+<div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
+</div>
+<div class="jp-InputArea jp-Cell-inputArea">
+<div class="jp-InputPrompt jp-InputArea-prompt">In [4]:</div>
+<div class="jp-CodeMirrorEditor jp-Editor jp-InputArea-editor" data-type="inline">
+<div class="cm-editor cm-s-jupyter">
+<div class="highlight hl-ipython3"><pre><span></span><span class="c1">##################################</span>
+<span class="c1"># Performing a general exploration of the dataset</span>
+<span class="c1">##################################</span>
+<span class="nb">print</span><span class="p">(</span><span class="s1">'Dataset Dimensions: '</span><span class="p">)</span>
+<span class="n">display</span><span class="p">(</span><span class="n">thyroid_cancer</span><span class="o">.</span><span class="n">shape</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+</div>
+</div>
+<div class="jp-Cell-outputWrapper">
+<div class="jp-Collapser jp-OutputCollapser jp-Cell-outputCollapser">
+</div>
+<div class="jp-OutputArea jp-Cell-outputArea">
+<div class="jp-OutputArea-child">
+<div class="jp-OutputPrompt jp-OutputArea-prompt"></div>
+<div class="jp-RenderedText jp-OutputArea-output" data-mime-type="text/plain" tabindex="0">
+<pre>Dataset Dimensions: 
+</pre>
+</div>
+</div>
+<div class="jp-OutputArea-child">
+<div class="jp-OutputPrompt jp-OutputArea-prompt"></div>
+<div class="jp-RenderedText jp-OutputArea-output" data-mime-type="text/plain" tabindex="0">
+<pre>(383, 17)</pre>
+</div>
+</div>
+</div>
+</div>
+</div><div class="jp-Cell jp-CodeCell jp-Notebook-cell" id="cell-id=c63fdfef-3d6d-4351-89e4-3897c8793f1a">
+<div class="jp-Cell-inputWrapper" tabindex="0">
+<div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
+</div>
+<div class="jp-InputArea jp-Cell-inputArea">
+<div class="jp-InputPrompt jp-InputArea-prompt">In [5]:</div>
+<div class="jp-CodeMirrorEditor jp-Editor jp-InputArea-editor" data-type="inline">
+<div class="cm-editor cm-s-jupyter">
+<div class="highlight hl-ipython3"><pre><span></span><span class="c1">##################################</span>
+<span class="c1"># Listing the column names and data types</span>
+<span class="c1">##################################</span>
+<span class="nb">print</span><span class="p">(</span><span class="s1">'Column Names and Data Types:'</span><span class="p">)</span>
+<span class="n">display</span><span class="p">(</span><span class="n">thyroid_cancer</span><span class="o">.</span><span class="n">dtypes</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+</div>
+</div>
+<div class="jp-Cell-outputWrapper">
+<div class="jp-Collapser jp-OutputCollapser jp-Cell-outputCollapser">
+</div>
+<div class="jp-OutputArea jp-Cell-outputArea">
+<div class="jp-OutputArea-child">
+<div class="jp-OutputPrompt jp-OutputArea-prompt"></div>
+<div class="jp-RenderedText jp-OutputArea-output" data-mime-type="text/plain" tabindex="0">
+<pre>Column Names and Data Types:
+</pre>
+</div>
+</div>
+<div class="jp-OutputArea-child">
+<div class="jp-OutputPrompt jp-OutputArea-prompt"></div>
+<div class="jp-RenderedText jp-OutputArea-output" data-mime-type="text/plain" tabindex="0">
+<pre>Age                      int64
+Gender                  object
+Smoking                 object
+Hx Smoking              object
+Hx Radiotherapy         object
+Thyroid Function        object
+Physical Examination    object
+Adenopathy              object
+Pathology               object
+Focality                object
+Risk                    object
+T                       object
+N                       object
+M                       object
+Stage                   object
+Response                object
+Recurred                object
+dtype: object</pre>
+</div>
+</div>
+</div>
+</div>
+</div><div class="jp-Cell jp-CodeCell jp-Notebook-cell jp-mod-noOutputs" id="cell-id=3ac4865c-92ad-4703-a12d-73ff4fdcf0e5">
+<div class="jp-Cell-inputWrapper" tabindex="0">
+<div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
+</div>
+<div class="jp-InputArea jp-Cell-inputArea">
+<div class="jp-InputPrompt jp-InputArea-prompt">In [6]:</div>
+<div class="jp-CodeMirrorEditor jp-Editor jp-InputArea-editor" data-type="inline">
+<div class="cm-editor cm-s-jupyter">
+<div class="highlight hl-ipython3"><pre><span></span><span class="c1">##################################</span>
+<span class="c1"># Renaming and standardizing the column names</span>
+<span class="c1"># to replace blanks with undercores</span>
+<span class="c1">##################################</span>
+<span class="n">thyroid_cancer</span><span class="o">.</span><span class="n">columns</span> <span class="o">=</span> <span class="n">thyroid_cancer</span><span class="o">.</span><span class="n">columns</span><span class="o">.</span><span class="n">str</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="s2">" "</span><span class="p">,</span> <span class="s2">"_"</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+</div>
+</div>
+</div><div class="jp-Cell jp-CodeCell jp-Notebook-cell" id="cell-id=9f875472-c599-4965-b9ee-910c2c4f05e2">
+<div class="jp-Cell-inputWrapper" tabindex="0">
+<div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
+</div>
+<div class="jp-InputArea jp-Cell-inputArea">
+<div class="jp-InputPrompt jp-InputArea-prompt">In [7]:</div>
+<div class="jp-CodeMirrorEditor jp-Editor jp-InputArea-editor" data-type="inline">
+<div class="cm-editor cm-s-jupyter">
+<div class="highlight hl-ipython3"><pre><span></span><span class="c1">##################################</span>
+<span class="c1"># Taking a snapshot of the dataset</span>
+<span class="c1">##################################</span>
+<span class="n">thyroid_cancer</span><span class="o">.</span><span class="n">head</span><span class="p">()</span>
+</pre></div>
+</div>
+</div>
+</div>
+</div>
+<div class="jp-Cell-outputWrapper">
+<div class="jp-Collapser jp-OutputCollapser jp-Cell-outputCollapser">
+</div>
+<div class="jp-OutputArea jp-Cell-outputArea">
+<div class="jp-OutputArea-child jp-OutputArea-executeResult">
+<div class="jp-OutputPrompt jp-OutputArea-prompt">Out[7]:</div>
+<div class="jp-RenderedHTMLCommon jp-RenderedHTML jp-OutputArea-output jp-OutputArea-executeResult" data-mime-type="text/html" tabindex="0">
+<div>
+<style scoped="">
+    .dataframe tbody tr th:only-of-type {
+        vertical-align: middle;
+    }
+
+    .dataframe tbody tr th {
+        vertical-align: top;
+    }
+
+    .dataframe thead th {
+        text-align: right;
+    }
+</style>
+<table border="1" class="dataframe">
+<thead>
+<tr style="text-align: right;">
+<th></th>
+<th>Age</th>
+<th>Gender</th>
+<th>Smoking</th>
+<th>Hx_Smoking</th>
+<th>Hx_Radiotherapy</th>
+<th>Thyroid_Function</th>
+<th>Physical_Examination</th>
+<th>Adenopathy</th>
+<th>Pathology</th>
+<th>Focality</th>
+<th>Risk</th>
+<th>T</th>
+<th>N</th>
+<th>M</th>
+<th>Stage</th>
+<th>Response</th>
+<th>Recurred</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<th>0</th>
+<td>27</td>
+<td>F</td>
+<td>No</td>
+<td>No</td>
+<td>No</td>
+<td>Euthyroid</td>
+<td>Single nodular goiter-left</td>
+<td>No</td>
+<td>Micropapillary</td>
+<td>Uni-Focal</td>
+<td>Low</td>
+<td>T1a</td>
+<td>N0</td>
+<td>M0</td>
+<td>I</td>
+<td>Indeterminate</td>
+<td>No</td>
+</tr>
+<tr>
+<th>1</th>
+<td>34</td>
+<td>F</td>
+<td>No</td>
+<td>Yes</td>
+<td>No</td>
+<td>Euthyroid</td>
+<td>Multinodular goiter</td>
+<td>No</td>
+<td>Micropapillary</td>
+<td>Uni-Focal</td>
+<td>Low</td>
+<td>T1a</td>
+<td>N0</td>
+<td>M0</td>
+<td>I</td>
+<td>Excellent</td>
+<td>No</td>
+</tr>
+<tr>
+<th>2</th>
+<td>30</td>
+<td>F</td>
+<td>No</td>
+<td>No</td>
+<td>No</td>
+<td>Euthyroid</td>
+<td>Single nodular goiter-right</td>
+<td>No</td>
+<td>Micropapillary</td>
+<td>Uni-Focal</td>
+<td>Low</td>
+<td>T1a</td>
+<td>N0</td>
+<td>M0</td>
+<td>I</td>
+<td>Excellent</td>
+<td>No</td>
+</tr>
+<tr>
+<th>3</th>
+<td>62</td>
+<td>F</td>
+<td>No</td>
+<td>No</td>
+<td>No</td>
+<td>Euthyroid</td>
+<td>Single nodular goiter-right</td>
+<td>No</td>
+<td>Micropapillary</td>
+<td>Uni-Focal</td>
+<td>Low</td>
+<td>T1a</td>
+<td>N0</td>
+<td>M0</td>
+<td>I</td>
+<td>Excellent</td>
+<td>No</td>
+</tr>
+<tr>
+<th>4</th>
+<td>62</td>
+<td>F</td>
+<td>No</td>
+<td>No</td>
+<td>No</td>
+<td>Euthyroid</td>
+<td>Multinodular goiter</td>
+<td>No</td>
+<td>Micropapillary</td>
+<td>Multi-Focal</td>
+<td>Low</td>
+<td>T1a</td>
+<td>N0</td>
+<td>M0</td>
+<td>I</td>
+<td>Excellent</td>
+<td>No</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div><div class="jp-Cell jp-CodeCell jp-Notebook-cell" id="cell-id=a4300d17-c8b2-4e35-ad09-7e4cdfd925b1">
+<div class="jp-Cell-inputWrapper" tabindex="0">
+<div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
+</div>
+<div class="jp-InputArea jp-Cell-inputArea">
+<div class="jp-InputPrompt jp-InputArea-prompt">In [8]:</div>
+<div class="jp-CodeMirrorEditor jp-Editor jp-InputArea-editor" data-type="inline">
+<div class="cm-editor cm-s-jupyter">
+<div class="highlight hl-ipython3"><pre><span></span><span class="c1">##################################</span>
+<span class="c1"># Selecting categorical columns (both object and categorical types)</span>
+<span class="c1"># and listing the unique categorical levels</span>
+<span class="c1">##################################</span>
+<span class="n">cat_cols</span> <span class="o">=</span> <span class="n">thyroid_cancer</span><span class="o">.</span><span class="n">select_dtypes</span><span class="p">(</span><span class="n">include</span><span class="o">=</span><span class="p">[</span><span class="s2">"object"</span><span class="p">,</span> <span class="s2">"category"</span><span class="p">])</span><span class="o">.</span><span class="n">columns</span>
+<span class="k">for</span> <span class="n">col</span> <span class="ow">in</span> <span class="n">cat_cols</span><span class="p">:</span>
+    <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">"Categorical | Object Column: </span><span class="si">{</span><span class="n">col</span><span class="si">}</span><span class="s2">"</span><span class="p">)</span>
+    <span class="nb">print</span><span class="p">(</span><span class="n">thyroid_cancer</span><span class="p">[</span><span class="n">col</span><span class="p">]</span><span class="o">.</span><span class="n">unique</span><span class="p">())</span>  
+    <span class="nb">print</span><span class="p">(</span><span class="s2">"-"</span> <span class="o">*</span> <span class="mi">40</span><span class="p">)</span>
+    
+</pre></div>
+</div>
+</div>
+</div>
+</div>
+<div class="jp-Cell-outputWrapper">
+<div class="jp-Collapser jp-OutputCollapser jp-Cell-outputCollapser">
+</div>
+<div class="jp-OutputArea jp-Cell-outputArea">
+<div class="jp-OutputArea-child">
+<div class="jp-OutputPrompt jp-OutputArea-prompt"></div>
+<div class="jp-RenderedText jp-OutputArea-output" data-mime-type="text/plain" tabindex="0">
+<pre>Categorical | Object Column: Gender
+['F' 'M']
+----------------------------------------
+Categorical | Object Column: Smoking
+['No' 'Yes']
+----------------------------------------
+Categorical | Object Column: Hx_Smoking
+['No' 'Yes']
+----------------------------------------
+Categorical | Object Column: Hx_Radiotherapy
+['No' 'Yes']
+----------------------------------------
+Categorical | Object Column: Thyroid_Function
+['Euthyroid' 'Clinical Hyperthyroidism' 'Clinical Hypothyroidism'
+ 'Subclinical Hyperthyroidism' 'Subclinical Hypothyroidism']
+----------------------------------------
+Categorical | Object Column: Physical_Examination
+['Single nodular goiter-left' 'Multinodular goiter'
+ 'Single nodular goiter-right' 'Normal' 'Diffuse goiter']
+----------------------------------------
+Categorical | Object Column: Adenopathy
+['No' 'Right' 'Extensive' 'Left' 'Bilateral' 'Posterior']
+----------------------------------------
+Categorical | Object Column: Pathology
+['Micropapillary' 'Papillary' 'Follicular' 'Hurthel cell']
+----------------------------------------
+Categorical | Object Column: Focality
+['Uni-Focal' 'Multi-Focal']
+----------------------------------------
+Categorical | Object Column: Risk
+['Low' 'Intermediate' 'High']
+----------------------------------------
+Categorical | Object Column: T
+['T1a' 'T1b' 'T2' 'T3a' 'T3b' 'T4a' 'T4b']
+----------------------------------------
+Categorical | Object Column: N
+['N0' 'N1b' 'N1a']
+----------------------------------------
+Categorical | Object Column: M
+['M0' 'M1']
+----------------------------------------
+Categorical | Object Column: Stage
+['I' 'II' 'IVB' 'III' 'IVA']
+----------------------------------------
+Categorical | Object Column: Response
+['Indeterminate' 'Excellent' 'Structural Incomplete'
+ 'Biochemical Incomplete']
+----------------------------------------
+Categorical | Object Column: Recurred
+['No' 'Yes']
+----------------------------------------
+</pre>
+</div>
+</div>
+</div>
+</div>
+</div><div class="jp-Cell jp-CodeCell jp-Notebook-cell jp-mod-noOutputs" id="cell-id=b5e408df-8e6f-4208-95f0-9f1a1c482fca">
+<div class="jp-Cell-inputWrapper" tabindex="0">
+<div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
+</div>
+<div class="jp-InputArea jp-Cell-inputArea">
+<div class="jp-InputPrompt jp-InputArea-prompt">In [9]:</div>
+<div class="jp-CodeMirrorEditor jp-Editor jp-InputArea-editor" data-type="inline">
+<div class="cm-editor cm-s-jupyter">
+<div class="highlight hl-ipython3"><pre><span></span><span class="c1">##################################</span>
+<span class="c1"># Correcting a category level</span>
+<span class="c1">##################################</span>
+<span class="n">thyroid_cancer</span><span class="p">[</span><span class="s2">"Pathology"</span><span class="p">]</span> <span class="o">=</span> <span class="n">thyroid_cancer</span><span class="p">[</span><span class="s2">"Pathology"</span><span class="p">]</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="s2">"Hurthel cell"</span><span class="p">,</span> <span class="s2">"Hurthle Cell"</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+</div>
+</div>
+</div><div class="jp-Cell jp-CodeCell jp-Notebook-cell jp-mod-noOutputs" id="cell-id=bf6a4bcd-5295-4616-bc97-dfeef4de8729">
+<div class="jp-Cell-inputWrapper" tabindex="0">
+<div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
+</div>
+<div class="jp-InputArea jp-Cell-inputArea">
+<div class="jp-InputPrompt jp-InputArea-prompt">In [10]:</div>
+<div class="jp-CodeMirrorEditor jp-Editor jp-InputArea-editor" data-type="inline">
+<div class="cm-editor cm-s-jupyter">
+<div class="highlight hl-ipython3"><pre><span></span><span class="c1">##################################</span>
+<span class="c1"># Setting the levels of the categorical variables</span>
+<span class="c1">##################################</span>
+<span class="n">thyroid_cancer</span><span class="p">[</span><span class="s1">'Recurred'</span><span class="p">]</span> <span class="o">=</span> <span class="n">thyroid_cancer</span><span class="p">[</span><span class="s1">'Recurred'</span><span class="p">]</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="s1">'category'</span><span class="p">)</span>
+<span class="n">thyroid_cancer</span><span class="p">[</span><span class="s1">'Recurred'</span><span class="p">]</span> <span class="o">=</span> <span class="n">thyroid_cancer</span><span class="p">[</span><span class="s1">'Recurred'</span><span class="p">]</span><span class="o">.</span><span class="n">cat</span><span class="o">.</span><span class="n">set_categories</span><span class="p">([</span><span class="s1">'No'</span><span class="p">,</span> <span class="s1">'Yes'</span><span class="p">],</span> <span class="n">ordered</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+<span class="n">thyroid_cancer</span><span class="p">[</span><span class="s1">'Gender'</span><span class="p">]</span> <span class="o">=</span> <span class="n">thyroid_cancer</span><span class="p">[</span><span class="s1">'Gender'</span><span class="p">]</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="s1">'category'</span><span class="p">)</span>
+<span class="n">thyroid_cancer</span><span class="p">[</span><span class="s1">'Gender'</span><span class="p">]</span> <span class="o">=</span> <span class="n">thyroid_cancer</span><span class="p">[</span><span class="s1">'Gender'</span><span class="p">]</span><span class="o">.</span><span class="n">cat</span><span class="o">.</span><span class="n">set_categories</span><span class="p">([</span><span class="s1">'M'</span><span class="p">,</span> <span class="s1">'F'</span><span class="p">],</span> <span class="n">ordered</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+<span class="n">thyroid_cancer</span><span class="p">[</span><span class="s1">'Smoking'</span><span class="p">]</span> <span class="o">=</span> <span class="n">thyroid_cancer</span><span class="p">[</span><span class="s1">'Smoking'</span><span class="p">]</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="s1">'category'</span><span class="p">)</span>
+<span class="n">thyroid_cancer</span><span class="p">[</span><span class="s1">'Smoking'</span><span class="p">]</span> <span class="o">=</span> <span class="n">thyroid_cancer</span><span class="p">[</span><span class="s1">'Smoking'</span><span class="p">]</span><span class="o">.</span><span class="n">cat</span><span class="o">.</span><span class="n">set_categories</span><span class="p">([</span><span class="s1">'No'</span><span class="p">,</span> <span class="s1">'Yes'</span><span class="p">],</span> <span class="n">ordered</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+<span class="n">thyroid_cancer</span><span class="p">[</span><span class="s1">'Hx_Smoking'</span><span class="p">]</span> <span class="o">=</span> <span class="n">thyroid_cancer</span><span class="p">[</span><span class="s1">'Hx_Smoking'</span><span class="p">]</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="s1">'category'</span><span class="p">)</span>
+<span class="n">thyroid_cancer</span><span class="p">[</span><span class="s1">'Hx_Smoking'</span><span class="p">]</span> <span class="o">=</span> <span class="n">thyroid_cancer</span><span class="p">[</span><span class="s1">'Hx_Smoking'</span><span class="p">]</span><span class="o">.</span><span class="n">cat</span><span class="o">.</span><span class="n">set_categories</span><span class="p">([</span><span class="s1">'No'</span><span class="p">,</span> <span class="s1">'Yes'</span><span class="p">],</span> <span class="n">ordered</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+<span class="n">thyroid_cancer</span><span class="p">[</span><span class="s1">'Hx_Radiotherapy'</span><span class="p">]</span> <span class="o">=</span> <span class="n">thyroid_cancer</span><span class="p">[</span><span class="s1">'Hx_Radiotherapy'</span><span class="p">]</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="s1">'category'</span><span class="p">)</span>
+<span class="n">thyroid_cancer</span><span class="p">[</span><span class="s1">'Hx_Radiotherapy'</span><span class="p">]</span> <span class="o">=</span> <span class="n">thyroid_cancer</span><span class="p">[</span><span class="s1">'Hx_Radiotherapy'</span><span class="p">]</span><span class="o">.</span><span class="n">cat</span><span class="o">.</span><span class="n">set_categories</span><span class="p">([</span><span class="s1">'No'</span><span class="p">,</span> <span class="s1">'Yes'</span><span class="p">],</span> <span class="n">ordered</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+<span class="n">thyroid_cancer</span><span class="p">[</span><span class="s1">'Thyroid_Function'</span><span class="p">]</span> <span class="o">=</span> <span class="n">thyroid_cancer</span><span class="p">[</span><span class="s1">'Thyroid_Function'</span><span class="p">]</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="s1">'category'</span><span class="p">)</span>
+<span class="n">thyroid_cancer</span><span class="p">[</span><span class="s1">'Thyroid_Function'</span><span class="p">]</span> <span class="o">=</span> <span class="n">thyroid_cancer</span><span class="p">[</span><span class="s1">'Thyroid_Function'</span><span class="p">]</span><span class="o">.</span><span class="n">cat</span><span class="o">.</span><span class="n">set_categories</span><span class="p">([</span><span class="s1">'Euthyroid'</span><span class="p">,</span> <span class="s1">'Subclinical Hypothyroidism'</span><span class="p">,</span> <span class="s1">'Subclinical Hyperthyroidism'</span><span class="p">,</span> <span class="s1">'Clinical Hypothyroidism'</span><span class="p">,</span> <span class="s1">'Clinical Hyperthyroidism'</span><span class="p">],</span> <span class="n">ordered</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+<span class="n">thyroid_cancer</span><span class="p">[</span><span class="s1">'Physical_Examination'</span><span class="p">]</span> <span class="o">=</span> <span class="n">thyroid_cancer</span><span class="p">[</span><span class="s1">'Physical_Examination'</span><span class="p">]</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="s1">'category'</span><span class="p">)</span>
+<span class="n">thyroid_cancer</span><span class="p">[</span><span class="s1">'Physical_Examination'</span><span class="p">]</span> <span class="o">=</span> <span class="n">thyroid_cancer</span><span class="p">[</span><span class="s1">'Physical_Examination'</span><span class="p">]</span><span class="o">.</span><span class="n">cat</span><span class="o">.</span><span class="n">set_categories</span><span class="p">([</span><span class="s1">'Normal'</span><span class="p">,</span> <span class="s1">'Single nodular goiter-left'</span><span class="p">,</span> <span class="s1">'Single nodular goiter-right'</span><span class="p">,</span> <span class="s1">'Multinodular goiter'</span><span class="p">,</span> <span class="s1">'Diffuse goiter'</span><span class="p">],</span> <span class="n">ordered</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+<span class="n">thyroid_cancer</span><span class="p">[</span><span class="s1">'Adenopathy'</span><span class="p">]</span> <span class="o">=</span> <span class="n">thyroid_cancer</span><span class="p">[</span><span class="s1">'Adenopathy'</span><span class="p">]</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="s1">'category'</span><span class="p">)</span>
+<span class="n">thyroid_cancer</span><span class="p">[</span><span class="s1">'Adenopathy'</span><span class="p">]</span> <span class="o">=</span> <span class="n">thyroid_cancer</span><span class="p">[</span><span class="s1">'Adenopathy'</span><span class="p">]</span><span class="o">.</span><span class="n">cat</span><span class="o">.</span><span class="n">set_categories</span><span class="p">([</span><span class="s1">'No'</span><span class="p">,</span> <span class="s1">'Left'</span><span class="p">,</span> <span class="s1">'Right'</span><span class="p">,</span> <span class="s1">'Bilateral'</span><span class="p">,</span> <span class="s1">'Posterior'</span><span class="p">,</span> <span class="s1">'Extensive'</span><span class="p">],</span> <span class="n">ordered</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+<span class="n">thyroid_cancer</span><span class="p">[</span><span class="s1">'Pathology'</span><span class="p">]</span> <span class="o">=</span> <span class="n">thyroid_cancer</span><span class="p">[</span><span class="s1">'Pathology'</span><span class="p">]</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="s1">'category'</span><span class="p">)</span>
+<span class="n">thyroid_cancer</span><span class="p">[</span><span class="s1">'Pathology'</span><span class="p">]</span> <span class="o">=</span> <span class="n">thyroid_cancer</span><span class="p">[</span><span class="s1">'Pathology'</span><span class="p">]</span><span class="o">.</span><span class="n">cat</span><span class="o">.</span><span class="n">set_categories</span><span class="p">([</span><span class="s1">'Hurthle Cell'</span><span class="p">,</span> <span class="s1">'Follicular'</span><span class="p">,</span> <span class="s1">'Micropapillary'</span><span class="p">,</span> <span class="s1">'Papillary'</span><span class="p">],</span> <span class="n">ordered</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+<span class="n">thyroid_cancer</span><span class="p">[</span><span class="s1">'Focality'</span><span class="p">]</span> <span class="o">=</span> <span class="n">thyroid_cancer</span><span class="p">[</span><span class="s1">'Focality'</span><span class="p">]</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="s1">'category'</span><span class="p">)</span>
+<span class="n">thyroid_cancer</span><span class="p">[</span><span class="s1">'Focality'</span><span class="p">]</span> <span class="o">=</span> <span class="n">thyroid_cancer</span><span class="p">[</span><span class="s1">'Focality'</span><span class="p">]</span><span class="o">.</span><span class="n">cat</span><span class="o">.</span><span class="n">set_categories</span><span class="p">([</span><span class="s1">'Uni-Focal'</span><span class="p">,</span> <span class="s1">'Multi-Focal'</span><span class="p">],</span> <span class="n">ordered</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+<span class="n">thyroid_cancer</span><span class="p">[</span><span class="s1">'Risk'</span><span class="p">]</span> <span class="o">=</span> <span class="n">thyroid_cancer</span><span class="p">[</span><span class="s1">'Risk'</span><span class="p">]</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="s1">'category'</span><span class="p">)</span>
+<span class="n">thyroid_cancer</span><span class="p">[</span><span class="s1">'Risk'</span><span class="p">]</span> <span class="o">=</span> <span class="n">thyroid_cancer</span><span class="p">[</span><span class="s1">'Risk'</span><span class="p">]</span><span class="o">.</span><span class="n">cat</span><span class="o">.</span><span class="n">set_categories</span><span class="p">([</span><span class="s1">'Low'</span><span class="p">,</span> <span class="s1">'Intermediate'</span><span class="p">,</span> <span class="s1">'High'</span><span class="p">],</span> <span class="n">ordered</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+<span class="n">thyroid_cancer</span><span class="p">[</span><span class="s1">'T'</span><span class="p">]</span> <span class="o">=</span> <span class="n">thyroid_cancer</span><span class="p">[</span><span class="s1">'T'</span><span class="p">]</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="s1">'category'</span><span class="p">)</span>
+<span class="n">thyroid_cancer</span><span class="p">[</span><span class="s1">'T'</span><span class="p">]</span> <span class="o">=</span> <span class="n">thyroid_cancer</span><span class="p">[</span><span class="s1">'T'</span><span class="p">]</span><span class="o">.</span><span class="n">cat</span><span class="o">.</span><span class="n">set_categories</span><span class="p">([</span><span class="s1">'T1a'</span><span class="p">,</span> <span class="s1">'T1b'</span><span class="p">,</span> <span class="s1">'T2'</span><span class="p">,</span> <span class="s1">'T3a'</span><span class="p">,</span> <span class="s1">'T3b'</span><span class="p">,</span> <span class="s1">'T4a'</span><span class="p">,</span> <span class="s1">'T4b'</span><span class="p">],</span> <span class="n">ordered</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+<span class="n">thyroid_cancer</span><span class="p">[</span><span class="s1">'N'</span><span class="p">]</span> <span class="o">=</span> <span class="n">thyroid_cancer</span><span class="p">[</span><span class="s1">'N'</span><span class="p">]</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="s1">'category'</span><span class="p">)</span>
+<span class="n">thyroid_cancer</span><span class="p">[</span><span class="s1">'N'</span><span class="p">]</span> <span class="o">=</span> <span class="n">thyroid_cancer</span><span class="p">[</span><span class="s1">'N'</span><span class="p">]</span><span class="o">.</span><span class="n">cat</span><span class="o">.</span><span class="n">set_categories</span><span class="p">([</span><span class="s1">'N0'</span><span class="p">,</span> <span class="s1">'N1a'</span><span class="p">,</span> <span class="s1">'N1b'</span><span class="p">],</span> <span class="n">ordered</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+<span class="n">thyroid_cancer</span><span class="p">[</span><span class="s1">'M'</span><span class="p">]</span> <span class="o">=</span> <span class="n">thyroid_cancer</span><span class="p">[</span><span class="s1">'M'</span><span class="p">]</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="s1">'category'</span><span class="p">)</span>
+<span class="n">thyroid_cancer</span><span class="p">[</span><span class="s1">'M'</span><span class="p">]</span> <span class="o">=</span> <span class="n">thyroid_cancer</span><span class="p">[</span><span class="s1">'M'</span><span class="p">]</span><span class="o">.</span><span class="n">cat</span><span class="o">.</span><span class="n">set_categories</span><span class="p">([</span><span class="s1">'M0'</span><span class="p">,</span> <span class="s1">'M1'</span><span class="p">],</span> <span class="n">ordered</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+<span class="n">thyroid_cancer</span><span class="p">[</span><span class="s1">'Stage'</span><span class="p">]</span> <span class="o">=</span> <span class="n">thyroid_cancer</span><span class="p">[</span><span class="s1">'Stage'</span><span class="p">]</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="s1">'category'</span><span class="p">)</span>
+<span class="n">thyroid_cancer</span><span class="p">[</span><span class="s1">'Stage'</span><span class="p">]</span> <span class="o">=</span> <span class="n">thyroid_cancer</span><span class="p">[</span><span class="s1">'Stage'</span><span class="p">]</span><span class="o">.</span><span class="n">cat</span><span class="o">.</span><span class="n">set_categories</span><span class="p">([</span><span class="s1">'I'</span><span class="p">,</span> <span class="s1">'II'</span><span class="p">,</span> <span class="s1">'III'</span><span class="p">,</span> <span class="s1">'IVA'</span><span class="p">,</span> <span class="s1">'IVB'</span><span class="p">],</span> <span class="n">ordered</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+<span class="n">thyroid_cancer</span><span class="p">[</span><span class="s1">'Response'</span><span class="p">]</span> <span class="o">=</span> <span class="n">thyroid_cancer</span><span class="p">[</span><span class="s1">'Response'</span><span class="p">]</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="s1">'category'</span><span class="p">)</span>
+<span class="n">thyroid_cancer</span><span class="p">[</span><span class="s1">'Response'</span><span class="p">]</span> <span class="o">=</span> <span class="n">thyroid_cancer</span><span class="p">[</span><span class="s1">'Response'</span><span class="p">]</span><span class="o">.</span><span class="n">cat</span><span class="o">.</span><span class="n">set_categories</span><span class="p">([</span><span class="s1">'Excellent'</span><span class="p">,</span> <span class="s1">'Structural Incomplete'</span><span class="p">,</span> <span class="s1">'Biochemical Incomplete'</span><span class="p">,</span> <span class="s1">'Indeterminate'</span><span class="p">],</span> <span class="n">ordered</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+</div>
+</div>
+</div><div class="jp-Cell jp-CodeCell jp-Notebook-cell" id="cell-id=8fe319ef-3281-499f-acba-9faaf265fd71">
+<div class="jp-Cell-inputWrapper" tabindex="0">
+<div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
+</div>
+<div class="jp-InputArea jp-Cell-inputArea">
+<div class="jp-InputPrompt jp-InputArea-prompt">In [11]:</div>
+<div class="jp-CodeMirrorEditor jp-Editor jp-InputArea-editor" data-type="inline">
+<div class="cm-editor cm-s-jupyter">
+<div class="highlight hl-ipython3"><pre><span></span><span class="c1">##################################</span>
+<span class="c1"># Performing a general exploration of the numeric variables</span>
+<span class="c1">##################################</span>
+<span class="nb">print</span><span class="p">(</span><span class="s1">'Numeric Variable Summary:'</span><span class="p">)</span>
+<span class="n">display</span><span class="p">(</span><span class="n">thyroid_cancer</span><span class="o">.</span><span class="n">describe</span><span class="p">(</span><span class="n">include</span><span class="o">=</span><span class="s1">'number'</span><span class="p">)</span><span class="o">.</span><span class="n">transpose</span><span class="p">())</span>
+</pre></div>
+</div>
+</div>
+</div>
+</div>
+<div class="jp-Cell-outputWrapper">
+<div class="jp-Collapser jp-OutputCollapser jp-Cell-outputCollapser">
+</div>
+<div class="jp-OutputArea jp-Cell-outputArea">
+<div class="jp-OutputArea-child">
+<div class="jp-OutputPrompt jp-OutputArea-prompt"></div>
+<div class="jp-RenderedText jp-OutputArea-output" data-mime-type="text/plain" tabindex="0">
+<pre>Numeric Variable Summary:
+</pre>
+</div>
+</div>
+<div class="jp-OutputArea-child">
+<div class="jp-OutputPrompt jp-OutputArea-prompt"></div>
+<div class="jp-RenderedHTMLCommon jp-RenderedHTML jp-OutputArea-output" data-mime-type="text/html" tabindex="0">
+<div>
+<style scoped="">
+    .dataframe tbody tr th:only-of-type {
+        vertical-align: middle;
+    }
+
+    .dataframe tbody tr th {
+        vertical-align: top;
+    }
+
+    .dataframe thead th {
+        text-align: right;
+    }
+</style>
+<table border="1" class="dataframe">
+<thead>
+<tr style="text-align: right;">
+<th></th>
+<th>count</th>
+<th>mean</th>
+<th>std</th>
+<th>min</th>
+<th>25%</th>
+<th>50%</th>
+<th>75%</th>
+<th>max</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<th>Age</th>
+<td>383.0</td>
+<td>40.866841</td>
+<td>15.134494</td>
+<td>15.0</td>
+<td>29.0</td>
+<td>37.0</td>
+<td>51.0</td>
+<td>82.0</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div><div class="jp-Cell jp-CodeCell jp-Notebook-cell" id="cell-id=392a15aa-5c05-49ca-b726-c0875727ca52">
+<div class="jp-Cell-inputWrapper" tabindex="0">
+<div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
+</div>
+<div class="jp-InputArea jp-Cell-inputArea">
+<div class="jp-InputPrompt jp-InputArea-prompt">In [12]:</div>
+<div class="jp-CodeMirrorEditor jp-Editor jp-InputArea-editor" data-type="inline">
+<div class="cm-editor cm-s-jupyter">
+<div class="highlight hl-ipython3"><pre><span></span><span class="c1">##################################</span>
+<span class="c1"># Performing a general exploration of the categorical variables</span>
+<span class="c1">##################################</span>
+<span class="nb">print</span><span class="p">(</span><span class="s1">'Categorical Variable Summary:'</span><span class="p">)</span>
+<span class="n">display</span><span class="p">(</span><span class="n">thyroid_cancer</span><span class="o">.</span><span class="n">describe</span><span class="p">(</span><span class="n">include</span><span class="o">=</span><span class="s1">'category'</span><span class="p">)</span><span class="o">.</span><span class="n">transpose</span><span class="p">())</span>
+</pre></div>
+</div>
+</div>
+</div>
+</div>
+<div class="jp-Cell-outputWrapper">
+<div class="jp-Collapser jp-OutputCollapser jp-Cell-outputCollapser">
+</div>
+<div class="jp-OutputArea jp-Cell-outputArea">
+<div class="jp-OutputArea-child">
+<div class="jp-OutputPrompt jp-OutputArea-prompt"></div>
+<div class="jp-RenderedText jp-OutputArea-output" data-mime-type="text/plain" tabindex="0">
+<pre>Categorical Variable Summary:
+</pre>
+</div>
+</div>
+<div class="jp-OutputArea-child">
+<div class="jp-OutputPrompt jp-OutputArea-prompt"></div>
+<div class="jp-RenderedHTMLCommon jp-RenderedHTML jp-OutputArea-output" data-mime-type="text/html" tabindex="0">
+<div>
+<style scoped="">
+    .dataframe tbody tr th:only-of-type {
+        vertical-align: middle;
+    }
+
+    .dataframe tbody tr th {
+        vertical-align: top;
+    }
+
+    .dataframe thead th {
+        text-align: right;
+    }
+</style>
+<table border="1" class="dataframe">
+<thead>
+<tr style="text-align: right;">
+<th></th>
+<th>count</th>
+<th>unique</th>
+<th>top</th>
+<th>freq</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<th>Gender</th>
+<td>383</td>
+<td>2</td>
+<td>F</td>
+<td>312</td>
+</tr>
+<tr>
+<th>Smoking</th>
+<td>383</td>
+<td>2</td>
+<td>No</td>
+<td>334</td>
+</tr>
+<tr>
+<th>Hx_Smoking</th>
+<td>383</td>
+<td>2</td>
+<td>No</td>
+<td>355</td>
+</tr>
+<tr>
+<th>Hx_Radiotherapy</th>
+<td>383</td>
+<td>2</td>
+<td>No</td>
+<td>376</td>
+</tr>
+<tr>
+<th>Thyroid_Function</th>
+<td>383</td>
+<td>5</td>
+<td>Euthyroid</td>
+<td>332</td>
+</tr>
+<tr>
+<th>Physical_Examination</th>
+<td>383</td>
+<td>5</td>
+<td>Single nodular goiter-right</td>
+<td>140</td>
+</tr>
+<tr>
+<th>Adenopathy</th>
+<td>383</td>
+<td>6</td>
+<td>No</td>
+<td>277</td>
+</tr>
+<tr>
+<th>Pathology</th>
+<td>383</td>
+<td>4</td>
+<td>Papillary</td>
+<td>287</td>
+</tr>
+<tr>
+<th>Focality</th>
+<td>383</td>
+<td>2</td>
+<td>Uni-Focal</td>
+<td>247</td>
+</tr>
+<tr>
+<th>Risk</th>
+<td>383</td>
+<td>3</td>
+<td>Low</td>
+<td>249</td>
+</tr>
+<tr>
+<th>T</th>
+<td>383</td>
+<td>7</td>
+<td>T2</td>
+<td>151</td>
+</tr>
+<tr>
+<th>N</th>
+<td>383</td>
+<td>3</td>
+<td>N0</td>
+<td>268</td>
+</tr>
+<tr>
+<th>M</th>
+<td>383</td>
+<td>2</td>
+<td>M0</td>
+<td>365</td>
+</tr>
+<tr>
+<th>Stage</th>
+<td>383</td>
+<td>5</td>
+<td>I</td>
+<td>333</td>
+</tr>
+<tr>
+<th>Response</th>
+<td>383</td>
+<td>4</td>
+<td>Excellent</td>
+<td>208</td>
+</tr>
+<tr>
+<th>Recurred</th>
+<td>383</td>
+<td>2</td>
+<td>No</td>
+<td>275</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div><div class="jp-Cell jp-CodeCell jp-Notebook-cell" id="cell-id=01d217aa-a736-4f05-a361-bff4e113f625">
+<div class="jp-Cell-inputWrapper" tabindex="0">
+<div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
+</div>
+<div class="jp-InputArea jp-Cell-inputArea">
+<div class="jp-InputPrompt jp-InputArea-prompt">In [13]:</div>
+<div class="jp-CodeMirrorEditor jp-Editor jp-InputArea-editor" data-type="inline">
+<div class="cm-editor cm-s-jupyter">
+<div class="highlight hl-ipython3"><pre><span></span><span class="c1">##################################</span>
+<span class="c1"># Performing a general exploration of the categorical variable levels</span>
+<span class="c1"># based on the ordered categories</span>
+<span class="c1">##################################</span>
+<span class="n">ordered_cat_cols</span> <span class="o">=</span> <span class="n">thyroid_cancer</span><span class="o">.</span><span class="n">select_dtypes</span><span class="p">(</span><span class="n">include</span><span class="o">=</span><span class="p">[</span><span class="s2">"category"</span><span class="p">])</span><span class="o">.</span><span class="n">columns</span>
+<span class="k">for</span> <span class="n">col</span> <span class="ow">in</span> <span class="n">ordered_cat_cols</span><span class="p">:</span>
+    <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">"Column: </span><span class="si">{</span><span class="n">col</span><span class="si">}</span><span class="s2">"</span><span class="p">)</span>
+    <span class="nb">print</span><span class="p">(</span><span class="s2">"Absolute Frequencies:"</span><span class="p">)</span>
+    <span class="nb">print</span><span class="p">(</span><span class="n">thyroid_cancer</span><span class="p">[</span><span class="n">col</span><span class="p">]</span><span class="o">.</span><span class="n">value_counts</span><span class="p">()</span><span class="o">.</span><span class="n">reindex</span><span class="p">(</span><span class="n">thyroid_cancer</span><span class="p">[</span><span class="n">col</span><span class="p">]</span><span class="o">.</span><span class="n">cat</span><span class="o">.</span><span class="n">categories</span><span class="p">))</span>
+    <span class="nb">print</span><span class="p">(</span><span class="s2">"</span><span class="se">\n</span><span class="s2">Normalized Frequencies:"</span><span class="p">)</span>
+    <span class="nb">print</span><span class="p">(</span><span class="n">thyroid_cancer</span><span class="p">[</span><span class="n">col</span><span class="p">]</span><span class="o">.</span><span class="n">value_counts</span><span class="p">(</span><span class="n">normalize</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span><span class="o">.</span><span class="n">reindex</span><span class="p">(</span><span class="n">thyroid_cancer</span><span class="p">[</span><span class="n">col</span><span class="p">]</span><span class="o">.</span><span class="n">cat</span><span class="o">.</span><span class="n">categories</span><span class="p">))</span>
+    <span class="nb">print</span><span class="p">(</span><span class="s2">"-"</span> <span class="o">*</span> <span class="mi">50</span><span class="p">)</span>
+    
+</pre></div>
+</div>
+</div>
+</div>
+</div>
+<div class="jp-Cell-outputWrapper">
+<div class="jp-Collapser jp-OutputCollapser jp-Cell-outputCollapser">
+</div>
+<div class="jp-OutputArea jp-Cell-outputArea">
+<div class="jp-OutputArea-child">
+<div class="jp-OutputPrompt jp-OutputArea-prompt"></div>
+<div class="jp-RenderedText jp-OutputArea-output" data-mime-type="text/plain" tabindex="0">
+<pre>Column: Gender
+Absolute Frequencies:
+M     71
+F    312
+Name: count, dtype: int64
+
+Normalized Frequencies:
+M    0.185379
+F    0.814621
+Name: proportion, dtype: float64
+--------------------------------------------------
+Column: Smoking
+Absolute Frequencies:
+No     334
+Yes     49
+Name: count, dtype: int64
+
+Normalized Frequencies:
+No     0.872063
+Yes    0.127937
+Name: proportion, dtype: float64
+--------------------------------------------------
+Column: Hx_Smoking
+Absolute Frequencies:
+No     355
+Yes     28
+Name: count, dtype: int64
+
+Normalized Frequencies:
+No     0.926893
+Yes    0.073107
+Name: proportion, dtype: float64
+--------------------------------------------------
+Column: Hx_Radiotherapy
+Absolute Frequencies:
+No     376
+Yes      7
+Name: count, dtype: int64
+
+Normalized Frequencies:
+No     0.981723
+Yes    0.018277
+Name: proportion, dtype: float64
+--------------------------------------------------
+Column: Thyroid_Function
+Absolute Frequencies:
+Euthyroid                      332
+Subclinical Hypothyroidism      14
+Subclinical Hyperthyroidism      5
+Clinical Hypothyroidism         12
+Clinical Hyperthyroidism        20
+Name: count, dtype: int64
+
+Normalized Frequencies:
+Euthyroid                      0.866841
+Subclinical Hypothyroidism     0.036554
+Subclinical Hyperthyroidism    0.013055
+Clinical Hypothyroidism        0.031332
+Clinical Hyperthyroidism       0.052219
+Name: proportion, dtype: float64
+--------------------------------------------------
+Column: Physical_Examination
+Absolute Frequencies:
+Normal                           7
+Single nodular goiter-left      89
+Single nodular goiter-right    140
+Multinodular goiter            140
+Diffuse goiter                   7
+Name: count, dtype: int64
+
+Normalized Frequencies:
+Normal                         0.018277
+Single nodular goiter-left     0.232376
+Single nodular goiter-right    0.365535
+Multinodular goiter            0.365535
+Diffuse goiter                 0.018277
+Name: proportion, dtype: float64
+--------------------------------------------------
+Column: Adenopathy
+Absolute Frequencies:
+No           277
+Left          17
+Right         48
+Bilateral     32
+Posterior      2
+Extensive      7
+Name: count, dtype: int64
+
+Normalized Frequencies:
+No           0.723238
+Left         0.044386
+Right        0.125326
+Bilateral    0.083551
+Posterior    0.005222
+Extensive    0.018277
+Name: proportion, dtype: float64
+--------------------------------------------------
+Column: Pathology
+Absolute Frequencies:
+Hurthle Cell       20
+Follicular         28
+Micropapillary     48
+Papillary         287
+Name: count, dtype: int64
+
+Normalized Frequencies:
+Hurthle Cell      0.052219
+Follicular        0.073107
+Micropapillary    0.125326
+Papillary         0.749347
+Name: proportion, dtype: float64
+--------------------------------------------------
+Column: Focality
+Absolute Frequencies:
+Uni-Focal      247
+Multi-Focal    136
+Name: count, dtype: int64
+
+Normalized Frequencies:
+Uni-Focal      0.644909
+Multi-Focal    0.355091
+Name: proportion, dtype: float64
+--------------------------------------------------
+Column: Risk
+Absolute Frequencies:
+Low             249
+Intermediate    102
+High             32
+Name: count, dtype: int64
+
+Normalized Frequencies:
+Low             0.650131
+Intermediate    0.266319
+High            0.083551
+Name: proportion, dtype: float64
+--------------------------------------------------
+Column: T
+Absolute Frequencies:
+T1a     49
+T1b     43
+T2     151
+T3a     96
+T3b     16
+T4a     20
+T4b      8
+Name: count, dtype: int64
+
+Normalized Frequencies:
+T1a    0.127937
+T1b    0.112272
+T2     0.394256
+T3a    0.250653
+T3b    0.041775
+T4a    0.052219
+T4b    0.020888
+Name: proportion, dtype: float64
+--------------------------------------------------
+Column: N
+Absolute Frequencies:
+N0     268
+N1a     22
+N1b     93
+Name: count, dtype: int64
+
+Normalized Frequencies:
+N0     0.699739
+N1a    0.057441
+N1b    0.242820
+Name: proportion, dtype: float64
+--------------------------------------------------
+Column: M
+Absolute Frequencies:
+M0    365
+M1     18
+Name: count, dtype: int64
+
+Normalized Frequencies:
+M0    0.953003
+M1    0.046997
+Name: proportion, dtype: float64
+--------------------------------------------------
+Column: Stage
+Absolute Frequencies:
+I      333
+II      32
+III      4
+IVA      3
+IVB     11
+Name: count, dtype: int64
+
+Normalized Frequencies:
+I      0.869452
+II     0.083551
+III    0.010444
+IVA    0.007833
+IVB    0.028721
+Name: proportion, dtype: float64
+--------------------------------------------------
+Column: Response
+Absolute Frequencies:
+Excellent                 208
+Structural Incomplete      91
+Biochemical Incomplete     23
+Indeterminate              61
+Name: count, dtype: int64
+
+Normalized Frequencies:
+Excellent                 0.543081
+Structural Incomplete     0.237598
+Biochemical Incomplete    0.060052
+Indeterminate             0.159269
+Name: proportion, dtype: float64
+--------------------------------------------------
+Column: Recurred
+Absolute Frequencies:
+No     275
+Yes    108
+Name: count, dtype: int64
+
+Normalized Frequencies:
+No     0.718016
+Yes    0.281984
+Name: proportion, dtype: float64
+--------------------------------------------------
+</pre>
+</div>
 </div>
 </div>
 </div>
@@ -7636,7 +8728,3072 @@ a.anchor-link {
 </div>
 <div class="jp-InputArea jp-Cell-inputArea"><div class="jp-InputPrompt jp-InputArea-prompt">
 </div><div class="jp-RenderedHTMLCommon jp-RenderedMarkdown jp-MarkdownOutput" data-mime-type="text/markdown">
-<h2 id="1.3.-Data-Quality-Assessment-">1.3. Data Quality Assessment <a class="anchor" id="1.3"></a><a class="anchor-link" href="#1.3.-Data-Quality-Assessment-">¶</a></h2>
+<h2 id="1.3.-Data-Quality-Assessment-">1.3. Data Quality Assessment <a class="anchor" id="1.3"></a><a class="anchor-link" href="#1.3.-Data-Quality-Assessment-">¶</a></h2><p>Data quality findings based on assessment are as follows:</p>
+<ol>
+<li>A total of 19 duplicated rows were identified.<ul>
+<li>In total, 34 observations were affected, consisting of 16 unique occurrences and 19 subsequent duplicates.</li>
+<li>These 19 duplicates spanned 16 distinct variations, meaning some variations had multiple duplicates.</li>
+<li>To clean the dataset, all 19 duplicate rows were removed, retaining only the first occurrence of each of the 16 unique variations.</li>
+</ul>
+</li>
+<li>No missing data noted for any variable with Null.Count&gt;0 and Fill.Rate&lt;1.0.</li>
+<li>Low variance observed for 8 variables with First.Second.Mode.Ratio&gt;5.<ul>
+<li><span style="color: #FF0000">Hx_Radiotherapy</span>: First.Second.Mode.Ratio = 51.000 (comprised 2 category levels)</li>
+<li><span style="color: #FF0000">M</span>: First.Second.Mode.Ratio = 19.222 (comprised 2 category levels)</li>
+<li><span style="color: #FF0000">Thyroid_Function</span>: First.Second.Mode.Ratio = 15.650 (comprised 5 category levels)</li>
+<li><span style="color: #FF0000">Hx_Smoking</span>: First.Second.Mode.Ratio = 12.000 (comprised 2 category levels)</li>
+<li><span style="color: #FF0000">Stage</span>: First.Second.Mode.Ratio = 9.812 (comprised 5 category levels)</li>
+<li><span style="color: #FF0000">Smoking</span>: First.Second.Mode.Ratio = 6.428 (comprised 2 category levels)</li>
+<li><span style="color: #FF0000">Pathology</span>: First.Second.Mode.Ratio = 6.022 (comprised 4 category levels)</li>
+<li><span style="color: #FF0000">Adenopathy</span>: First.Second.Mode.Ratio = 5.375 (comprised 5 category levels)</li>
+</ul>
+</li>
+<li>No low variance observed for any variable with Unique.Count.Ratio&gt;10.</li>
+<li>No high skewness observed for any variable with Skewness&gt;3 or Skewness&lt;(-3).</li>
+</ol>
+</div>
+</div>
+</div>
+</div><div class="jp-Cell jp-CodeCell jp-Notebook-cell" id="cell-id=77678669-7404-4e97-a754-21c1421168c4">
+<div class="jp-Cell-inputWrapper" tabindex="0">
+<div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
+</div>
+<div class="jp-InputArea jp-Cell-inputArea">
+<div class="jp-InputPrompt jp-InputArea-prompt">In [14]:</div>
+<div class="jp-CodeMirrorEditor jp-Editor jp-InputArea-editor" data-type="inline">
+<div class="cm-editor cm-s-jupyter">
+<div class="highlight hl-ipython3"><pre><span></span><span class="c1">##################################</span>
+<span class="c1"># Counting the number of duplicated rows</span>
+<span class="c1">##################################</span>
+<span class="n">thyroid_cancer</span><span class="o">.</span><span class="n">duplicated</span><span class="p">()</span><span class="o">.</span><span class="n">sum</span><span class="p">()</span>
+</pre></div>
+</div>
+</div>
+</div>
+</div>
+<div class="jp-Cell-outputWrapper">
+<div class="jp-Collapser jp-OutputCollapser jp-Cell-outputCollapser">
+</div>
+<div class="jp-OutputArea jp-Cell-outputArea">
+<div class="jp-OutputArea-child jp-OutputArea-executeResult">
+<div class="jp-OutputPrompt jp-OutputArea-prompt">Out[14]:</div>
+<div class="jp-RenderedText jp-OutputArea-output jp-OutputArea-executeResult" data-mime-type="text/plain" tabindex="0">
+<pre>np.int64(19)</pre>
+</div>
+</div>
+</div>
+</div>
+</div><div class="jp-Cell jp-CodeCell jp-Notebook-cell" id="cell-id=2dda0463-71c0-4421-8ee6-50ee72652a02">
+<div class="jp-Cell-inputWrapper" tabindex="0">
+<div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
+</div>
+<div class="jp-InputArea jp-Cell-inputArea">
+<div class="jp-InputPrompt jp-InputArea-prompt">In [15]:</div>
+<div class="jp-CodeMirrorEditor jp-Editor jp-InputArea-editor" data-type="inline">
+<div class="cm-editor cm-s-jupyter">
+<div class="highlight hl-ipython3"><pre><span></span><span class="c1">##################################</span>
+<span class="c1"># Exploring the duplicated rows</span>
+<span class="c1">##################################</span>
+<span class="n">duplicated_rows</span> <span class="o">=</span> <span class="n">thyroid_cancer</span><span class="p">[</span><span class="n">thyroid_cancer</span><span class="o">.</span><span class="n">duplicated</span><span class="p">(</span><span class="n">keep</span><span class="o">=</span><span class="kc">False</span><span class="p">)]</span>
+<span class="n">display</span><span class="p">(</span><span class="n">duplicated_rows</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+</div>
+</div>
+<div class="jp-Cell-outputWrapper">
+<div class="jp-Collapser jp-OutputCollapser jp-Cell-outputCollapser">
+</div>
+<div class="jp-OutputArea jp-Cell-outputArea">
+<div class="jp-OutputArea-child">
+<div class="jp-OutputPrompt jp-OutputArea-prompt"></div>
+<div class="jp-RenderedHTMLCommon jp-RenderedHTML jp-OutputArea-output" data-mime-type="text/html" tabindex="0">
+<div>
+<style scoped="">
+    .dataframe tbody tr th:only-of-type {
+        vertical-align: middle;
+    }
+
+    .dataframe tbody tr th {
+        vertical-align: top;
+    }
+
+    .dataframe thead th {
+        text-align: right;
+    }
+</style>
+<table border="1" class="dataframe">
+<thead>
+<tr style="text-align: right;">
+<th></th>
+<th>Age</th>
+<th>Gender</th>
+<th>Smoking</th>
+<th>Hx_Smoking</th>
+<th>Hx_Radiotherapy</th>
+<th>Thyroid_Function</th>
+<th>Physical_Examination</th>
+<th>Adenopathy</th>
+<th>Pathology</th>
+<th>Focality</th>
+<th>Risk</th>
+<th>T</th>
+<th>N</th>
+<th>M</th>
+<th>Stage</th>
+<th>Response</th>
+<th>Recurred</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<th>8</th>
+<td>51</td>
+<td>F</td>
+<td>No</td>
+<td>No</td>
+<td>No</td>
+<td>Euthyroid</td>
+<td>Single nodular goiter-right</td>
+<td>No</td>
+<td>Micropapillary</td>
+<td>Uni-Focal</td>
+<td>Low</td>
+<td>T1a</td>
+<td>N0</td>
+<td>M0</td>
+<td>I</td>
+<td>Excellent</td>
+<td>No</td>
+</tr>
+<tr>
+<th>9</th>
+<td>40</td>
+<td>F</td>
+<td>No</td>
+<td>No</td>
+<td>No</td>
+<td>Euthyroid</td>
+<td>Single nodular goiter-right</td>
+<td>No</td>
+<td>Micropapillary</td>
+<td>Uni-Focal</td>
+<td>Low</td>
+<td>T1a</td>
+<td>N0</td>
+<td>M0</td>
+<td>I</td>
+<td>Excellent</td>
+<td>No</td>
+</tr>
+<tr>
+<th>22</th>
+<td>36</td>
+<td>F</td>
+<td>No</td>
+<td>No</td>
+<td>No</td>
+<td>Euthyroid</td>
+<td>Single nodular goiter-right</td>
+<td>No</td>
+<td>Micropapillary</td>
+<td>Uni-Focal</td>
+<td>Low</td>
+<td>T1a</td>
+<td>N0</td>
+<td>M0</td>
+<td>I</td>
+<td>Excellent</td>
+<td>No</td>
+</tr>
+<tr>
+<th>32</th>
+<td>36</td>
+<td>F</td>
+<td>No</td>
+<td>No</td>
+<td>No</td>
+<td>Euthyroid</td>
+<td>Single nodular goiter-right</td>
+<td>No</td>
+<td>Micropapillary</td>
+<td>Uni-Focal</td>
+<td>Low</td>
+<td>T1a</td>
+<td>N0</td>
+<td>M0</td>
+<td>I</td>
+<td>Excellent</td>
+<td>No</td>
+</tr>
+<tr>
+<th>38</th>
+<td>40</td>
+<td>F</td>
+<td>No</td>
+<td>No</td>
+<td>No</td>
+<td>Euthyroid</td>
+<td>Single nodular goiter-right</td>
+<td>No</td>
+<td>Micropapillary</td>
+<td>Uni-Focal</td>
+<td>Low</td>
+<td>T1a</td>
+<td>N0</td>
+<td>M0</td>
+<td>I</td>
+<td>Excellent</td>
+<td>No</td>
+</tr>
+<tr>
+<th>40</th>
+<td>51</td>
+<td>F</td>
+<td>No</td>
+<td>No</td>
+<td>No</td>
+<td>Euthyroid</td>
+<td>Single nodular goiter-right</td>
+<td>No</td>
+<td>Micropapillary</td>
+<td>Uni-Focal</td>
+<td>Low</td>
+<td>T1a</td>
+<td>N0</td>
+<td>M0</td>
+<td>I</td>
+<td>Excellent</td>
+<td>No</td>
+</tr>
+<tr>
+<th>61</th>
+<td>35</td>
+<td>F</td>
+<td>No</td>
+<td>No</td>
+<td>No</td>
+<td>Euthyroid</td>
+<td>Single nodular goiter-right</td>
+<td>No</td>
+<td>Papillary</td>
+<td>Uni-Focal</td>
+<td>Low</td>
+<td>T1b</td>
+<td>N0</td>
+<td>M0</td>
+<td>I</td>
+<td>Excellent</td>
+<td>No</td>
+</tr>
+<tr>
+<th>66</th>
+<td>35</td>
+<td>F</td>
+<td>No</td>
+<td>No</td>
+<td>No</td>
+<td>Euthyroid</td>
+<td>Single nodular goiter-right</td>
+<td>No</td>
+<td>Papillary</td>
+<td>Uni-Focal</td>
+<td>Low</td>
+<td>T1b</td>
+<td>N0</td>
+<td>M0</td>
+<td>I</td>
+<td>Excellent</td>
+<td>No</td>
+</tr>
+<tr>
+<th>67</th>
+<td>51</td>
+<td>F</td>
+<td>No</td>
+<td>No</td>
+<td>No</td>
+<td>Euthyroid</td>
+<td>Single nodular goiter-left</td>
+<td>No</td>
+<td>Papillary</td>
+<td>Uni-Focal</td>
+<td>Low</td>
+<td>T1b</td>
+<td>N0</td>
+<td>M0</td>
+<td>I</td>
+<td>Excellent</td>
+<td>No</td>
+</tr>
+<tr>
+<th>69</th>
+<td>51</td>
+<td>F</td>
+<td>No</td>
+<td>No</td>
+<td>No</td>
+<td>Euthyroid</td>
+<td>Single nodular goiter-left</td>
+<td>No</td>
+<td>Papillary</td>
+<td>Uni-Focal</td>
+<td>Low</td>
+<td>T1b</td>
+<td>N0</td>
+<td>M0</td>
+<td>I</td>
+<td>Excellent</td>
+<td>No</td>
+</tr>
+<tr>
+<th>73</th>
+<td>29</td>
+<td>F</td>
+<td>No</td>
+<td>No</td>
+<td>No</td>
+<td>Euthyroid</td>
+<td>Single nodular goiter-right</td>
+<td>No</td>
+<td>Papillary</td>
+<td>Uni-Focal</td>
+<td>Low</td>
+<td>T1b</td>
+<td>N0</td>
+<td>M0</td>
+<td>I</td>
+<td>Excellent</td>
+<td>No</td>
+</tr>
+<tr>
+<th>77</th>
+<td>29</td>
+<td>F</td>
+<td>No</td>
+<td>No</td>
+<td>No</td>
+<td>Euthyroid</td>
+<td>Single nodular goiter-right</td>
+<td>No</td>
+<td>Papillary</td>
+<td>Uni-Focal</td>
+<td>Low</td>
+<td>T1b</td>
+<td>N0</td>
+<td>M0</td>
+<td>I</td>
+<td>Excellent</td>
+<td>No</td>
+</tr>
+<tr>
+<th>106</th>
+<td>26</td>
+<td>F</td>
+<td>No</td>
+<td>No</td>
+<td>No</td>
+<td>Euthyroid</td>
+<td>Multinodular goiter</td>
+<td>No</td>
+<td>Papillary</td>
+<td>Uni-Focal</td>
+<td>Low</td>
+<td>T2</td>
+<td>N0</td>
+<td>M0</td>
+<td>I</td>
+<td>Excellent</td>
+<td>No</td>
+</tr>
+<tr>
+<th>110</th>
+<td>31</td>
+<td>F</td>
+<td>No</td>
+<td>No</td>
+<td>No</td>
+<td>Euthyroid</td>
+<td>Single nodular goiter-right</td>
+<td>No</td>
+<td>Papillary</td>
+<td>Uni-Focal</td>
+<td>Low</td>
+<td>T2</td>
+<td>N0</td>
+<td>M0</td>
+<td>I</td>
+<td>Excellent</td>
+<td>No</td>
+</tr>
+<tr>
+<th>113</th>
+<td>32</td>
+<td>F</td>
+<td>No</td>
+<td>No</td>
+<td>No</td>
+<td>Euthyroid</td>
+<td>Single nodular goiter-right</td>
+<td>No</td>
+<td>Papillary</td>
+<td>Uni-Focal</td>
+<td>Low</td>
+<td>T2</td>
+<td>N0</td>
+<td>M0</td>
+<td>I</td>
+<td>Excellent</td>
+<td>No</td>
+</tr>
+<tr>
+<th>115</th>
+<td>37</td>
+<td>F</td>
+<td>No</td>
+<td>No</td>
+<td>No</td>
+<td>Euthyroid</td>
+<td>Single nodular goiter-right</td>
+<td>No</td>
+<td>Papillary</td>
+<td>Uni-Focal</td>
+<td>Low</td>
+<td>T2</td>
+<td>N0</td>
+<td>M0</td>
+<td>I</td>
+<td>Excellent</td>
+<td>No</td>
+</tr>
+<tr>
+<th>119</th>
+<td>28</td>
+<td>F</td>
+<td>No</td>
+<td>No</td>
+<td>No</td>
+<td>Euthyroid</td>
+<td>Single nodular goiter-right</td>
+<td>No</td>
+<td>Papillary</td>
+<td>Uni-Focal</td>
+<td>Low</td>
+<td>T2</td>
+<td>N0</td>
+<td>M0</td>
+<td>I</td>
+<td>Excellent</td>
+<td>No</td>
+</tr>
+<tr>
+<th>120</th>
+<td>37</td>
+<td>F</td>
+<td>No</td>
+<td>No</td>
+<td>No</td>
+<td>Euthyroid</td>
+<td>Single nodular goiter-right</td>
+<td>No</td>
+<td>Papillary</td>
+<td>Uni-Focal</td>
+<td>Low</td>
+<td>T2</td>
+<td>N0</td>
+<td>M0</td>
+<td>I</td>
+<td>Excellent</td>
+<td>No</td>
+</tr>
+<tr>
+<th>121</th>
+<td>26</td>
+<td>F</td>
+<td>No</td>
+<td>No</td>
+<td>No</td>
+<td>Euthyroid</td>
+<td>Multinodular goiter</td>
+<td>No</td>
+<td>Papillary</td>
+<td>Uni-Focal</td>
+<td>Low</td>
+<td>T2</td>
+<td>N0</td>
+<td>M0</td>
+<td>I</td>
+<td>Excellent</td>
+<td>No</td>
+</tr>
+<tr>
+<th>123</th>
+<td>28</td>
+<td>F</td>
+<td>No</td>
+<td>No</td>
+<td>No</td>
+<td>Euthyroid</td>
+<td>Single nodular goiter-right</td>
+<td>No</td>
+<td>Papillary</td>
+<td>Uni-Focal</td>
+<td>Low</td>
+<td>T2</td>
+<td>N0</td>
+<td>M0</td>
+<td>I</td>
+<td>Excellent</td>
+<td>No</td>
+</tr>
+<tr>
+<th>132</th>
+<td>32</td>
+<td>F</td>
+<td>No</td>
+<td>No</td>
+<td>No</td>
+<td>Euthyroid</td>
+<td>Single nodular goiter-right</td>
+<td>No</td>
+<td>Papillary</td>
+<td>Uni-Focal</td>
+<td>Low</td>
+<td>T2</td>
+<td>N0</td>
+<td>M0</td>
+<td>I</td>
+<td>Excellent</td>
+<td>No</td>
+</tr>
+<tr>
+<th>136</th>
+<td>21</td>
+<td>F</td>
+<td>No</td>
+<td>No</td>
+<td>No</td>
+<td>Euthyroid</td>
+<td>Single nodular goiter-right</td>
+<td>No</td>
+<td>Papillary</td>
+<td>Uni-Focal</td>
+<td>Low</td>
+<td>T2</td>
+<td>N0</td>
+<td>M0</td>
+<td>I</td>
+<td>Excellent</td>
+<td>No</td>
+</tr>
+<tr>
+<th>137</th>
+<td>32</td>
+<td>F</td>
+<td>No</td>
+<td>No</td>
+<td>No</td>
+<td>Euthyroid</td>
+<td>Single nodular goiter-right</td>
+<td>No</td>
+<td>Papillary</td>
+<td>Uni-Focal</td>
+<td>Low</td>
+<td>T2</td>
+<td>N0</td>
+<td>M0</td>
+<td>I</td>
+<td>Excellent</td>
+<td>No</td>
+</tr>
+<tr>
+<th>138</th>
+<td>26</td>
+<td>F</td>
+<td>No</td>
+<td>No</td>
+<td>No</td>
+<td>Euthyroid</td>
+<td>Multinodular goiter</td>
+<td>No</td>
+<td>Papillary</td>
+<td>Uni-Focal</td>
+<td>Low</td>
+<td>T2</td>
+<td>N0</td>
+<td>M0</td>
+<td>I</td>
+<td>Excellent</td>
+<td>No</td>
+</tr>
+<tr>
+<th>142</th>
+<td>42</td>
+<td>F</td>
+<td>No</td>
+<td>No</td>
+<td>No</td>
+<td>Euthyroid</td>
+<td>Multinodular goiter</td>
+<td>No</td>
+<td>Papillary</td>
+<td>Uni-Focal</td>
+<td>Low</td>
+<td>T2</td>
+<td>N0</td>
+<td>M0</td>
+<td>I</td>
+<td>Excellent</td>
+<td>No</td>
+</tr>
+<tr>
+<th>161</th>
+<td>22</td>
+<td>F</td>
+<td>No</td>
+<td>No</td>
+<td>No</td>
+<td>Euthyroid</td>
+<td>Single nodular goiter-right</td>
+<td>No</td>
+<td>Papillary</td>
+<td>Uni-Focal</td>
+<td>Low</td>
+<td>T2</td>
+<td>N0</td>
+<td>M0</td>
+<td>I</td>
+<td>Excellent</td>
+<td>No</td>
+</tr>
+<tr>
+<th>166</th>
+<td>31</td>
+<td>F</td>
+<td>No</td>
+<td>No</td>
+<td>No</td>
+<td>Euthyroid</td>
+<td>Single nodular goiter-right</td>
+<td>No</td>
+<td>Papillary</td>
+<td>Uni-Focal</td>
+<td>Low</td>
+<td>T2</td>
+<td>N0</td>
+<td>M0</td>
+<td>I</td>
+<td>Excellent</td>
+<td>No</td>
+</tr>
+<tr>
+<th>168</th>
+<td>21</td>
+<td>F</td>
+<td>No</td>
+<td>No</td>
+<td>No</td>
+<td>Euthyroid</td>
+<td>Single nodular goiter-right</td>
+<td>No</td>
+<td>Papillary</td>
+<td>Uni-Focal</td>
+<td>Low</td>
+<td>T2</td>
+<td>N0</td>
+<td>M0</td>
+<td>I</td>
+<td>Excellent</td>
+<td>No</td>
+</tr>
+<tr>
+<th>170</th>
+<td>38</td>
+<td>F</td>
+<td>No</td>
+<td>No</td>
+<td>No</td>
+<td>Euthyroid</td>
+<td>Single nodular goiter-right</td>
+<td>No</td>
+<td>Papillary</td>
+<td>Uni-Focal</td>
+<td>Low</td>
+<td>T2</td>
+<td>N0</td>
+<td>M0</td>
+<td>I</td>
+<td>Excellent</td>
+<td>No</td>
+</tr>
+<tr>
+<th>175</th>
+<td>34</td>
+<td>F</td>
+<td>No</td>
+<td>No</td>
+<td>No</td>
+<td>Euthyroid</td>
+<td>Multinodular goiter</td>
+<td>No</td>
+<td>Papillary</td>
+<td>Uni-Focal</td>
+<td>Low</td>
+<td>T2</td>
+<td>N0</td>
+<td>M0</td>
+<td>I</td>
+<td>Excellent</td>
+<td>No</td>
+</tr>
+<tr>
+<th>178</th>
+<td>38</td>
+<td>F</td>
+<td>No</td>
+<td>No</td>
+<td>No</td>
+<td>Euthyroid</td>
+<td>Single nodular goiter-right</td>
+<td>No</td>
+<td>Papillary</td>
+<td>Uni-Focal</td>
+<td>Low</td>
+<td>T2</td>
+<td>N0</td>
+<td>M0</td>
+<td>I</td>
+<td>Excellent</td>
+<td>No</td>
+</tr>
+<tr>
+<th>183</th>
+<td>26</td>
+<td>F</td>
+<td>No</td>
+<td>No</td>
+<td>No</td>
+<td>Euthyroid</td>
+<td>Multinodular goiter</td>
+<td>No</td>
+<td>Papillary</td>
+<td>Uni-Focal</td>
+<td>Low</td>
+<td>T2</td>
+<td>N0</td>
+<td>M0</td>
+<td>I</td>
+<td>Excellent</td>
+<td>No</td>
+</tr>
+<tr>
+<th>187</th>
+<td>34</td>
+<td>F</td>
+<td>No</td>
+<td>No</td>
+<td>No</td>
+<td>Euthyroid</td>
+<td>Multinodular goiter</td>
+<td>No</td>
+<td>Papillary</td>
+<td>Uni-Focal</td>
+<td>Low</td>
+<td>T2</td>
+<td>N0</td>
+<td>M0</td>
+<td>I</td>
+<td>Excellent</td>
+<td>No</td>
+</tr>
+<tr>
+<th>189</th>
+<td>42</td>
+<td>F</td>
+<td>No</td>
+<td>No</td>
+<td>No</td>
+<td>Euthyroid</td>
+<td>Multinodular goiter</td>
+<td>No</td>
+<td>Papillary</td>
+<td>Uni-Focal</td>
+<td>Low</td>
+<td>T2</td>
+<td>N0</td>
+<td>M0</td>
+<td>I</td>
+<td>Excellent</td>
+<td>No</td>
+</tr>
+<tr>
+<th>196</th>
+<td>22</td>
+<td>F</td>
+<td>No</td>
+<td>No</td>
+<td>No</td>
+<td>Euthyroid</td>
+<td>Single nodular goiter-right</td>
+<td>No</td>
+<td>Papillary</td>
+<td>Uni-Focal</td>
+<td>Low</td>
+<td>T2</td>
+<td>N0</td>
+<td>M0</td>
+<td>I</td>
+<td>Excellent</td>
+<td>No</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div><div class="jp-Cell jp-CodeCell jp-Notebook-cell" id="cell-id=ecea353b-1f75-4230-bce5-360fd93708d9">
+<div class="jp-Cell-inputWrapper" tabindex="0">
+<div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
+</div>
+<div class="jp-InputArea jp-Cell-inputArea">
+<div class="jp-InputPrompt jp-InputArea-prompt">In [16]:</div>
+<div class="jp-CodeMirrorEditor jp-Editor jp-InputArea-editor" data-type="inline">
+<div class="cm-editor cm-s-jupyter">
+<div class="highlight hl-ipython3"><pre><span></span><span class="c1">##################################</span>
+<span class="c1"># Checking if duplicated rows have identical values across all columns</span>
+<span class="c1">##################################</span>
+<span class="n">num_unique_dup_rows</span> <span class="o">=</span> <span class="n">duplicated_rows</span><span class="o">.</span><span class="n">drop_duplicates</span><span class="p">()</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+<span class="n">num_total_dup_rows</span> <span class="o">=</span> <span class="n">duplicated_rows</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+<span class="k">if</span> <span class="n">num_unique_dup_rows</span> <span class="o">==</span> <span class="mi">1</span><span class="p">:</span>
+    <span class="nb">print</span><span class="p">(</span><span class="s2">"All duplicated rows have the same values across all columns."</span><span class="p">)</span>
+<span class="k">else</span><span class="p">:</span>
+    <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">"There are </span><span class="si">{</span><span class="n">num_unique_dup_rows</span><span class="si">}</span><span class="s2"> unique versions among the </span><span class="si">{</span><span class="n">num_total_dup_rows</span><span class="si">}</span><span class="s2"> duplicated rows."</span><span class="p">)</span>
+    
+</pre></div>
+</div>
+</div>
+</div>
+</div>
+<div class="jp-Cell-outputWrapper">
+<div class="jp-Collapser jp-OutputCollapser jp-Cell-outputCollapser">
+</div>
+<div class="jp-OutputArea jp-Cell-outputArea">
+<div class="jp-OutputArea-child">
+<div class="jp-OutputPrompt jp-OutputArea-prompt"></div>
+<div class="jp-RenderedText jp-OutputArea-output" data-mime-type="text/plain" tabindex="0">
+<pre>There are 16 unique versions among the 35 duplicated rows.
+</pre>
+</div>
+</div>
+</div>
+</div>
+</div><div class="jp-Cell jp-CodeCell jp-Notebook-cell" id="cell-id=8bf95379-bc07-4e47-8aee-da0ff7ed11d4">
+<div class="jp-Cell-inputWrapper" tabindex="0">
+<div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
+</div>
+<div class="jp-InputArea jp-Cell-inputArea">
+<div class="jp-InputPrompt jp-InputArea-prompt">In [17]:</div>
+<div class="jp-CodeMirrorEditor jp-Editor jp-InputArea-editor" data-type="inline">
+<div class="cm-editor cm-s-jupyter">
+<div class="highlight hl-ipython3"><pre><span></span><span class="c1">##################################</span>
+<span class="c1"># Counting the unique variations among duplicated rows</span>
+<span class="c1">##################################</span>
+<span class="n">unique_dup_variations</span> <span class="o">=</span> <span class="n">duplicated_rows</span><span class="o">.</span><span class="n">drop_duplicates</span><span class="p">()</span>
+<span class="n">variation_counts</span> <span class="o">=</span> <span class="n">duplicated_rows</span><span class="o">.</span><span class="n">value_counts</span><span class="p">()</span><span class="o">.</span><span class="n">reset_index</span><span class="p">(</span><span class="n">name</span><span class="o">=</span><span class="s2">"Count"</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">"Unique duplicated row variations and their counts:"</span><span class="p">)</span>
+<span class="n">display</span><span class="p">(</span><span class="n">variation_counts</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+</div>
+</div>
+<div class="jp-Cell-outputWrapper">
+<div class="jp-Collapser jp-OutputCollapser jp-Cell-outputCollapser">
+</div>
+<div class="jp-OutputArea jp-Cell-outputArea">
+<div class="jp-OutputArea-child">
+<div class="jp-OutputPrompt jp-OutputArea-prompt"></div>
+<div class="jp-RenderedText jp-OutputArea-output" data-mime-type="text/plain" tabindex="0">
+<pre>Unique duplicated row variations and their counts:
+</pre>
+</div>
+</div>
+<div class="jp-OutputArea-child">
+<div class="jp-OutputPrompt jp-OutputArea-prompt"></div>
+<div class="jp-RenderedHTMLCommon jp-RenderedHTML jp-OutputArea-output" data-mime-type="text/html" tabindex="0">
+<div>
+<style scoped="">
+    .dataframe tbody tr th:only-of-type {
+        vertical-align: middle;
+    }
+
+    .dataframe tbody tr th {
+        vertical-align: top;
+    }
+
+    .dataframe thead th {
+        text-align: right;
+    }
+</style>
+<table border="1" class="dataframe">
+<thead>
+<tr style="text-align: right;">
+<th></th>
+<th>Age</th>
+<th>Gender</th>
+<th>Smoking</th>
+<th>Hx_Smoking</th>
+<th>Hx_Radiotherapy</th>
+<th>Thyroid_Function</th>
+<th>Physical_Examination</th>
+<th>Adenopathy</th>
+<th>Pathology</th>
+<th>Focality</th>
+<th>Risk</th>
+<th>T</th>
+<th>N</th>
+<th>M</th>
+<th>Stage</th>
+<th>Response</th>
+<th>Recurred</th>
+<th>Count</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<th>0</th>
+<td>26</td>
+<td>F</td>
+<td>No</td>
+<td>No</td>
+<td>No</td>
+<td>Euthyroid</td>
+<td>Multinodular goiter</td>
+<td>No</td>
+<td>Papillary</td>
+<td>Uni-Focal</td>
+<td>Low</td>
+<td>T2</td>
+<td>N0</td>
+<td>M0</td>
+<td>I</td>
+<td>Excellent</td>
+<td>No</td>
+<td>4</td>
+</tr>
+<tr>
+<th>1</th>
+<td>32</td>
+<td>F</td>
+<td>No</td>
+<td>No</td>
+<td>No</td>
+<td>Euthyroid</td>
+<td>Single nodular goiter-right</td>
+<td>No</td>
+<td>Papillary</td>
+<td>Uni-Focal</td>
+<td>Low</td>
+<td>T2</td>
+<td>N0</td>
+<td>M0</td>
+<td>I</td>
+<td>Excellent</td>
+<td>No</td>
+<td>3</td>
+</tr>
+<tr>
+<th>2</th>
+<td>22</td>
+<td>F</td>
+<td>No</td>
+<td>No</td>
+<td>No</td>
+<td>Euthyroid</td>
+<td>Single nodular goiter-right</td>
+<td>No</td>
+<td>Papillary</td>
+<td>Uni-Focal</td>
+<td>Low</td>
+<td>T2</td>
+<td>N0</td>
+<td>M0</td>
+<td>I</td>
+<td>Excellent</td>
+<td>No</td>
+<td>2</td>
+</tr>
+<tr>
+<th>3</th>
+<td>21</td>
+<td>F</td>
+<td>No</td>
+<td>No</td>
+<td>No</td>
+<td>Euthyroid</td>
+<td>Single nodular goiter-right</td>
+<td>No</td>
+<td>Papillary</td>
+<td>Uni-Focal</td>
+<td>Low</td>
+<td>T2</td>
+<td>N0</td>
+<td>M0</td>
+<td>I</td>
+<td>Excellent</td>
+<td>No</td>
+<td>2</td>
+</tr>
+<tr>
+<th>4</th>
+<td>28</td>
+<td>F</td>
+<td>No</td>
+<td>No</td>
+<td>No</td>
+<td>Euthyroid</td>
+<td>Single nodular goiter-right</td>
+<td>No</td>
+<td>Papillary</td>
+<td>Uni-Focal</td>
+<td>Low</td>
+<td>T2</td>
+<td>N0</td>
+<td>M0</td>
+<td>I</td>
+<td>Excellent</td>
+<td>No</td>
+<td>2</td>
+</tr>
+<tr>
+<th>5</th>
+<td>29</td>
+<td>F</td>
+<td>No</td>
+<td>No</td>
+<td>No</td>
+<td>Euthyroid</td>
+<td>Single nodular goiter-right</td>
+<td>No</td>
+<td>Papillary</td>
+<td>Uni-Focal</td>
+<td>Low</td>
+<td>T1b</td>
+<td>N0</td>
+<td>M0</td>
+<td>I</td>
+<td>Excellent</td>
+<td>No</td>
+<td>2</td>
+</tr>
+<tr>
+<th>6</th>
+<td>31</td>
+<td>F</td>
+<td>No</td>
+<td>No</td>
+<td>No</td>
+<td>Euthyroid</td>
+<td>Single nodular goiter-right</td>
+<td>No</td>
+<td>Papillary</td>
+<td>Uni-Focal</td>
+<td>Low</td>
+<td>T2</td>
+<td>N0</td>
+<td>M0</td>
+<td>I</td>
+<td>Excellent</td>
+<td>No</td>
+<td>2</td>
+</tr>
+<tr>
+<th>7</th>
+<td>34</td>
+<td>F</td>
+<td>No</td>
+<td>No</td>
+<td>No</td>
+<td>Euthyroid</td>
+<td>Multinodular goiter</td>
+<td>No</td>
+<td>Papillary</td>
+<td>Uni-Focal</td>
+<td>Low</td>
+<td>T2</td>
+<td>N0</td>
+<td>M0</td>
+<td>I</td>
+<td>Excellent</td>
+<td>No</td>
+<td>2</td>
+</tr>
+<tr>
+<th>8</th>
+<td>35</td>
+<td>F</td>
+<td>No</td>
+<td>No</td>
+<td>No</td>
+<td>Euthyroid</td>
+<td>Single nodular goiter-right</td>
+<td>No</td>
+<td>Papillary</td>
+<td>Uni-Focal</td>
+<td>Low</td>
+<td>T1b</td>
+<td>N0</td>
+<td>M0</td>
+<td>I</td>
+<td>Excellent</td>
+<td>No</td>
+<td>2</td>
+</tr>
+<tr>
+<th>9</th>
+<td>36</td>
+<td>F</td>
+<td>No</td>
+<td>No</td>
+<td>No</td>
+<td>Euthyroid</td>
+<td>Single nodular goiter-right</td>
+<td>No</td>
+<td>Micropapillary</td>
+<td>Uni-Focal</td>
+<td>Low</td>
+<td>T1a</td>
+<td>N0</td>
+<td>M0</td>
+<td>I</td>
+<td>Excellent</td>
+<td>No</td>
+<td>2</td>
+</tr>
+<tr>
+<th>10</th>
+<td>37</td>
+<td>F</td>
+<td>No</td>
+<td>No</td>
+<td>No</td>
+<td>Euthyroid</td>
+<td>Single nodular goiter-right</td>
+<td>No</td>
+<td>Papillary</td>
+<td>Uni-Focal</td>
+<td>Low</td>
+<td>T2</td>
+<td>N0</td>
+<td>M0</td>
+<td>I</td>
+<td>Excellent</td>
+<td>No</td>
+<td>2</td>
+</tr>
+<tr>
+<th>11</th>
+<td>38</td>
+<td>F</td>
+<td>No</td>
+<td>No</td>
+<td>No</td>
+<td>Euthyroid</td>
+<td>Single nodular goiter-right</td>
+<td>No</td>
+<td>Papillary</td>
+<td>Uni-Focal</td>
+<td>Low</td>
+<td>T2</td>
+<td>N0</td>
+<td>M0</td>
+<td>I</td>
+<td>Excellent</td>
+<td>No</td>
+<td>2</td>
+</tr>
+<tr>
+<th>12</th>
+<td>40</td>
+<td>F</td>
+<td>No</td>
+<td>No</td>
+<td>No</td>
+<td>Euthyroid</td>
+<td>Single nodular goiter-right</td>
+<td>No</td>
+<td>Micropapillary</td>
+<td>Uni-Focal</td>
+<td>Low</td>
+<td>T1a</td>
+<td>N0</td>
+<td>M0</td>
+<td>I</td>
+<td>Excellent</td>
+<td>No</td>
+<td>2</td>
+</tr>
+<tr>
+<th>13</th>
+<td>42</td>
+<td>F</td>
+<td>No</td>
+<td>No</td>
+<td>No</td>
+<td>Euthyroid</td>
+<td>Multinodular goiter</td>
+<td>No</td>
+<td>Papillary</td>
+<td>Uni-Focal</td>
+<td>Low</td>
+<td>T2</td>
+<td>N0</td>
+<td>M0</td>
+<td>I</td>
+<td>Excellent</td>
+<td>No</td>
+<td>2</td>
+</tr>
+<tr>
+<th>14</th>
+<td>51</td>
+<td>F</td>
+<td>No</td>
+<td>No</td>
+<td>No</td>
+<td>Euthyroid</td>
+<td>Single nodular goiter-left</td>
+<td>No</td>
+<td>Papillary</td>
+<td>Uni-Focal</td>
+<td>Low</td>
+<td>T1b</td>
+<td>N0</td>
+<td>M0</td>
+<td>I</td>
+<td>Excellent</td>
+<td>No</td>
+<td>2</td>
+</tr>
+<tr>
+<th>15</th>
+<td>51</td>
+<td>F</td>
+<td>No</td>
+<td>No</td>
+<td>No</td>
+<td>Euthyroid</td>
+<td>Single nodular goiter-right</td>
+<td>No</td>
+<td>Micropapillary</td>
+<td>Uni-Focal</td>
+<td>Low</td>
+<td>T1a</td>
+<td>N0</td>
+<td>M0</td>
+<td>I</td>
+<td>Excellent</td>
+<td>No</td>
+<td>2</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div><div class="jp-Cell jp-CodeCell jp-Notebook-cell" id="cell-id=9ed63e24-12d9-47b4-ba92-c35469d4ec53">
+<div class="jp-Cell-inputWrapper" tabindex="0">
+<div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
+</div>
+<div class="jp-InputArea jp-Cell-inputArea">
+<div class="jp-InputPrompt jp-InputArea-prompt">In [18]:</div>
+<div class="jp-CodeMirrorEditor jp-Editor jp-InputArea-editor" data-type="inline">
+<div class="cm-editor cm-s-jupyter">
+<div class="highlight hl-ipython3"><pre><span></span><span class="c1">##################################</span>
+<span class="c1"># Removing the duplicated rows and</span>
+<span class="c1"># retaining only the first occurrence</span>
+<span class="c1">##################################</span>
+<span class="n">thyroid_cancer_row_filtered</span> <span class="o">=</span> <span class="n">thyroid_cancer</span><span class="o">.</span><span class="n">drop_duplicates</span><span class="p">(</span><span class="n">keep</span><span class="o">=</span><span class="s2">"first"</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="s1">'Dataset Dimensions: '</span><span class="p">)</span>
+<span class="n">display</span><span class="p">(</span><span class="n">thyroid_cancer_row_filtered</span><span class="o">.</span><span class="n">shape</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+</div>
+</div>
+<div class="jp-Cell-outputWrapper">
+<div class="jp-Collapser jp-OutputCollapser jp-Cell-outputCollapser">
+</div>
+<div class="jp-OutputArea jp-Cell-outputArea">
+<div class="jp-OutputArea-child">
+<div class="jp-OutputPrompt jp-OutputArea-prompt"></div>
+<div class="jp-RenderedText jp-OutputArea-output" data-mime-type="text/plain" tabindex="0">
+<pre>Dataset Dimensions: 
+</pre>
+</div>
+</div>
+<div class="jp-OutputArea-child">
+<div class="jp-OutputPrompt jp-OutputArea-prompt"></div>
+<div class="jp-RenderedText jp-OutputArea-output" data-mime-type="text/plain" tabindex="0">
+<pre>(364, 17)</pre>
+</div>
+</div>
+</div>
+</div>
+</div><div class="jp-Cell jp-CodeCell jp-Notebook-cell jp-mod-noOutputs" id="cell-id=98509103-0169-486d-beb7-a0247ebe1c96">
+<div class="jp-Cell-inputWrapper" tabindex="0">
+<div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
+</div>
+<div class="jp-InputArea jp-Cell-inputArea">
+<div class="jp-InputPrompt jp-InputArea-prompt">In [19]:</div>
+<div class="jp-CodeMirrorEditor jp-Editor jp-InputArea-editor" data-type="inline">
+<div class="cm-editor cm-s-jupyter">
+<div class="highlight hl-ipython3"><pre><span></span><span class="c1">##################################</span>
+<span class="c1"># Gathering the data types for each column</span>
+<span class="c1">##################################</span>
+<span class="n">data_type_list</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="n">thyroid_cancer_row_filtered</span><span class="o">.</span><span class="n">dtypes</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+</div>
+</div>
+</div><div class="jp-Cell jp-CodeCell jp-Notebook-cell jp-mod-noOutputs" id="cell-id=537e842f-f38d-42a9-ae7e-5a7dbde1a3c0">
+<div class="jp-Cell-inputWrapper" tabindex="0">
+<div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
+</div>
+<div class="jp-InputArea jp-Cell-inputArea">
+<div class="jp-InputPrompt jp-InputArea-prompt">In [20]:</div>
+<div class="jp-CodeMirrorEditor jp-Editor jp-InputArea-editor" data-type="inline">
+<div class="cm-editor cm-s-jupyter">
+<div class="highlight hl-ipython3"><pre><span></span><span class="c1">##################################</span>
+<span class="c1"># Gathering the variable names for each column</span>
+<span class="c1">##################################</span>
+<span class="n">variable_name_list</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="n">thyroid_cancer_row_filtered</span><span class="o">.</span><span class="n">columns</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+</div>
+</div>
+</div><div class="jp-Cell jp-CodeCell jp-Notebook-cell jp-mod-noOutputs" id="cell-id=e4c61a7e-6c0e-4a2c-9ce2-50e83401763e">
+<div class="jp-Cell-inputWrapper" tabindex="0">
+<div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
+</div>
+<div class="jp-InputArea jp-Cell-inputArea">
+<div class="jp-InputPrompt jp-InputArea-prompt">In [21]:</div>
+<div class="jp-CodeMirrorEditor jp-Editor jp-InputArea-editor" data-type="inline">
+<div class="cm-editor cm-s-jupyter">
+<div class="highlight hl-ipython3"><pre><span></span><span class="c1">##################################</span>
+<span class="c1"># Gathering the number of observations for each column</span>
+<span class="c1">##################################</span>
+<span class="n">row_count_list</span> <span class="o">=</span> <span class="nb">list</span><span class="p">([</span><span class="nb">len</span><span class="p">(</span><span class="n">thyroid_cancer_row_filtered</span><span class="p">)]</span> <span class="o">*</span> <span class="nb">len</span><span class="p">(</span><span class="n">thyroid_cancer_row_filtered</span><span class="o">.</span><span class="n">columns</span><span class="p">))</span>
+</pre></div>
+</div>
+</div>
+</div>
+</div>
+</div><div class="jp-Cell jp-CodeCell jp-Notebook-cell jp-mod-noOutputs" id="cell-id=82f74b05-88b2-41b3-9a4f-f9ccce57d3da">
+<div class="jp-Cell-inputWrapper" tabindex="0">
+<div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
+</div>
+<div class="jp-InputArea jp-Cell-inputArea">
+<div class="jp-InputPrompt jp-InputArea-prompt">In [22]:</div>
+<div class="jp-CodeMirrorEditor jp-Editor jp-InputArea-editor" data-type="inline">
+<div class="cm-editor cm-s-jupyter">
+<div class="highlight hl-ipython3"><pre><span></span><span class="c1">##################################</span>
+<span class="c1"># Gathering the number of missing data for each column</span>
+<span class="c1">##################################</span>
+<span class="n">null_count_list</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="n">thyroid_cancer_row_filtered</span><span class="o">.</span><span class="n">isna</span><span class="p">()</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span><span class="n">axis</span><span class="o">=</span><span class="mi">0</span><span class="p">))</span>
+</pre></div>
+</div>
+</div>
+</div>
+</div>
+</div><div class="jp-Cell jp-CodeCell jp-Notebook-cell jp-mod-noOutputs" id="cell-id=880987e6-5663-44a2-9620-7df9631578ca">
+<div class="jp-Cell-inputWrapper" tabindex="0">
+<div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
+</div>
+<div class="jp-InputArea jp-Cell-inputArea">
+<div class="jp-InputPrompt jp-InputArea-prompt">In [23]:</div>
+<div class="jp-CodeMirrorEditor jp-Editor jp-InputArea-editor" data-type="inline">
+<div class="cm-editor cm-s-jupyter">
+<div class="highlight hl-ipython3"><pre><span></span><span class="c1">##################################</span>
+<span class="c1"># Gathering the number of non-missing data for each column</span>
+<span class="c1">##################################</span>
+<span class="n">non_null_count_list</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="n">thyroid_cancer_row_filtered</span><span class="o">.</span><span class="n">count</span><span class="p">())</span>
+</pre></div>
+</div>
+</div>
+</div>
+</div>
+</div><div class="jp-Cell jp-CodeCell jp-Notebook-cell jp-mod-noOutputs" id="cell-id=e51f19e7-92fa-4f58-bb90-7628279e85d6">
+<div class="jp-Cell-inputWrapper" tabindex="0">
+<div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
+</div>
+<div class="jp-InputArea jp-Cell-inputArea">
+<div class="jp-InputPrompt jp-InputArea-prompt">In [24]:</div>
+<div class="jp-CodeMirrorEditor jp-Editor jp-InputArea-editor" data-type="inline">
+<div class="cm-editor cm-s-jupyter">
+<div class="highlight hl-ipython3"><pre><span></span><span class="c1">##################################</span>
+<span class="c1"># Gathering the missing data percentage for each column</span>
+<span class="c1">##################################</span>
+<span class="n">fill_rate_list</span> <span class="o">=</span> <span class="nb">map</span><span class="p">(</span><span class="n">truediv</span><span class="p">,</span> <span class="n">non_null_count_list</span><span class="p">,</span> <span class="n">row_count_list</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+</div>
+</div>
+</div><div class="jp-Cell jp-CodeCell jp-Notebook-cell" id="cell-id=89107625-5f99-4ff2-8d19-7e8b09663f4f">
+<div class="jp-Cell-inputWrapper" tabindex="0">
+<div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
+</div>
+<div class="jp-InputArea jp-Cell-inputArea">
+<div class="jp-InputPrompt jp-InputArea-prompt">In [25]:</div>
+<div class="jp-CodeMirrorEditor jp-Editor jp-InputArea-editor" data-type="inline">
+<div class="cm-editor cm-s-jupyter">
+<div class="highlight hl-ipython3"><pre><span></span><span class="c1">##################################</span>
+<span class="c1"># Formulating the summary</span>
+<span class="c1"># for all columns</span>
+<span class="c1">##################################</span>
+<span class="n">all_column_quality_summary</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">(</span><span class="nb">zip</span><span class="p">(</span><span class="n">variable_name_list</span><span class="p">,</span>
+                                              <span class="n">data_type_list</span><span class="p">,</span>
+                                              <span class="n">row_count_list</span><span class="p">,</span>
+                                              <span class="n">non_null_count_list</span><span class="p">,</span>
+                                              <span class="n">null_count_list</span><span class="p">,</span>
+                                              <span class="n">fill_rate_list</span><span class="p">),</span> 
+                                        <span class="n">columns</span><span class="o">=</span><span class="p">[</span><span class="s1">'Column.Name'</span><span class="p">,</span>
+                                                 <span class="s1">'Column.Type'</span><span class="p">,</span>
+                                                 <span class="s1">'Row.Count'</span><span class="p">,</span>
+                                                 <span class="s1">'Non.Null.Count'</span><span class="p">,</span>
+                                                 <span class="s1">'Null.Count'</span><span class="p">,</span>                                                 
+                                                 <span class="s1">'Fill.Rate'</span><span class="p">])</span>
+<span class="n">display</span><span class="p">(</span><span class="n">all_column_quality_summary</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+</div>
+</div>
+<div class="jp-Cell-outputWrapper">
+<div class="jp-Collapser jp-OutputCollapser jp-Cell-outputCollapser">
+</div>
+<div class="jp-OutputArea jp-Cell-outputArea">
+<div class="jp-OutputArea-child">
+<div class="jp-OutputPrompt jp-OutputArea-prompt"></div>
+<div class="jp-RenderedHTMLCommon jp-RenderedHTML jp-OutputArea-output" data-mime-type="text/html" tabindex="0">
+<div>
+<style scoped="">
+    .dataframe tbody tr th:only-of-type {
+        vertical-align: middle;
+    }
+
+    .dataframe tbody tr th {
+        vertical-align: top;
+    }
+
+    .dataframe thead th {
+        text-align: right;
+    }
+</style>
+<table border="1" class="dataframe">
+<thead>
+<tr style="text-align: right;">
+<th></th>
+<th>Column.Name</th>
+<th>Column.Type</th>
+<th>Row.Count</th>
+<th>Non.Null.Count</th>
+<th>Null.Count</th>
+<th>Fill.Rate</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<th>0</th>
+<td>Age</td>
+<td>int64</td>
+<td>364</td>
+<td>364</td>
+<td>0</td>
+<td>1.0</td>
+</tr>
+<tr>
+<th>1</th>
+<td>Gender</td>
+<td>category</td>
+<td>364</td>
+<td>364</td>
+<td>0</td>
+<td>1.0</td>
+</tr>
+<tr>
+<th>2</th>
+<td>Smoking</td>
+<td>category</td>
+<td>364</td>
+<td>364</td>
+<td>0</td>
+<td>1.0</td>
+</tr>
+<tr>
+<th>3</th>
+<td>Hx_Smoking</td>
+<td>category</td>
+<td>364</td>
+<td>364</td>
+<td>0</td>
+<td>1.0</td>
+</tr>
+<tr>
+<th>4</th>
+<td>Hx_Radiotherapy</td>
+<td>category</td>
+<td>364</td>
+<td>364</td>
+<td>0</td>
+<td>1.0</td>
+</tr>
+<tr>
+<th>5</th>
+<td>Thyroid_Function</td>
+<td>category</td>
+<td>364</td>
+<td>364</td>
+<td>0</td>
+<td>1.0</td>
+</tr>
+<tr>
+<th>6</th>
+<td>Physical_Examination</td>
+<td>category</td>
+<td>364</td>
+<td>364</td>
+<td>0</td>
+<td>1.0</td>
+</tr>
+<tr>
+<th>7</th>
+<td>Adenopathy</td>
+<td>category</td>
+<td>364</td>
+<td>364</td>
+<td>0</td>
+<td>1.0</td>
+</tr>
+<tr>
+<th>8</th>
+<td>Pathology</td>
+<td>category</td>
+<td>364</td>
+<td>364</td>
+<td>0</td>
+<td>1.0</td>
+</tr>
+<tr>
+<th>9</th>
+<td>Focality</td>
+<td>category</td>
+<td>364</td>
+<td>364</td>
+<td>0</td>
+<td>1.0</td>
+</tr>
+<tr>
+<th>10</th>
+<td>Risk</td>
+<td>category</td>
+<td>364</td>
+<td>364</td>
+<td>0</td>
+<td>1.0</td>
+</tr>
+<tr>
+<th>11</th>
+<td>T</td>
+<td>category</td>
+<td>364</td>
+<td>364</td>
+<td>0</td>
+<td>1.0</td>
+</tr>
+<tr>
+<th>12</th>
+<td>N</td>
+<td>category</td>
+<td>364</td>
+<td>364</td>
+<td>0</td>
+<td>1.0</td>
+</tr>
+<tr>
+<th>13</th>
+<td>M</td>
+<td>category</td>
+<td>364</td>
+<td>364</td>
+<td>0</td>
+<td>1.0</td>
+</tr>
+<tr>
+<th>14</th>
+<td>Stage</td>
+<td>category</td>
+<td>364</td>
+<td>364</td>
+<td>0</td>
+<td>1.0</td>
+</tr>
+<tr>
+<th>15</th>
+<td>Response</td>
+<td>category</td>
+<td>364</td>
+<td>364</td>
+<td>0</td>
+<td>1.0</td>
+</tr>
+<tr>
+<th>16</th>
+<td>Recurred</td>
+<td>category</td>
+<td>364</td>
+<td>364</td>
+<td>0</td>
+<td>1.0</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div><div class="jp-Cell jp-CodeCell jp-Notebook-cell" id="cell-id=4662f0bb-27df-4fe9-8b42-089c1190f09b">
+<div class="jp-Cell-inputWrapper" tabindex="0">
+<div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
+</div>
+<div class="jp-InputArea jp-Cell-inputArea">
+<div class="jp-InputPrompt jp-InputArea-prompt">In [26]:</div>
+<div class="jp-CodeMirrorEditor jp-Editor jp-InputArea-editor" data-type="inline">
+<div class="cm-editor cm-s-jupyter">
+<div class="highlight hl-ipython3"><pre><span></span><span class="c1">##################################</span>
+<span class="c1"># Counting the number of columns</span>
+<span class="c1"># with Fill.Rate &lt; 1.00</span>
+<span class="c1">##################################</span>
+<span class="nb">len</span><span class="p">(</span><span class="n">all_column_quality_summary</span><span class="p">[(</span><span class="n">all_column_quality_summary</span><span class="p">[</span><span class="s1">'Fill.Rate'</span><span class="p">]</span><span class="o">&lt;</span><span class="mi">1</span><span class="p">)])</span>
+</pre></div>
+</div>
+</div>
+</div>
+</div>
+<div class="jp-Cell-outputWrapper">
+<div class="jp-Collapser jp-OutputCollapser jp-Cell-outputCollapser">
+</div>
+<div class="jp-OutputArea jp-Cell-outputArea">
+<div class="jp-OutputArea-child jp-OutputArea-executeResult">
+<div class="jp-OutputPrompt jp-OutputArea-prompt">Out[26]:</div>
+<div class="jp-RenderedText jp-OutputArea-output jp-OutputArea-executeResult" data-mime-type="text/plain" tabindex="0">
+<pre>0</pre>
+</div>
+</div>
+</div>
+</div>
+</div><div class="jp-Cell jp-CodeCell jp-Notebook-cell jp-mod-noOutputs" id="cell-id=fdb7e877-967f-489d-ae9e-1e4beaae4a20">
+<div class="jp-Cell-inputWrapper" tabindex="0">
+<div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
+</div>
+<div class="jp-InputArea jp-Cell-inputArea">
+<div class="jp-InputPrompt jp-InputArea-prompt">In [27]:</div>
+<div class="jp-CodeMirrorEditor jp-Editor jp-InputArea-editor" data-type="inline">
+<div class="cm-editor cm-s-jupyter">
+<div class="highlight hl-ipython3"><pre><span></span><span class="c1">##################################</span>
+<span class="c1"># Identifying the rows</span>
+<span class="c1"># with Fill.Rate &lt; 0.90</span>
+<span class="c1">##################################</span>
+<span class="n">column_low_fill_rate</span> <span class="o">=</span> <span class="n">all_column_quality_summary</span><span class="p">[(</span><span class="n">all_column_quality_summary</span><span class="p">[</span><span class="s1">'Fill.Rate'</span><span class="p">]</span><span class="o">&lt;</span><span class="mf">0.90</span><span class="p">)]</span>
+</pre></div>
+</div>
+</div>
+</div>
+</div>
+</div><div class="jp-Cell jp-CodeCell jp-Notebook-cell jp-mod-noOutputs" id="cell-id=0033e908-e3b3-487a-a15e-0c26f8fd772f">
+<div class="jp-Cell-inputWrapper" tabindex="0">
+<div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
+</div>
+<div class="jp-InputArea jp-Cell-inputArea">
+<div class="jp-InputPrompt jp-InputArea-prompt">In [28]:</div>
+<div class="jp-CodeMirrorEditor jp-Editor jp-InputArea-editor" data-type="inline">
+<div class="cm-editor cm-s-jupyter">
+<div class="highlight hl-ipython3"><pre><span></span><span class="c1">##################################</span>
+<span class="c1"># Gathering the indices for each observation</span>
+<span class="c1">##################################</span>
+<span class="n">row_index_list</span> <span class="o">=</span> <span class="n">thyroid_cancer_row_filtered</span><span class="o">.</span><span class="n">index</span>
+</pre></div>
+</div>
+</div>
+</div>
+</div>
+</div><div class="jp-Cell jp-CodeCell jp-Notebook-cell jp-mod-noOutputs" id="cell-id=9f97c964-407d-4541-b687-1f9142e6f25f">
+<div class="jp-Cell-inputWrapper" tabindex="0">
+<div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
+</div>
+<div class="jp-InputArea jp-Cell-inputArea">
+<div class="jp-InputPrompt jp-InputArea-prompt">In [29]:</div>
+<div class="jp-CodeMirrorEditor jp-Editor jp-InputArea-editor" data-type="inline">
+<div class="cm-editor cm-s-jupyter">
+<div class="highlight hl-ipython3"><pre><span></span><span class="c1">##################################</span>
+<span class="c1"># Gathering the number of columns for each observation</span>
+<span class="c1">##################################</span>
+<span class="n">column_count_list</span> <span class="o">=</span> <span class="nb">list</span><span class="p">([</span><span class="nb">len</span><span class="p">(</span><span class="n">thyroid_cancer_row_filtered</span><span class="o">.</span><span class="n">columns</span><span class="p">)]</span> <span class="o">*</span> <span class="nb">len</span><span class="p">(</span><span class="n">thyroid_cancer_row_filtered</span><span class="p">))</span>
+</pre></div>
+</div>
+</div>
+</div>
+</div>
+</div><div class="jp-Cell jp-CodeCell jp-Notebook-cell jp-mod-noOutputs" id="cell-id=366397da-7533-42fc-a891-2d1efcc6c65a">
+<div class="jp-Cell-inputWrapper" tabindex="0">
+<div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
+</div>
+<div class="jp-InputArea jp-Cell-inputArea">
+<div class="jp-InputPrompt jp-InputArea-prompt">In [30]:</div>
+<div class="jp-CodeMirrorEditor jp-Editor jp-InputArea-editor" data-type="inline">
+<div class="cm-editor cm-s-jupyter">
+<div class="highlight hl-ipython3"><pre><span></span><span class="c1">##################################</span>
+<span class="c1"># Gathering the number of missing data for each row</span>
+<span class="c1">##################################</span>
+<span class="n">null_row_list</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="n">thyroid_cancer_row_filtered</span><span class="o">.</span><span class="n">isna</span><span class="p">()</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span><span class="n">axis</span><span class="o">=</span><span class="mi">1</span><span class="p">))</span>
+</pre></div>
+</div>
+</div>
+</div>
+</div>
+</div><div class="jp-Cell jp-CodeCell jp-Notebook-cell jp-mod-noOutputs" id="cell-id=9735ba9f-da35-4c78-9750-a1def1a06e8d">
+<div class="jp-Cell-inputWrapper" tabindex="0">
+<div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
+</div>
+<div class="jp-InputArea jp-Cell-inputArea">
+<div class="jp-InputPrompt jp-InputArea-prompt">In [31]:</div>
+<div class="jp-CodeMirrorEditor jp-Editor jp-InputArea-editor" data-type="inline">
+<div class="cm-editor cm-s-jupyter">
+<div class="highlight hl-ipython3"><pre><span></span><span class="c1">##################################</span>
+<span class="c1"># Gathering the missing data percentage for each column</span>
+<span class="c1">##################################</span>
+<span class="n">missing_rate_list</span> <span class="o">=</span> <span class="nb">map</span><span class="p">(</span><span class="n">truediv</span><span class="p">,</span> <span class="n">null_row_list</span><span class="p">,</span> <span class="n">column_count_list</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+</div>
+</div>
+</div><div class="jp-Cell jp-CodeCell jp-Notebook-cell" id="cell-id=c0f2b521-954b-4945-9c90-6ddb9c638b10">
+<div class="jp-Cell-inputWrapper" tabindex="0">
+<div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
+</div>
+<div class="jp-InputArea jp-Cell-inputArea">
+<div class="jp-InputPrompt jp-InputArea-prompt">In [32]:</div>
+<div class="jp-CodeMirrorEditor jp-Editor jp-InputArea-editor" data-type="inline">
+<div class="cm-editor cm-s-jupyter">
+<div class="highlight hl-ipython3"><pre><span></span><span class="c1">##################################</span>
+<span class="c1"># Identifying the rows</span>
+<span class="c1"># with missing data</span>
+<span class="c1">##################################</span>
+<span class="n">all_row_quality_summary</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">(</span><span class="nb">zip</span><span class="p">(</span><span class="n">row_index_list</span><span class="p">,</span>
+                                           <span class="n">column_count_list</span><span class="p">,</span>
+                                           <span class="n">null_row_list</span><span class="p">,</span>
+                                           <span class="n">missing_rate_list</span><span class="p">),</span> 
+                                        <span class="n">columns</span><span class="o">=</span><span class="p">[</span><span class="s1">'Row.Name'</span><span class="p">,</span>
+                                                 <span class="s1">'Column.Count'</span><span class="p">,</span>
+                                                 <span class="s1">'Null.Count'</span><span class="p">,</span>                                                 
+                                                 <span class="s1">'Missing.Rate'</span><span class="p">])</span>
+<span class="n">display</span><span class="p">(</span><span class="n">all_row_quality_summary</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+</div>
+</div>
+<div class="jp-Cell-outputWrapper">
+<div class="jp-Collapser jp-OutputCollapser jp-Cell-outputCollapser">
+</div>
+<div class="jp-OutputArea jp-Cell-outputArea">
+<div class="jp-OutputArea-child">
+<div class="jp-OutputPrompt jp-OutputArea-prompt"></div>
+<div class="jp-RenderedHTMLCommon jp-RenderedHTML jp-OutputArea-output" data-mime-type="text/html" tabindex="0">
+<div>
+<style scoped="">
+    .dataframe tbody tr th:only-of-type {
+        vertical-align: middle;
+    }
+
+    .dataframe tbody tr th {
+        vertical-align: top;
+    }
+
+    .dataframe thead th {
+        text-align: right;
+    }
+</style>
+<table border="1" class="dataframe">
+<thead>
+<tr style="text-align: right;">
+<th></th>
+<th>Row.Name</th>
+<th>Column.Count</th>
+<th>Null.Count</th>
+<th>Missing.Rate</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<th>0</th>
+<td>0</td>
+<td>17</td>
+<td>0</td>
+<td>0.0</td>
+</tr>
+<tr>
+<th>1</th>
+<td>1</td>
+<td>17</td>
+<td>0</td>
+<td>0.0</td>
+</tr>
+<tr>
+<th>2</th>
+<td>2</td>
+<td>17</td>
+<td>0</td>
+<td>0.0</td>
+</tr>
+<tr>
+<th>3</th>
+<td>3</td>
+<td>17</td>
+<td>0</td>
+<td>0.0</td>
+</tr>
+<tr>
+<th>4</th>
+<td>4</td>
+<td>17</td>
+<td>0</td>
+<td>0.0</td>
+</tr>
+<tr>
+<th>...</th>
+<td>...</td>
+<td>...</td>
+<td>...</td>
+<td>...</td>
+</tr>
+<tr>
+<th>359</th>
+<td>378</td>
+<td>17</td>
+<td>0</td>
+<td>0.0</td>
+</tr>
+<tr>
+<th>360</th>
+<td>379</td>
+<td>17</td>
+<td>0</td>
+<td>0.0</td>
+</tr>
+<tr>
+<th>361</th>
+<td>380</td>
+<td>17</td>
+<td>0</td>
+<td>0.0</td>
+</tr>
+<tr>
+<th>362</th>
+<td>381</td>
+<td>17</td>
+<td>0</td>
+<td>0.0</td>
+</tr>
+<tr>
+<th>363</th>
+<td>382</td>
+<td>17</td>
+<td>0</td>
+<td>0.0</td>
+</tr>
+</tbody>
+</table>
+<p>364 rows × 4 columns</p>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div><div class="jp-Cell jp-CodeCell jp-Notebook-cell" id="cell-id=7be77074-aec2-431d-a6f5-a6c4f00867e0">
+<div class="jp-Cell-inputWrapper" tabindex="0">
+<div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
+</div>
+<div class="jp-InputArea jp-Cell-inputArea">
+<div class="jp-InputPrompt jp-InputArea-prompt">In [33]:</div>
+<div class="jp-CodeMirrorEditor jp-Editor jp-InputArea-editor" data-type="inline">
+<div class="cm-editor cm-s-jupyter">
+<div class="highlight hl-ipython3"><pre><span></span><span class="c1">##################################</span>
+<span class="c1"># Counting the number of rows</span>
+<span class="c1"># with Missing.Rate &gt; 0.00</span>
+<span class="c1">##################################</span>
+<span class="nb">len</span><span class="p">(</span><span class="n">all_row_quality_summary</span><span class="p">[(</span><span class="n">all_row_quality_summary</span><span class="p">[</span><span class="s1">'Missing.Rate'</span><span class="p">]</span><span class="o">&gt;</span><span class="mf">0.00</span><span class="p">)])</span>
+</pre></div>
+</div>
+</div>
+</div>
+</div>
+<div class="jp-Cell-outputWrapper">
+<div class="jp-Collapser jp-OutputCollapser jp-Cell-outputCollapser">
+</div>
+<div class="jp-OutputArea jp-Cell-outputArea">
+<div class="jp-OutputArea-child jp-OutputArea-executeResult">
+<div class="jp-OutputPrompt jp-OutputArea-prompt">Out[33]:</div>
+<div class="jp-RenderedText jp-OutputArea-output jp-OutputArea-executeResult" data-mime-type="text/plain" tabindex="0">
+<pre>0</pre>
+</div>
+</div>
+</div>
+</div>
+</div><div class="jp-Cell jp-CodeCell jp-Notebook-cell jp-mod-noOutputs" id="cell-id=d69f7ac2-ffea-49ff-95ee-fd1c940d8783">
+<div class="jp-Cell-inputWrapper" tabindex="0">
+<div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
+</div>
+<div class="jp-InputArea jp-Cell-inputArea">
+<div class="jp-InputPrompt jp-InputArea-prompt">In [34]:</div>
+<div class="jp-CodeMirrorEditor jp-Editor jp-InputArea-editor" data-type="inline">
+<div class="cm-editor cm-s-jupyter">
+<div class="highlight hl-ipython3"><pre><span></span><span class="c1">##################################</span>
+<span class="c1"># Formulating the dataset</span>
+<span class="c1"># with numeric columns only</span>
+<span class="c1">##################################</span>
+<span class="n">thyroid_cancer_numeric</span> <span class="o">=</span> <span class="n">thyroid_cancer_row_filtered</span><span class="o">.</span><span class="n">select_dtypes</span><span class="p">(</span><span class="n">include</span><span class="o">=</span><span class="s1">'number'</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+</div>
+</div>
+</div><div class="jp-Cell jp-CodeCell jp-Notebook-cell jp-mod-noOutputs" id="cell-id=aca5bae6-d7d8-477e-92b8-a258841c4f65">
+<div class="jp-Cell-inputWrapper" tabindex="0">
+<div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
+</div>
+<div class="jp-InputArea jp-Cell-inputArea">
+<div class="jp-InputPrompt jp-InputArea-prompt">In [35]:</div>
+<div class="jp-CodeMirrorEditor jp-Editor jp-InputArea-editor" data-type="inline">
+<div class="cm-editor cm-s-jupyter">
+<div class="highlight hl-ipython3"><pre><span></span><span class="c1">##################################</span>
+<span class="c1"># Gathering the variable names for each numeric column</span>
+<span class="c1">##################################</span>
+<span class="n">numeric_variable_name_list</span> <span class="o">=</span> <span class="n">thyroid_cancer_numeric</span><span class="o">.</span><span class="n">columns</span>
+</pre></div>
+</div>
+</div>
+</div>
+</div>
+</div><div class="jp-Cell jp-CodeCell jp-Notebook-cell jp-mod-noOutputs" id="cell-id=d6406a51-72da-4d0b-996c-28562c604dd5">
+<div class="jp-Cell-inputWrapper" tabindex="0">
+<div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
+</div>
+<div class="jp-InputArea jp-Cell-inputArea">
+<div class="jp-InputPrompt jp-InputArea-prompt">In [36]:</div>
+<div class="jp-CodeMirrorEditor jp-Editor jp-InputArea-editor" data-type="inline">
+<div class="cm-editor cm-s-jupyter">
+<div class="highlight hl-ipython3"><pre><span></span><span class="c1">##################################</span>
+<span class="c1"># Gathering the minimum value for each numeric column</span>
+<span class="c1">##################################</span>
+<span class="n">numeric_minimum_list</span> <span class="o">=</span> <span class="n">thyroid_cancer_numeric</span><span class="o">.</span><span class="n">min</span><span class="p">()</span>
+</pre></div>
+</div>
+</div>
+</div>
+</div>
+</div><div class="jp-Cell jp-CodeCell jp-Notebook-cell jp-mod-noOutputs" id="cell-id=5165223c-6db2-4135-bf14-75bf1a53f012">
+<div class="jp-Cell-inputWrapper" tabindex="0">
+<div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
+</div>
+<div class="jp-InputArea jp-Cell-inputArea">
+<div class="jp-InputPrompt jp-InputArea-prompt">In [37]:</div>
+<div class="jp-CodeMirrorEditor jp-Editor jp-InputArea-editor" data-type="inline">
+<div class="cm-editor cm-s-jupyter">
+<div class="highlight hl-ipython3"><pre><span></span><span class="c1">##################################</span>
+<span class="c1"># Gathering the mean value for each numeric column</span>
+<span class="c1">##################################</span>
+<span class="n">numeric_mean_list</span> <span class="o">=</span> <span class="n">thyroid_cancer_numeric</span><span class="o">.</span><span class="n">mean</span><span class="p">()</span>
+</pre></div>
+</div>
+</div>
+</div>
+</div>
+</div><div class="jp-Cell jp-CodeCell jp-Notebook-cell jp-mod-noOutputs" id="cell-id=b49f58f4-ca58-4cb5-94ca-d6109daeed1c">
+<div class="jp-Cell-inputWrapper" tabindex="0">
+<div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
+</div>
+<div class="jp-InputArea jp-Cell-inputArea">
+<div class="jp-InputPrompt jp-InputArea-prompt">In [38]:</div>
+<div class="jp-CodeMirrorEditor jp-Editor jp-InputArea-editor" data-type="inline">
+<div class="cm-editor cm-s-jupyter">
+<div class="highlight hl-ipython3"><pre><span></span><span class="c1">##################################</span>
+<span class="c1"># Gathering the median value for each numeric column</span>
+<span class="c1">##################################</span>
+<span class="n">numeric_median_list</span> <span class="o">=</span> <span class="n">thyroid_cancer_numeric</span><span class="o">.</span><span class="n">median</span><span class="p">()</span>
+</pre></div>
+</div>
+</div>
+</div>
+</div>
+</div><div class="jp-Cell jp-CodeCell jp-Notebook-cell jp-mod-noOutputs" id="cell-id=763fec79-66f9-4993-a2e8-12d49cf25100">
+<div class="jp-Cell-inputWrapper" tabindex="0">
+<div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
+</div>
+<div class="jp-InputArea jp-Cell-inputArea">
+<div class="jp-InputPrompt jp-InputArea-prompt">In [39]:</div>
+<div class="jp-CodeMirrorEditor jp-Editor jp-InputArea-editor" data-type="inline">
+<div class="cm-editor cm-s-jupyter">
+<div class="highlight hl-ipython3"><pre><span></span><span class="c1">##################################</span>
+<span class="c1"># Gathering the maximum value for each numeric column</span>
+<span class="c1">##################################</span>
+<span class="n">numeric_maximum_list</span> <span class="o">=</span> <span class="n">thyroid_cancer_numeric</span><span class="o">.</span><span class="n">max</span><span class="p">()</span>
+</pre></div>
+</div>
+</div>
+</div>
+</div>
+</div><div class="jp-Cell jp-CodeCell jp-Notebook-cell jp-mod-noOutputs" id="cell-id=982fd66b-8713-4867-95c3-e3b6cbe2f119">
+<div class="jp-Cell-inputWrapper" tabindex="0">
+<div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
+</div>
+<div class="jp-InputArea jp-Cell-inputArea">
+<div class="jp-InputPrompt jp-InputArea-prompt">In [40]:</div>
+<div class="jp-CodeMirrorEditor jp-Editor jp-InputArea-editor" data-type="inline">
+<div class="cm-editor cm-s-jupyter">
+<div class="highlight hl-ipython3"><pre><span></span><span class="c1">##################################</span>
+<span class="c1"># Gathering the first mode values for each numeric column</span>
+<span class="c1">##################################</span>
+<span class="n">numeric_first_mode_list</span> <span class="o">=</span> <span class="p">[</span><span class="n">thyroid_cancer_row_filtered</span><span class="p">[</span><span class="n">x</span><span class="p">]</span><span class="o">.</span><span class="n">value_counts</span><span class="p">(</span><span class="n">dropna</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span><span class="o">.</span><span class="n">index</span><span class="o">.</span><span class="n">tolist</span><span class="p">()[</span><span class="mi">0</span><span class="p">]</span> <span class="k">for</span> <span class="n">x</span> <span class="ow">in</span> <span class="n">thyroid_cancer_numeric</span><span class="p">]</span>
+</pre></div>
+</div>
+</div>
+</div>
+</div>
+</div><div class="jp-Cell jp-CodeCell jp-Notebook-cell jp-mod-noOutputs" id="cell-id=a0e77f1b-aac6-469c-8f11-049746f06adb">
+<div class="jp-Cell-inputWrapper" tabindex="0">
+<div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
+</div>
+<div class="jp-InputArea jp-Cell-inputArea">
+<div class="jp-InputPrompt jp-InputArea-prompt">In [41]:</div>
+<div class="jp-CodeMirrorEditor jp-Editor jp-InputArea-editor" data-type="inline">
+<div class="cm-editor cm-s-jupyter">
+<div class="highlight hl-ipython3"><pre><span></span><span class="c1">##################################</span>
+<span class="c1"># Gathering the second mode values for each numeric column</span>
+<span class="c1">##################################</span>
+<span class="n">numeric_second_mode_list</span> <span class="o">=</span> <span class="p">[</span><span class="n">thyroid_cancer_row_filtered</span><span class="p">[</span><span class="n">x</span><span class="p">]</span><span class="o">.</span><span class="n">value_counts</span><span class="p">(</span><span class="n">dropna</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span><span class="o">.</span><span class="n">index</span><span class="o">.</span><span class="n">tolist</span><span class="p">()[</span><span class="mi">1</span><span class="p">]</span> <span class="k">for</span> <span class="n">x</span> <span class="ow">in</span> <span class="n">thyroid_cancer_numeric</span><span class="p">]</span>
+</pre></div>
+</div>
+</div>
+</div>
+</div>
+</div><div class="jp-Cell jp-CodeCell jp-Notebook-cell jp-mod-noOutputs" id="cell-id=faa93dd7-38e9-4ec2-8f35-cf261159d928">
+<div class="jp-Cell-inputWrapper" tabindex="0">
+<div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
+</div>
+<div class="jp-InputArea jp-Cell-inputArea">
+<div class="jp-InputPrompt jp-InputArea-prompt">In [42]:</div>
+<div class="jp-CodeMirrorEditor jp-Editor jp-InputArea-editor" data-type="inline">
+<div class="cm-editor cm-s-jupyter">
+<div class="highlight hl-ipython3"><pre><span></span><span class="c1">##################################</span>
+<span class="c1"># Gathering the count of first mode values for each numeric column</span>
+<span class="c1">##################################</span>
+<span class="n">numeric_first_mode_count_list</span> <span class="o">=</span> <span class="p">[</span><span class="n">thyroid_cancer_numeric</span><span class="p">[</span><span class="n">x</span><span class="p">]</span><span class="o">.</span><span class="n">isin</span><span class="p">([</span><span class="n">thyroid_cancer_row_filtered</span><span class="p">[</span><span class="n">x</span><span class="p">]</span><span class="o">.</span><span class="n">value_counts</span><span class="p">(</span><span class="n">dropna</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span><span class="o">.</span><span class="n">index</span><span class="o">.</span><span class="n">tolist</span><span class="p">()[</span><span class="mi">0</span><span class="p">]])</span><span class="o">.</span><span class="n">sum</span><span class="p">()</span> <span class="k">for</span> <span class="n">x</span> <span class="ow">in</span> <span class="n">thyroid_cancer_numeric</span><span class="p">]</span>
+</pre></div>
+</div>
+</div>
+</div>
+</div>
+</div><div class="jp-Cell jp-CodeCell jp-Notebook-cell jp-mod-noOutputs" id="cell-id=9a804d07-bb37-4665-baa1-ce6efd622995">
+<div class="jp-Cell-inputWrapper" tabindex="0">
+<div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
+</div>
+<div class="jp-InputArea jp-Cell-inputArea">
+<div class="jp-InputPrompt jp-InputArea-prompt">In [43]:</div>
+<div class="jp-CodeMirrorEditor jp-Editor jp-InputArea-editor" data-type="inline">
+<div class="cm-editor cm-s-jupyter">
+<div class="highlight hl-ipython3"><pre><span></span><span class="c1">##################################</span>
+<span class="c1"># Gathering the count of second mode values for each numeric column</span>
+<span class="c1">##################################</span>
+<span class="n">numeric_second_mode_count_list</span> <span class="o">=</span> <span class="p">[</span><span class="n">thyroid_cancer_numeric</span><span class="p">[</span><span class="n">x</span><span class="p">]</span><span class="o">.</span><span class="n">isin</span><span class="p">([</span><span class="n">thyroid_cancer_row_filtered</span><span class="p">[</span><span class="n">x</span><span class="p">]</span><span class="o">.</span><span class="n">value_counts</span><span class="p">(</span><span class="n">dropna</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span><span class="o">.</span><span class="n">index</span><span class="o">.</span><span class="n">tolist</span><span class="p">()[</span><span class="mi">1</span><span class="p">]])</span><span class="o">.</span><span class="n">sum</span><span class="p">()</span> <span class="k">for</span> <span class="n">x</span> <span class="ow">in</span> <span class="n">thyroid_cancer_numeric</span><span class="p">]</span>
+</pre></div>
+</div>
+</div>
+</div>
+</div>
+</div><div class="jp-Cell jp-CodeCell jp-Notebook-cell jp-mod-noOutputs" id="cell-id=941fa38c-a36c-4468-958c-7aecc2e053be">
+<div class="jp-Cell-inputWrapper" tabindex="0">
+<div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
+</div>
+<div class="jp-InputArea jp-Cell-inputArea">
+<div class="jp-InputPrompt jp-InputArea-prompt">In [44]:</div>
+<div class="jp-CodeMirrorEditor jp-Editor jp-InputArea-editor" data-type="inline">
+<div class="cm-editor cm-s-jupyter">
+<div class="highlight hl-ipython3"><pre><span></span><span class="c1">##################################</span>
+<span class="c1"># Gathering the first mode to second mode ratio for each numeric column</span>
+<span class="c1">##################################</span>
+<span class="n">numeric_first_second_mode_ratio_list</span> <span class="o">=</span> <span class="nb">map</span><span class="p">(</span><span class="n">truediv</span><span class="p">,</span> <span class="n">numeric_first_mode_count_list</span><span class="p">,</span> <span class="n">numeric_second_mode_count_list</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+</div>
+</div>
+</div><div class="jp-Cell jp-CodeCell jp-Notebook-cell jp-mod-noOutputs" id="cell-id=6e6b087d-2f9f-489c-b9ef-3f9c1b7bf4dc">
+<div class="jp-Cell-inputWrapper" tabindex="0">
+<div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
+</div>
+<div class="jp-InputArea jp-Cell-inputArea">
+<div class="jp-InputPrompt jp-InputArea-prompt">In [45]:</div>
+<div class="jp-CodeMirrorEditor jp-Editor jp-InputArea-editor" data-type="inline">
+<div class="cm-editor cm-s-jupyter">
+<div class="highlight hl-ipython3"><pre><span></span><span class="c1">##################################</span>
+<span class="c1"># Gathering the count of unique values for each numeric column</span>
+<span class="c1">##################################</span>
+<span class="n">numeric_unique_count_list</span> <span class="o">=</span> <span class="n">thyroid_cancer_numeric</span><span class="o">.</span><span class="n">nunique</span><span class="p">(</span><span class="n">dropna</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+</div>
+</div>
+</div><div class="jp-Cell jp-CodeCell jp-Notebook-cell jp-mod-noOutputs" id="cell-id=4ccdea53-1f14-4153-95c7-79f129f01580">
+<div class="jp-Cell-inputWrapper" tabindex="0">
+<div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
+</div>
+<div class="jp-InputArea jp-Cell-inputArea">
+<div class="jp-InputPrompt jp-InputArea-prompt">In [46]:</div>
+<div class="jp-CodeMirrorEditor jp-Editor jp-InputArea-editor" data-type="inline">
+<div class="cm-editor cm-s-jupyter">
+<div class="highlight hl-ipython3"><pre><span></span><span class="c1">##################################</span>
+<span class="c1"># Gathering the number of observations for each numeric column</span>
+<span class="c1">##################################</span>
+<span class="n">numeric_row_count_list</span> <span class="o">=</span> <span class="nb">list</span><span class="p">([</span><span class="nb">len</span><span class="p">(</span><span class="n">thyroid_cancer_numeric</span><span class="p">)]</span> <span class="o">*</span> <span class="nb">len</span><span class="p">(</span><span class="n">thyroid_cancer_numeric</span><span class="o">.</span><span class="n">columns</span><span class="p">))</span>
+</pre></div>
+</div>
+</div>
+</div>
+</div>
+</div><div class="jp-Cell jp-CodeCell jp-Notebook-cell jp-mod-noOutputs" id="cell-id=b380626a-3b55-4556-ab90-c4c4cd4e0742">
+<div class="jp-Cell-inputWrapper" tabindex="0">
+<div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
+</div>
+<div class="jp-InputArea jp-Cell-inputArea">
+<div class="jp-InputPrompt jp-InputArea-prompt">In [47]:</div>
+<div class="jp-CodeMirrorEditor jp-Editor jp-InputArea-editor" data-type="inline">
+<div class="cm-editor cm-s-jupyter">
+<div class="highlight hl-ipython3"><pre><span></span><span class="c1">##################################</span>
+<span class="c1"># Gathering the unique to count ratio for each numeric column</span>
+<span class="c1">##################################</span>
+<span class="n">numeric_unique_count_ratio_list</span> <span class="o">=</span> <span class="nb">map</span><span class="p">(</span><span class="n">truediv</span><span class="p">,</span> <span class="n">numeric_unique_count_list</span><span class="p">,</span> <span class="n">numeric_row_count_list</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+</div>
+</div>
+</div><div class="jp-Cell jp-CodeCell jp-Notebook-cell jp-mod-noOutputs" id="cell-id=8b74b92e-5412-4be6-bcf9-e32d7e53308e">
+<div class="jp-Cell-inputWrapper" tabindex="0">
+<div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
+</div>
+<div class="jp-InputArea jp-Cell-inputArea">
+<div class="jp-InputPrompt jp-InputArea-prompt">In [48]:</div>
+<div class="jp-CodeMirrorEditor jp-Editor jp-InputArea-editor" data-type="inline">
+<div class="cm-editor cm-s-jupyter">
+<div class="highlight hl-ipython3"><pre><span></span><span class="c1">##################################</span>
+<span class="c1"># Gathering the skewness value for each numeric column</span>
+<span class="c1">##################################</span>
+<span class="n">numeric_skewness_list</span> <span class="o">=</span> <span class="n">thyroid_cancer_numeric</span><span class="o">.</span><span class="n">skew</span><span class="p">()</span>
+</pre></div>
+</div>
+</div>
+</div>
+</div>
+</div><div class="jp-Cell jp-CodeCell jp-Notebook-cell jp-mod-noOutputs" id="cell-id=1ea0ae07-e4fa-4fb9-8888-026c6014c2ec">
+<div class="jp-Cell-inputWrapper" tabindex="0">
+<div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
+</div>
+<div class="jp-InputArea jp-Cell-inputArea">
+<div class="jp-InputPrompt jp-InputArea-prompt">In [49]:</div>
+<div class="jp-CodeMirrorEditor jp-Editor jp-InputArea-editor" data-type="inline">
+<div class="cm-editor cm-s-jupyter">
+<div class="highlight hl-ipython3"><pre><span></span><span class="c1">##################################</span>
+<span class="c1"># Gathering the kurtosis value for each numeric column</span>
+<span class="c1">##################################</span>
+<span class="n">numeric_kurtosis_list</span> <span class="o">=</span> <span class="n">thyroid_cancer_numeric</span><span class="o">.</span><span class="n">kurtosis</span><span class="p">()</span>
+</pre></div>
+</div>
+</div>
+</div>
+</div>
+</div><div class="jp-Cell jp-CodeCell jp-Notebook-cell" id="cell-id=4dcddbd1-9f80-4f49-a458-549b830f39cb">
+<div class="jp-Cell-inputWrapper" tabindex="0">
+<div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
+</div>
+<div class="jp-InputArea jp-Cell-inputArea">
+<div class="jp-InputPrompt jp-InputArea-prompt">In [50]:</div>
+<div class="jp-CodeMirrorEditor jp-Editor jp-InputArea-editor" data-type="inline">
+<div class="cm-editor cm-s-jupyter">
+<div class="highlight hl-ipython3"><pre><span></span><span class="c1">##################################</span>
+<span class="c1"># Generating a column quality summary for the numeric column</span>
+<span class="c1">##################################</span>
+<span class="n">numeric_column_quality_summary</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">(</span><span class="nb">zip</span><span class="p">(</span><span class="n">numeric_variable_name_list</span><span class="p">,</span>
+                                                <span class="n">numeric_minimum_list</span><span class="p">,</span>
+                                                <span class="n">numeric_mean_list</span><span class="p">,</span>
+                                                <span class="n">numeric_median_list</span><span class="p">,</span>
+                                                <span class="n">numeric_maximum_list</span><span class="p">,</span>
+                                                <span class="n">numeric_first_mode_list</span><span class="p">,</span>
+                                                <span class="n">numeric_second_mode_list</span><span class="p">,</span>
+                                                <span class="n">numeric_first_mode_count_list</span><span class="p">,</span>
+                                                <span class="n">numeric_second_mode_count_list</span><span class="p">,</span>
+                                                <span class="n">numeric_first_second_mode_ratio_list</span><span class="p">,</span>
+                                                <span class="n">numeric_unique_count_list</span><span class="p">,</span>
+                                                <span class="n">numeric_row_count_list</span><span class="p">,</span>
+                                                <span class="n">numeric_unique_count_ratio_list</span><span class="p">,</span>
+                                                <span class="n">numeric_skewness_list</span><span class="p">,</span>
+                                                <span class="n">numeric_kurtosis_list</span><span class="p">),</span> 
+                                        <span class="n">columns</span><span class="o">=</span><span class="p">[</span><span class="s1">'Numeric.Column.Name'</span><span class="p">,</span>
+                                                 <span class="s1">'Minimum'</span><span class="p">,</span>
+                                                 <span class="s1">'Mean'</span><span class="p">,</span>
+                                                 <span class="s1">'Median'</span><span class="p">,</span>
+                                                 <span class="s1">'Maximum'</span><span class="p">,</span>
+                                                 <span class="s1">'First.Mode'</span><span class="p">,</span>
+                                                 <span class="s1">'Second.Mode'</span><span class="p">,</span>
+                                                 <span class="s1">'First.Mode.Count'</span><span class="p">,</span>
+                                                 <span class="s1">'Second.Mode.Count'</span><span class="p">,</span>
+                                                 <span class="s1">'First.Second.Mode.Ratio'</span><span class="p">,</span>
+                                                 <span class="s1">'Unique.Count'</span><span class="p">,</span>
+                                                 <span class="s1">'Row.Count'</span><span class="p">,</span>
+                                                 <span class="s1">'Unique.Count.Ratio'</span><span class="p">,</span>
+                                                 <span class="s1">'Skewness'</span><span class="p">,</span>
+                                                 <span class="s1">'Kurtosis'</span><span class="p">])</span>
+<span class="n">display</span><span class="p">(</span><span class="n">numeric_column_quality_summary</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+</div>
+</div>
+<div class="jp-Cell-outputWrapper">
+<div class="jp-Collapser jp-OutputCollapser jp-Cell-outputCollapser">
+</div>
+<div class="jp-OutputArea jp-Cell-outputArea">
+<div class="jp-OutputArea-child">
+<div class="jp-OutputPrompt jp-OutputArea-prompt"></div>
+<div class="jp-RenderedHTMLCommon jp-RenderedHTML jp-OutputArea-output" data-mime-type="text/html" tabindex="0">
+<div>
+<style scoped="">
+    .dataframe tbody tr th:only-of-type {
+        vertical-align: middle;
+    }
+
+    .dataframe tbody tr th {
+        vertical-align: top;
+    }
+
+    .dataframe thead th {
+        text-align: right;
+    }
+</style>
+<table border="1" class="dataframe">
+<thead>
+<tr style="text-align: right;">
+<th></th>
+<th>Numeric.Column.Name</th>
+<th>Minimum</th>
+<th>Mean</th>
+<th>Median</th>
+<th>Maximum</th>
+<th>First.Mode</th>
+<th>Second.Mode</th>
+<th>First.Mode.Count</th>
+<th>Second.Mode.Count</th>
+<th>First.Second.Mode.Ratio</th>
+<th>Unique.Count</th>
+<th>Row.Count</th>
+<th>Unique.Count.Ratio</th>
+<th>Skewness</th>
+<th>Kurtosis</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<th>0</th>
+<td>Age</td>
+<td>15</td>
+<td>41.25</td>
+<td>38.0</td>
+<td>82</td>
+<td>31</td>
+<td>27</td>
+<td>21</td>
+<td>13</td>
+<td>1.615385</td>
+<td>65</td>
+<td>364</td>
+<td>0.178571</td>
+<td>0.678269</td>
+<td>-0.359255</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div><div class="jp-Cell jp-CodeCell jp-Notebook-cell" id="cell-id=e71c3cac-cafd-4520-8533-6168ade993a6">
+<div class="jp-Cell-inputWrapper" tabindex="0">
+<div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
+</div>
+<div class="jp-InputArea jp-Cell-inputArea">
+<div class="jp-InputPrompt jp-InputArea-prompt">In [51]:</div>
+<div class="jp-CodeMirrorEditor jp-Editor jp-InputArea-editor" data-type="inline">
+<div class="cm-editor cm-s-jupyter">
+<div class="highlight hl-ipython3"><pre><span></span><span class="c1">##################################</span>
+<span class="c1"># Counting the number of numeric columns</span>
+<span class="c1"># with First.Second.Mode.Ratio &gt; 5.00</span>
+<span class="c1">##################################</span>
+<span class="nb">len</span><span class="p">(</span><span class="n">numeric_column_quality_summary</span><span class="p">[(</span><span class="n">numeric_column_quality_summary</span><span class="p">[</span><span class="s1">'First.Second.Mode.Ratio'</span><span class="p">]</span><span class="o">&gt;</span><span class="mi">5</span><span class="p">)])</span>
+</pre></div>
+</div>
+</div>
+</div>
+</div>
+<div class="jp-Cell-outputWrapper">
+<div class="jp-Collapser jp-OutputCollapser jp-Cell-outputCollapser">
+</div>
+<div class="jp-OutputArea jp-Cell-outputArea">
+<div class="jp-OutputArea-child jp-OutputArea-executeResult">
+<div class="jp-OutputPrompt jp-OutputArea-prompt">Out[51]:</div>
+<div class="jp-RenderedText jp-OutputArea-output jp-OutputArea-executeResult" data-mime-type="text/plain" tabindex="0">
+<pre>0</pre>
+</div>
+</div>
+</div>
+</div>
+</div><div class="jp-Cell jp-CodeCell jp-Notebook-cell" id="cell-id=ae2694d3-1a0f-45d6-873c-e8d8bbb639c5">
+<div class="jp-Cell-inputWrapper" tabindex="0">
+<div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
+</div>
+<div class="jp-InputArea jp-Cell-inputArea">
+<div class="jp-InputPrompt jp-InputArea-prompt">In [52]:</div>
+<div class="jp-CodeMirrorEditor jp-Editor jp-InputArea-editor" data-type="inline">
+<div class="cm-editor cm-s-jupyter">
+<div class="highlight hl-ipython3"><pre><span></span><span class="c1">##################################</span>
+<span class="c1"># Counting the number of numeric columns</span>
+<span class="c1"># with Unique.Count.Ratio &gt; 10.00</span>
+<span class="c1">##################################</span>
+<span class="nb">len</span><span class="p">(</span><span class="n">numeric_column_quality_summary</span><span class="p">[(</span><span class="n">numeric_column_quality_summary</span><span class="p">[</span><span class="s1">'Unique.Count.Ratio'</span><span class="p">]</span><span class="o">&gt;</span><span class="mi">10</span><span class="p">)])</span>
+</pre></div>
+</div>
+</div>
+</div>
+</div>
+<div class="jp-Cell-outputWrapper">
+<div class="jp-Collapser jp-OutputCollapser jp-Cell-outputCollapser">
+</div>
+<div class="jp-OutputArea jp-Cell-outputArea">
+<div class="jp-OutputArea-child jp-OutputArea-executeResult">
+<div class="jp-OutputPrompt jp-OutputArea-prompt">Out[52]:</div>
+<div class="jp-RenderedText jp-OutputArea-output jp-OutputArea-executeResult" data-mime-type="text/plain" tabindex="0">
+<pre>0</pre>
+</div>
+</div>
+</div>
+</div>
+</div><div class="jp-Cell jp-CodeCell jp-Notebook-cell" id="cell-id=d1366e29-7ed3-4d01-9185-88c0237b9d44">
+<div class="jp-Cell-inputWrapper" tabindex="0">
+<div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
+</div>
+<div class="jp-InputArea jp-Cell-inputArea">
+<div class="jp-InputPrompt jp-InputArea-prompt">In [53]:</div>
+<div class="jp-CodeMirrorEditor jp-Editor jp-InputArea-editor" data-type="inline">
+<div class="cm-editor cm-s-jupyter">
+<div class="highlight hl-ipython3"><pre><span></span><span class="c1">##################################</span>
+<span class="c1"># Counting the number of numeric columns</span>
+<span class="c1"># with Skewness &gt; 3.00 or Skewness &lt; -3.00</span>
+<span class="c1">##################################</span>
+<span class="nb">len</span><span class="p">(</span><span class="n">numeric_column_quality_summary</span><span class="p">[(</span><span class="n">numeric_column_quality_summary</span><span class="p">[</span><span class="s1">'Skewness'</span><span class="p">]</span><span class="o">&gt;</span><span class="mi">3</span><span class="p">)</span> <span class="o">|</span> <span class="p">(</span><span class="n">numeric_column_quality_summary</span><span class="p">[</span><span class="s1">'Skewness'</span><span class="p">]</span><span class="o">&lt;</span><span class="p">(</span><span class="o">-</span><span class="mi">3</span><span class="p">))])</span>
+</pre></div>
+</div>
+</div>
+</div>
+</div>
+<div class="jp-Cell-outputWrapper">
+<div class="jp-Collapser jp-OutputCollapser jp-Cell-outputCollapser">
+</div>
+<div class="jp-OutputArea jp-Cell-outputArea">
+<div class="jp-OutputArea-child jp-OutputArea-executeResult">
+<div class="jp-OutputPrompt jp-OutputArea-prompt">Out[53]:</div>
+<div class="jp-RenderedText jp-OutputArea-output jp-OutputArea-executeResult" data-mime-type="text/plain" tabindex="0">
+<pre>0</pre>
+</div>
+</div>
+</div>
+</div>
+</div><div class="jp-Cell jp-CodeCell jp-Notebook-cell jp-mod-noOutputs" id="cell-id=45a58989-034a-48f4-85a9-82b82add468e">
+<div class="jp-Cell-inputWrapper" tabindex="0">
+<div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
+</div>
+<div class="jp-InputArea jp-Cell-inputArea">
+<div class="jp-InputPrompt jp-InputArea-prompt">In [54]:</div>
+<div class="jp-CodeMirrorEditor jp-Editor jp-InputArea-editor" data-type="inline">
+<div class="cm-editor cm-s-jupyter">
+<div class="highlight hl-ipython3"><pre><span></span><span class="c1">##################################</span>
+<span class="c1"># Formulating the dataset</span>
+<span class="c1"># with categorical columns only</span>
+<span class="c1">##################################</span>
+<span class="n">thyroid_cancer_categorical</span> <span class="o">=</span> <span class="n">thyroid_cancer_row_filtered</span><span class="o">.</span><span class="n">select_dtypes</span><span class="p">(</span><span class="n">include</span><span class="o">=</span><span class="s1">'category'</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+</div>
+</div>
+</div><div class="jp-Cell jp-CodeCell jp-Notebook-cell jp-mod-noOutputs" id="cell-id=c0e9c5fc-c131-4c8d-a91a-a91e8cb70924">
+<div class="jp-Cell-inputWrapper" tabindex="0">
+<div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
+</div>
+<div class="jp-InputArea jp-Cell-inputArea">
+<div class="jp-InputPrompt jp-InputArea-prompt">In [55]:</div>
+<div class="jp-CodeMirrorEditor jp-Editor jp-InputArea-editor" data-type="inline">
+<div class="cm-editor cm-s-jupyter">
+<div class="highlight hl-ipython3"><pre><span></span><span class="c1">##################################</span>
+<span class="c1"># Gathering the variable names for the categorical column</span>
+<span class="c1">##################################</span>
+<span class="n">categorical_variable_name_list</span> <span class="o">=</span> <span class="n">thyroid_cancer_categorical</span><span class="o">.</span><span class="n">columns</span>
+</pre></div>
+</div>
+</div>
+</div>
+</div>
+</div><div class="jp-Cell jp-CodeCell jp-Notebook-cell jp-mod-noOutputs" id="cell-id=beb3a1e8-961d-4390-90ad-010f607a6a6a">
+<div class="jp-Cell-inputWrapper" tabindex="0">
+<div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
+</div>
+<div class="jp-InputArea jp-Cell-inputArea">
+<div class="jp-InputPrompt jp-InputArea-prompt">In [56]:</div>
+<div class="jp-CodeMirrorEditor jp-Editor jp-InputArea-editor" data-type="inline">
+<div class="cm-editor cm-s-jupyter">
+<div class="highlight hl-ipython3"><pre><span></span><span class="c1">##################################</span>
+<span class="c1"># Gathering the first mode values for each categorical column</span>
+<span class="c1">##################################</span>
+<span class="n">categorical_first_mode_list</span> <span class="o">=</span> <span class="p">[</span><span class="n">thyroid_cancer_row_filtered</span><span class="p">[</span><span class="n">x</span><span class="p">]</span><span class="o">.</span><span class="n">value_counts</span><span class="p">()</span><span class="o">.</span><span class="n">index</span><span class="o">.</span><span class="n">tolist</span><span class="p">()[</span><span class="mi">0</span><span class="p">]</span> <span class="k">for</span> <span class="n">x</span> <span class="ow">in</span> <span class="n">thyroid_cancer_categorical</span><span class="p">]</span>
+</pre></div>
+</div>
+</div>
+</div>
+</div>
+</div><div class="jp-Cell jp-CodeCell jp-Notebook-cell jp-mod-noOutputs" id="cell-id=74cef062-9b34-495f-ba4b-e60542db9ebd">
+<div class="jp-Cell-inputWrapper" tabindex="0">
+<div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
+</div>
+<div class="jp-InputArea jp-Cell-inputArea">
+<div class="jp-InputPrompt jp-InputArea-prompt">In [57]:</div>
+<div class="jp-CodeMirrorEditor jp-Editor jp-InputArea-editor" data-type="inline">
+<div class="cm-editor cm-s-jupyter">
+<div class="highlight hl-ipython3"><pre><span></span><span class="c1">##################################</span>
+<span class="c1"># Gathering the second mode values for each categorical column</span>
+<span class="c1">##################################</span>
+<span class="n">categorical_second_mode_list</span> <span class="o">=</span> <span class="p">[</span><span class="n">thyroid_cancer_row_filtered</span><span class="p">[</span><span class="n">x</span><span class="p">]</span><span class="o">.</span><span class="n">value_counts</span><span class="p">()</span><span class="o">.</span><span class="n">index</span><span class="o">.</span><span class="n">tolist</span><span class="p">()[</span><span class="mi">1</span><span class="p">]</span> <span class="k">for</span> <span class="n">x</span> <span class="ow">in</span> <span class="n">thyroid_cancer_categorical</span><span class="p">]</span>
+</pre></div>
+</div>
+</div>
+</div>
+</div>
+</div><div class="jp-Cell jp-CodeCell jp-Notebook-cell jp-mod-noOutputs" id="cell-id=b8792c45-0bfb-43d1-8d4d-3836301f4237">
+<div class="jp-Cell-inputWrapper" tabindex="0">
+<div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
+</div>
+<div class="jp-InputArea jp-Cell-inputArea">
+<div class="jp-InputPrompt jp-InputArea-prompt">In [58]:</div>
+<div class="jp-CodeMirrorEditor jp-Editor jp-InputArea-editor" data-type="inline">
+<div class="cm-editor cm-s-jupyter">
+<div class="highlight hl-ipython3"><pre><span></span><span class="c1">##################################</span>
+<span class="c1"># Gathering the count of first mode values for each categorical column</span>
+<span class="c1">##################################</span>
+<span class="n">categorical_first_mode_count_list</span> <span class="o">=</span> <span class="p">[</span><span class="n">thyroid_cancer_categorical</span><span class="p">[</span><span class="n">x</span><span class="p">]</span><span class="o">.</span><span class="n">isin</span><span class="p">([</span><span class="n">thyroid_cancer_row_filtered</span><span class="p">[</span><span class="n">x</span><span class="p">]</span><span class="o">.</span><span class="n">value_counts</span><span class="p">(</span><span class="n">dropna</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span><span class="o">.</span><span class="n">index</span><span class="o">.</span><span class="n">tolist</span><span class="p">()[</span><span class="mi">0</span><span class="p">]])</span><span class="o">.</span><span class="n">sum</span><span class="p">()</span> <span class="k">for</span> <span class="n">x</span> <span class="ow">in</span> <span class="n">thyroid_cancer_categorical</span><span class="p">]</span>
+</pre></div>
+</div>
+</div>
+</div>
+</div>
+</div><div class="jp-Cell jp-CodeCell jp-Notebook-cell jp-mod-noOutputs" id="cell-id=36ab7db0-f269-40ed-83e1-aaa2e6bc7c0d">
+<div class="jp-Cell-inputWrapper" tabindex="0">
+<div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
+</div>
+<div class="jp-InputArea jp-Cell-inputArea">
+<div class="jp-InputPrompt jp-InputArea-prompt">In [59]:</div>
+<div class="jp-CodeMirrorEditor jp-Editor jp-InputArea-editor" data-type="inline">
+<div class="cm-editor cm-s-jupyter">
+<div class="highlight hl-ipython3"><pre><span></span><span class="c1">##################################</span>
+<span class="c1"># Gathering the count of second mode values for each categorical column</span>
+<span class="c1">##################################</span>
+<span class="n">categorical_second_mode_count_list</span> <span class="o">=</span> <span class="p">[</span><span class="n">thyroid_cancer_categorical</span><span class="p">[</span><span class="n">x</span><span class="p">]</span><span class="o">.</span><span class="n">isin</span><span class="p">([</span><span class="n">thyroid_cancer_row_filtered</span><span class="p">[</span><span class="n">x</span><span class="p">]</span><span class="o">.</span><span class="n">value_counts</span><span class="p">(</span><span class="n">dropna</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span><span class="o">.</span><span class="n">index</span><span class="o">.</span><span class="n">tolist</span><span class="p">()[</span><span class="mi">1</span><span class="p">]])</span><span class="o">.</span><span class="n">sum</span><span class="p">()</span> <span class="k">for</span> <span class="n">x</span> <span class="ow">in</span> <span class="n">thyroid_cancer_categorical</span><span class="p">]</span>
+</pre></div>
+</div>
+</div>
+</div>
+</div>
+</div><div class="jp-Cell jp-CodeCell jp-Notebook-cell jp-mod-noOutputs" id="cell-id=6d6bad18-4c3c-4f4f-9f4c-7c7f6f7ba8f4">
+<div class="jp-Cell-inputWrapper" tabindex="0">
+<div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
+</div>
+<div class="jp-InputArea jp-Cell-inputArea">
+<div class="jp-InputPrompt jp-InputArea-prompt">In [60]:</div>
+<div class="jp-CodeMirrorEditor jp-Editor jp-InputArea-editor" data-type="inline">
+<div class="cm-editor cm-s-jupyter">
+<div class="highlight hl-ipython3"><pre><span></span><span class="c1">##################################</span>
+<span class="c1"># Gathering the first mode to second mode ratio for each categorical column</span>
+<span class="c1">##################################</span>
+<span class="n">categorical_first_second_mode_ratio_list</span> <span class="o">=</span> <span class="nb">map</span><span class="p">(</span><span class="n">truediv</span><span class="p">,</span> <span class="n">categorical_first_mode_count_list</span><span class="p">,</span> <span class="n">categorical_second_mode_count_list</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+</div>
+</div>
+</div><div class="jp-Cell jp-CodeCell jp-Notebook-cell jp-mod-noOutputs" id="cell-id=044714c7-e82d-4e44-8530-15e9a8395cc3">
+<div class="jp-Cell-inputWrapper" tabindex="0">
+<div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
+</div>
+<div class="jp-InputArea jp-Cell-inputArea">
+<div class="jp-InputPrompt jp-InputArea-prompt">In [61]:</div>
+<div class="jp-CodeMirrorEditor jp-Editor jp-InputArea-editor" data-type="inline">
+<div class="cm-editor cm-s-jupyter">
+<div class="highlight hl-ipython3"><pre><span></span><span class="c1">##################################</span>
+<span class="c1"># Gathering the count of unique values for each categorical column</span>
+<span class="c1">##################################</span>
+<span class="n">categorical_unique_count_list</span> <span class="o">=</span> <span class="n">thyroid_cancer_categorical</span><span class="o">.</span><span class="n">nunique</span><span class="p">(</span><span class="n">dropna</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+</div>
+</div>
+</div><div class="jp-Cell jp-CodeCell jp-Notebook-cell jp-mod-noOutputs" id="cell-id=60ca64b3-6fb5-4822-b1db-dcde478ca9de">
+<div class="jp-Cell-inputWrapper" tabindex="0">
+<div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
+</div>
+<div class="jp-InputArea jp-Cell-inputArea">
+<div class="jp-InputPrompt jp-InputArea-prompt">In [62]:</div>
+<div class="jp-CodeMirrorEditor jp-Editor jp-InputArea-editor" data-type="inline">
+<div class="cm-editor cm-s-jupyter">
+<div class="highlight hl-ipython3"><pre><span></span><span class="c1">##################################</span>
+<span class="c1"># Gathering the number of observations for each categorical column</span>
+<span class="c1">##################################</span>
+<span class="n">categorical_row_count_list</span> <span class="o">=</span> <span class="nb">list</span><span class="p">([</span><span class="nb">len</span><span class="p">(</span><span class="n">thyroid_cancer_categorical</span><span class="p">)]</span> <span class="o">*</span> <span class="nb">len</span><span class="p">(</span><span class="n">thyroid_cancer_categorical</span><span class="o">.</span><span class="n">columns</span><span class="p">))</span>
+</pre></div>
+</div>
+</div>
+</div>
+</div>
+</div><div class="jp-Cell jp-CodeCell jp-Notebook-cell jp-mod-noOutputs" id="cell-id=e53ec22c-1011-44fe-b124-f42155739b97">
+<div class="jp-Cell-inputWrapper" tabindex="0">
+<div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
+</div>
+<div class="jp-InputArea jp-Cell-inputArea">
+<div class="jp-InputPrompt jp-InputArea-prompt">In [63]:</div>
+<div class="jp-CodeMirrorEditor jp-Editor jp-InputArea-editor" data-type="inline">
+<div class="cm-editor cm-s-jupyter">
+<div class="highlight hl-ipython3"><pre><span></span><span class="c1">##################################</span>
+<span class="c1"># Gathering the unique to count ratio for each categorical column</span>
+<span class="c1">##################################</span>
+<span class="n">categorical_unique_count_ratio_list</span> <span class="o">=</span> <span class="nb">map</span><span class="p">(</span><span class="n">truediv</span><span class="p">,</span> <span class="n">categorical_unique_count_list</span><span class="p">,</span> <span class="n">categorical_row_count_list</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+</div>
+</div>
+</div><div class="jp-Cell jp-CodeCell jp-Notebook-cell" id="cell-id=102f79e6-3d6c-4ee8-989c-547fe6edba8f">
+<div class="jp-Cell-inputWrapper" tabindex="0">
+<div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
+</div>
+<div class="jp-InputArea jp-Cell-inputArea">
+<div class="jp-InputPrompt jp-InputArea-prompt">In [64]:</div>
+<div class="jp-CodeMirrorEditor jp-Editor jp-InputArea-editor" data-type="inline">
+<div class="cm-editor cm-s-jupyter">
+<div class="highlight hl-ipython3"><pre><span></span><span class="c1">##################################</span>
+<span class="c1"># Generating a column quality summary for the categorical columns</span>
+<span class="c1">##################################</span>
+<span class="n">categorical_column_quality_summary</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">(</span><span class="nb">zip</span><span class="p">(</span><span class="n">categorical_variable_name_list</span><span class="p">,</span>
+                                                    <span class="n">categorical_first_mode_list</span><span class="p">,</span>
+                                                    <span class="n">categorical_second_mode_list</span><span class="p">,</span>
+                                                    <span class="n">categorical_first_mode_count_list</span><span class="p">,</span>
+                                                    <span class="n">categorical_second_mode_count_list</span><span class="p">,</span>
+                                                    <span class="n">categorical_first_second_mode_ratio_list</span><span class="p">,</span>
+                                                    <span class="n">categorical_unique_count_list</span><span class="p">,</span>
+                                                    <span class="n">categorical_row_count_list</span><span class="p">,</span>
+                                                    <span class="n">categorical_unique_count_ratio_list</span><span class="p">),</span> 
+                                        <span class="n">columns</span><span class="o">=</span><span class="p">[</span><span class="s1">'Categorical.Column.Name'</span><span class="p">,</span>
+                                                 <span class="s1">'First.Mode'</span><span class="p">,</span>
+                                                 <span class="s1">'Second.Mode'</span><span class="p">,</span>
+                                                 <span class="s1">'First.Mode.Count'</span><span class="p">,</span>
+                                                 <span class="s1">'Second.Mode.Count'</span><span class="p">,</span>
+                                                 <span class="s1">'First.Second.Mode.Ratio'</span><span class="p">,</span>
+                                                 <span class="s1">'Unique.Count'</span><span class="p">,</span>
+                                                 <span class="s1">'Row.Count'</span><span class="p">,</span>
+                                                 <span class="s1">'Unique.Count.Ratio'</span><span class="p">])</span>
+<span class="n">display</span><span class="p">(</span><span class="n">categorical_column_quality_summary</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+</div>
+</div>
+<div class="jp-Cell-outputWrapper">
+<div class="jp-Collapser jp-OutputCollapser jp-Cell-outputCollapser">
+</div>
+<div class="jp-OutputArea jp-Cell-outputArea">
+<div class="jp-OutputArea-child">
+<div class="jp-OutputPrompt jp-OutputArea-prompt"></div>
+<div class="jp-RenderedHTMLCommon jp-RenderedHTML jp-OutputArea-output" data-mime-type="text/html" tabindex="0">
+<div>
+<style scoped="">
+    .dataframe tbody tr th:only-of-type {
+        vertical-align: middle;
+    }
+
+    .dataframe tbody tr th {
+        vertical-align: top;
+    }
+
+    .dataframe thead th {
+        text-align: right;
+    }
+</style>
+<table border="1" class="dataframe">
+<thead>
+<tr style="text-align: right;">
+<th></th>
+<th>Categorical.Column.Name</th>
+<th>First.Mode</th>
+<th>Second.Mode</th>
+<th>First.Mode.Count</th>
+<th>Second.Mode.Count</th>
+<th>First.Second.Mode.Ratio</th>
+<th>Unique.Count</th>
+<th>Row.Count</th>
+<th>Unique.Count.Ratio</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<th>0</th>
+<td>Gender</td>
+<td>F</td>
+<td>M</td>
+<td>293</td>
+<td>71</td>
+<td>4.126761</td>
+<td>2</td>
+<td>364</td>
+<td>0.005495</td>
+</tr>
+<tr>
+<th>1</th>
+<td>Smoking</td>
+<td>No</td>
+<td>Yes</td>
+<td>315</td>
+<td>49</td>
+<td>6.428571</td>
+<td>2</td>
+<td>364</td>
+<td>0.005495</td>
+</tr>
+<tr>
+<th>2</th>
+<td>Hx_Smoking</td>
+<td>No</td>
+<td>Yes</td>
+<td>336</td>
+<td>28</td>
+<td>12.000000</td>
+<td>2</td>
+<td>364</td>
+<td>0.005495</td>
+</tr>
+<tr>
+<th>3</th>
+<td>Hx_Radiotherapy</td>
+<td>No</td>
+<td>Yes</td>
+<td>357</td>
+<td>7</td>
+<td>51.000000</td>
+<td>2</td>
+<td>364</td>
+<td>0.005495</td>
+</tr>
+<tr>
+<th>4</th>
+<td>Thyroid_Function</td>
+<td>Euthyroid</td>
+<td>Clinical Hyperthyroidism</td>
+<td>313</td>
+<td>20</td>
+<td>15.650000</td>
+<td>5</td>
+<td>364</td>
+<td>0.013736</td>
+</tr>
+<tr>
+<th>5</th>
+<td>Physical_Examination</td>
+<td>Multinodular goiter</td>
+<td>Single nodular goiter-right</td>
+<td>135</td>
+<td>127</td>
+<td>1.062992</td>
+<td>5</td>
+<td>364</td>
+<td>0.013736</td>
+</tr>
+<tr>
+<th>6</th>
+<td>Adenopathy</td>
+<td>No</td>
+<td>Right</td>
+<td>258</td>
+<td>48</td>
+<td>5.375000</td>
+<td>6</td>
+<td>364</td>
+<td>0.016484</td>
+</tr>
+<tr>
+<th>7</th>
+<td>Pathology</td>
+<td>Papillary</td>
+<td>Micropapillary</td>
+<td>271</td>
+<td>45</td>
+<td>6.022222</td>
+<td>4</td>
+<td>364</td>
+<td>0.010989</td>
+</tr>
+<tr>
+<th>8</th>
+<td>Focality</td>
+<td>Uni-Focal</td>
+<td>Multi-Focal</td>
+<td>228</td>
+<td>136</td>
+<td>1.676471</td>
+<td>2</td>
+<td>364</td>
+<td>0.005495</td>
+</tr>
+<tr>
+<th>9</th>
+<td>Risk</td>
+<td>Low</td>
+<td>Intermediate</td>
+<td>230</td>
+<td>102</td>
+<td>2.254902</td>
+<td>3</td>
+<td>364</td>
+<td>0.008242</td>
+</tr>
+<tr>
+<th>10</th>
+<td>T</td>
+<td>T2</td>
+<td>T3a</td>
+<td>138</td>
+<td>96</td>
+<td>1.437500</td>
+<td>7</td>
+<td>364</td>
+<td>0.019231</td>
+</tr>
+<tr>
+<th>11</th>
+<td>N</td>
+<td>N0</td>
+<td>N1b</td>
+<td>249</td>
+<td>93</td>
+<td>2.677419</td>
+<td>3</td>
+<td>364</td>
+<td>0.008242</td>
+</tr>
+<tr>
+<th>12</th>
+<td>M</td>
+<td>M0</td>
+<td>M1</td>
+<td>346</td>
+<td>18</td>
+<td>19.222222</td>
+<td>2</td>
+<td>364</td>
+<td>0.005495</td>
+</tr>
+<tr>
+<th>13</th>
+<td>Stage</td>
+<td>I</td>
+<td>II</td>
+<td>314</td>
+<td>32</td>
+<td>9.812500</td>
+<td>5</td>
+<td>364</td>
+<td>0.013736</td>
+</tr>
+<tr>
+<th>14</th>
+<td>Response</td>
+<td>Excellent</td>
+<td>Structural Incomplete</td>
+<td>189</td>
+<td>91</td>
+<td>2.076923</td>
+<td>4</td>
+<td>364</td>
+<td>0.010989</td>
+</tr>
+<tr>
+<th>15</th>
+<td>Recurred</td>
+<td>No</td>
+<td>Yes</td>
+<td>256</td>
+<td>108</td>
+<td>2.370370</td>
+<td>2</td>
+<td>364</td>
+<td>0.005495</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div><div class="jp-Cell jp-CodeCell jp-Notebook-cell" id="cell-id=0b529c21-065a-4f98-a858-d4225c79d644">
+<div class="jp-Cell-inputWrapper" tabindex="0">
+<div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
+</div>
+<div class="jp-InputArea jp-Cell-inputArea">
+<div class="jp-InputPrompt jp-InputArea-prompt">In [65]:</div>
+<div class="jp-CodeMirrorEditor jp-Editor jp-InputArea-editor" data-type="inline">
+<div class="cm-editor cm-s-jupyter">
+<div class="highlight hl-ipython3"><pre><span></span><span class="c1">##################################</span>
+<span class="c1"># Counting the number of categorical columns</span>
+<span class="c1"># with First.Second.Mode.Ratio &gt; 5.00</span>
+<span class="c1">##################################</span>
+<span class="nb">len</span><span class="p">(</span><span class="n">categorical_column_quality_summary</span><span class="p">[(</span><span class="n">categorical_column_quality_summary</span><span class="p">[</span><span class="s1">'First.Second.Mode.Ratio'</span><span class="p">]</span><span class="o">&gt;</span><span class="mi">5</span><span class="p">)])</span>
+</pre></div>
+</div>
+</div>
+</div>
+</div>
+<div class="jp-Cell-outputWrapper">
+<div class="jp-Collapser jp-OutputCollapser jp-Cell-outputCollapser">
+</div>
+<div class="jp-OutputArea jp-Cell-outputArea">
+<div class="jp-OutputArea-child jp-OutputArea-executeResult">
+<div class="jp-OutputPrompt jp-OutputArea-prompt">Out[65]:</div>
+<div class="jp-RenderedText jp-OutputArea-output jp-OutputArea-executeResult" data-mime-type="text/plain" tabindex="0">
+<pre>8</pre>
+</div>
+</div>
+</div>
+</div>
+</div><div class="jp-Cell jp-CodeCell jp-Notebook-cell" id="cell-id=a57115f8-1139-4054-ace5-03aa1f7782d3">
+<div class="jp-Cell-inputWrapper" tabindex="0">
+<div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
+</div>
+<div class="jp-InputArea jp-Cell-inputArea">
+<div class="jp-InputPrompt jp-InputArea-prompt">In [66]:</div>
+<div class="jp-CodeMirrorEditor jp-Editor jp-InputArea-editor" data-type="inline">
+<div class="cm-editor cm-s-jupyter">
+<div class="highlight hl-ipython3"><pre><span></span><span class="c1">##################################</span>
+<span class="c1"># Identifying the categorical columns</span>
+<span class="c1"># with First.Second.Mode.Ratio &gt; 5.00</span>
+<span class="c1">##################################</span>
+<span class="n">display</span><span class="p">(</span><span class="n">categorical_column_quality_summary</span><span class="p">[(</span><span class="n">categorical_column_quality_summary</span><span class="p">[</span><span class="s1">'First.Second.Mode.Ratio'</span><span class="p">]</span><span class="o">&gt;</span><span class="mi">5</span><span class="p">)]</span><span class="o">.</span><span class="n">sort_values</span><span class="p">(</span><span class="n">by</span><span class="o">=</span><span class="p">[</span><span class="s1">'First.Second.Mode.Ratio'</span><span class="p">],</span> <span class="n">ascending</span><span class="o">=</span><span class="kc">False</span><span class="p">))</span>
+</pre></div>
+</div>
+</div>
+</div>
+</div>
+<div class="jp-Cell-outputWrapper">
+<div class="jp-Collapser jp-OutputCollapser jp-Cell-outputCollapser">
+</div>
+<div class="jp-OutputArea jp-Cell-outputArea">
+<div class="jp-OutputArea-child">
+<div class="jp-OutputPrompt jp-OutputArea-prompt"></div>
+<div class="jp-RenderedHTMLCommon jp-RenderedHTML jp-OutputArea-output" data-mime-type="text/html" tabindex="0">
+<div>
+<style scoped="">
+    .dataframe tbody tr th:only-of-type {
+        vertical-align: middle;
+    }
+
+    .dataframe tbody tr th {
+        vertical-align: top;
+    }
+
+    .dataframe thead th {
+        text-align: right;
+    }
+</style>
+<table border="1" class="dataframe">
+<thead>
+<tr style="text-align: right;">
+<th></th>
+<th>Categorical.Column.Name</th>
+<th>First.Mode</th>
+<th>Second.Mode</th>
+<th>First.Mode.Count</th>
+<th>Second.Mode.Count</th>
+<th>First.Second.Mode.Ratio</th>
+<th>Unique.Count</th>
+<th>Row.Count</th>
+<th>Unique.Count.Ratio</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<th>3</th>
+<td>Hx_Radiotherapy</td>
+<td>No</td>
+<td>Yes</td>
+<td>357</td>
+<td>7</td>
+<td>51.000000</td>
+<td>2</td>
+<td>364</td>
+<td>0.005495</td>
+</tr>
+<tr>
+<th>12</th>
+<td>M</td>
+<td>M0</td>
+<td>M1</td>
+<td>346</td>
+<td>18</td>
+<td>19.222222</td>
+<td>2</td>
+<td>364</td>
+<td>0.005495</td>
+</tr>
+<tr>
+<th>4</th>
+<td>Thyroid_Function</td>
+<td>Euthyroid</td>
+<td>Clinical Hyperthyroidism</td>
+<td>313</td>
+<td>20</td>
+<td>15.650000</td>
+<td>5</td>
+<td>364</td>
+<td>0.013736</td>
+</tr>
+<tr>
+<th>2</th>
+<td>Hx_Smoking</td>
+<td>No</td>
+<td>Yes</td>
+<td>336</td>
+<td>28</td>
+<td>12.000000</td>
+<td>2</td>
+<td>364</td>
+<td>0.005495</td>
+</tr>
+<tr>
+<th>13</th>
+<td>Stage</td>
+<td>I</td>
+<td>II</td>
+<td>314</td>
+<td>32</td>
+<td>9.812500</td>
+<td>5</td>
+<td>364</td>
+<td>0.013736</td>
+</tr>
+<tr>
+<th>1</th>
+<td>Smoking</td>
+<td>No</td>
+<td>Yes</td>
+<td>315</td>
+<td>49</td>
+<td>6.428571</td>
+<td>2</td>
+<td>364</td>
+<td>0.005495</td>
+</tr>
+<tr>
+<th>7</th>
+<td>Pathology</td>
+<td>Papillary</td>
+<td>Micropapillary</td>
+<td>271</td>
+<td>45</td>
+<td>6.022222</td>
+<td>4</td>
+<td>364</td>
+<td>0.010989</td>
+</tr>
+<tr>
+<th>6</th>
+<td>Adenopathy</td>
+<td>No</td>
+<td>Right</td>
+<td>258</td>
+<td>48</td>
+<td>5.375000</td>
+<td>6</td>
+<td>364</td>
+<td>0.016484</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div><div class="jp-Cell jp-CodeCell jp-Notebook-cell" id="cell-id=01c037fa-096e-42d6-a3a8-46ef93d729aa">
+<div class="jp-Cell-inputWrapper" tabindex="0">
+<div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
+</div>
+<div class="jp-InputArea jp-Cell-inputArea">
+<div class="jp-InputPrompt jp-InputArea-prompt">In [67]:</div>
+<div class="jp-CodeMirrorEditor jp-Editor jp-InputArea-editor" data-type="inline">
+<div class="cm-editor cm-s-jupyter">
+<div class="highlight hl-ipython3"><pre><span></span><span class="c1">##################################</span>
+<span class="c1"># Counting the number of categorical columns</span>
+<span class="c1"># with Unique.Count.Ratio &gt; 10.00</span>
+<span class="c1">##################################</span>
+<span class="nb">len</span><span class="p">(</span><span class="n">categorical_column_quality_summary</span><span class="p">[(</span><span class="n">categorical_column_quality_summary</span><span class="p">[</span><span class="s1">'Unique.Count.Ratio'</span><span class="p">]</span><span class="o">&gt;</span><span class="mi">10</span><span class="p">)])</span>
+</pre></div>
+</div>
+</div>
+</div>
+</div>
+<div class="jp-Cell-outputWrapper">
+<div class="jp-Collapser jp-OutputCollapser jp-Cell-outputCollapser">
+</div>
+<div class="jp-OutputArea jp-Cell-outputArea">
+<div class="jp-OutputArea-child jp-OutputArea-executeResult">
+<div class="jp-OutputPrompt jp-OutputArea-prompt">Out[67]:</div>
+<div class="jp-RenderedText jp-OutputArea-output jp-OutputArea-executeResult" data-mime-type="text/plain" tabindex="0">
+<pre>0</pre>
+</div>
 </div>
 </div>
 </div>
@@ -7987,7 +12144,7 @@ a.anchor-link {
 <div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
 </div>
 <div class="jp-InputArea jp-Cell-inputArea">
-<div class="jp-InputPrompt jp-InputArea-prompt">In [1]:</div>
+<div class="jp-InputPrompt jp-InputArea-prompt">In [68]:</div>
 <div class="jp-CodeMirrorEditor jp-Editor jp-InputArea-editor" data-type="inline">
 <div class="cm-editor cm-s-jupyter">
 <div class="highlight hl-ipython3"><pre><span></span><span class="kn">from</span><span class="w"> </span><span class="nn">IPython.display</span><span class="w"> </span><span class="kn">import</span> <span class="n">display</span><span class="p">,</span> <span class="n">HTML</span>
