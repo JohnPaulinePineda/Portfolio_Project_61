@@ -10,11 +10,11 @@
     * [1.2 Data Description](#1.2)
     * [1.3 Data Quality Assessment](#1.3)
     * [1.4 Data Preprocessing](#1.4)
-        * [1.4.1 Data Splitting](#1.4.1)
-        * [1.4.2 Data Profiling](#1.4.2)
-        * [1.4.3 Category Aggregation and Encoding](#1.4.3)
-        * [1.4.4 Outlier and Distributional Shape Analysis](#1.4.4)
-        * [1.4.5 Collinearity](#1.4.5)
+        * [1.4.1 Ordinal Binning](#1.4.1)
+        * [1.4.2 Category Aggregration and Encoding](#1.4.2)
+        * [1.4.3 Synthetic Outlier Labeling via Frequency-Based Tagging](#1.4.3)
+        * [1.4.4 Data Splitting](#1.4.4)
+        * [1.4.5 Data Preparation](#1.4.5)
     * [1.5 Data Exploration](#1.5)
         * [1.5.1 Exploratory Data Analysis](#1.5.1)
         * [1.5.2 Hypothesis Testing](#1.5.2)
@@ -3472,15 +3472,1235 @@ len(categorical_column_quality_summary[(categorical_column_quality_summary['Uniq
 
 ## 1.4. Data Preprocessing <a class="anchor" id="1.4"></a>
 
-### 1.4.1 Data Splitting <a class="anchor" id="1.4.1"></a>
+### 1.4.1 Ordinal Binning <a class="anchor" id="1.4.1"></a>
 
-### 1.4.2 Data Profiling <a class="anchor" id="1.4.2"></a>
 
-### 1.4.3 Category Aggregration and Encoding <a class="anchor" id="1.4.3"></a>
+```python
+##################################
+# Creating a dataset copy
+# of the row filtered data
+##################################
+thyroid_cancer_baseline = thyroid_cancer_row_filtered.copy()
+```
 
-### 1.4.4 Outlier and Distributional Shape Analysis <a class="anchor" id="1.4.4"></a>
 
-### 1.4.5 Collinearity <a class="anchor" id="1.4.5"></a>
+```python
+##################################
+# Defining bins and labels
+##################################
+bins = [0, 50, float('inf')]
+labels = ['<50', '50+']
+```
+
+
+```python
+##################################
+# Creating ordinal bins
+# for the numeric column
+##################################
+thyroid_cancer_baseline['Age_Group'] = pd.cut(thyroid_cancer_baseline['Age'], bins=bins, labels=labels, right=False)
+thyroid_cancer_baseline['Age_Group'] = pd.Categorical(thyroid_cancer_baseline['Age_Group'], categories=labels, ordered=True)
+display(thyroid_cancer_baseline)
+```
+
+
+<div>
+<style scoped>
+    .dataframe tbody tr th:only-of-type {
+        vertical-align: middle;
+    }
+
+    .dataframe tbody tr th {
+        vertical-align: top;
+    }
+
+    .dataframe thead th {
+        text-align: right;
+    }
+</style>
+<table border="1" class="dataframe">
+  <thead>
+    <tr style="text-align: right;">
+      <th></th>
+      <th>Age</th>
+      <th>Gender</th>
+      <th>Smoking</th>
+      <th>Hx_Smoking</th>
+      <th>Hx_Radiotherapy</th>
+      <th>Thyroid_Function</th>
+      <th>Physical_Examination</th>
+      <th>Adenopathy</th>
+      <th>Pathology</th>
+      <th>Focality</th>
+      <th>Risk</th>
+      <th>T</th>
+      <th>N</th>
+      <th>M</th>
+      <th>Stage</th>
+      <th>Response</th>
+      <th>Recurred</th>
+      <th>Age_Group</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th>0</th>
+      <td>27</td>
+      <td>F</td>
+      <td>No</td>
+      <td>No</td>
+      <td>No</td>
+      <td>Euthyroid</td>
+      <td>Single nodular goiter-left</td>
+      <td>No</td>
+      <td>Micropapillary</td>
+      <td>Uni-Focal</td>
+      <td>Low</td>
+      <td>T1a</td>
+      <td>N0</td>
+      <td>M0</td>
+      <td>I</td>
+      <td>Indeterminate</td>
+      <td>No</td>
+      <td>&lt;50</td>
+    </tr>
+    <tr>
+      <th>1</th>
+      <td>34</td>
+      <td>F</td>
+      <td>No</td>
+      <td>Yes</td>
+      <td>No</td>
+      <td>Euthyroid</td>
+      <td>Multinodular goiter</td>
+      <td>No</td>
+      <td>Micropapillary</td>
+      <td>Uni-Focal</td>
+      <td>Low</td>
+      <td>T1a</td>
+      <td>N0</td>
+      <td>M0</td>
+      <td>I</td>
+      <td>Excellent</td>
+      <td>No</td>
+      <td>&lt;50</td>
+    </tr>
+    <tr>
+      <th>2</th>
+      <td>30</td>
+      <td>F</td>
+      <td>No</td>
+      <td>No</td>
+      <td>No</td>
+      <td>Euthyroid</td>
+      <td>Single nodular goiter-right</td>
+      <td>No</td>
+      <td>Micropapillary</td>
+      <td>Uni-Focal</td>
+      <td>Low</td>
+      <td>T1a</td>
+      <td>N0</td>
+      <td>M0</td>
+      <td>I</td>
+      <td>Excellent</td>
+      <td>No</td>
+      <td>&lt;50</td>
+    </tr>
+    <tr>
+      <th>3</th>
+      <td>62</td>
+      <td>F</td>
+      <td>No</td>
+      <td>No</td>
+      <td>No</td>
+      <td>Euthyroid</td>
+      <td>Single nodular goiter-right</td>
+      <td>No</td>
+      <td>Micropapillary</td>
+      <td>Uni-Focal</td>
+      <td>Low</td>
+      <td>T1a</td>
+      <td>N0</td>
+      <td>M0</td>
+      <td>I</td>
+      <td>Excellent</td>
+      <td>No</td>
+      <td>50+</td>
+    </tr>
+    <tr>
+      <th>4</th>
+      <td>62</td>
+      <td>F</td>
+      <td>No</td>
+      <td>No</td>
+      <td>No</td>
+      <td>Euthyroid</td>
+      <td>Multinodular goiter</td>
+      <td>No</td>
+      <td>Micropapillary</td>
+      <td>Multi-Focal</td>
+      <td>Low</td>
+      <td>T1a</td>
+      <td>N0</td>
+      <td>M0</td>
+      <td>I</td>
+      <td>Excellent</td>
+      <td>No</td>
+      <td>50+</td>
+    </tr>
+    <tr>
+      <th>...</th>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+    </tr>
+    <tr>
+      <th>378</th>
+      <td>72</td>
+      <td>M</td>
+      <td>Yes</td>
+      <td>Yes</td>
+      <td>Yes</td>
+      <td>Euthyroid</td>
+      <td>Single nodular goiter-right</td>
+      <td>Right</td>
+      <td>Papillary</td>
+      <td>Uni-Focal</td>
+      <td>High</td>
+      <td>T4b</td>
+      <td>N1b</td>
+      <td>M1</td>
+      <td>IVB</td>
+      <td>Biochemical Incomplete</td>
+      <td>Yes</td>
+      <td>50+</td>
+    </tr>
+    <tr>
+      <th>379</th>
+      <td>81</td>
+      <td>M</td>
+      <td>Yes</td>
+      <td>No</td>
+      <td>Yes</td>
+      <td>Euthyroid</td>
+      <td>Multinodular goiter</td>
+      <td>Extensive</td>
+      <td>Papillary</td>
+      <td>Multi-Focal</td>
+      <td>High</td>
+      <td>T4b</td>
+      <td>N1b</td>
+      <td>M1</td>
+      <td>IVB</td>
+      <td>Structural Incomplete</td>
+      <td>Yes</td>
+      <td>50+</td>
+    </tr>
+    <tr>
+      <th>380</th>
+      <td>72</td>
+      <td>M</td>
+      <td>Yes</td>
+      <td>Yes</td>
+      <td>No</td>
+      <td>Euthyroid</td>
+      <td>Multinodular goiter</td>
+      <td>Bilateral</td>
+      <td>Papillary</td>
+      <td>Multi-Focal</td>
+      <td>High</td>
+      <td>T4b</td>
+      <td>N1b</td>
+      <td>M1</td>
+      <td>IVB</td>
+      <td>Structural Incomplete</td>
+      <td>Yes</td>
+      <td>50+</td>
+    </tr>
+    <tr>
+      <th>381</th>
+      <td>61</td>
+      <td>M</td>
+      <td>Yes</td>
+      <td>Yes</td>
+      <td>Yes</td>
+      <td>Clinical Hyperthyroidism</td>
+      <td>Multinodular goiter</td>
+      <td>Extensive</td>
+      <td>Hurthle Cell</td>
+      <td>Multi-Focal</td>
+      <td>High</td>
+      <td>T4b</td>
+      <td>N1b</td>
+      <td>M0</td>
+      <td>IVA</td>
+      <td>Structural Incomplete</td>
+      <td>Yes</td>
+      <td>50+</td>
+    </tr>
+    <tr>
+      <th>382</th>
+      <td>67</td>
+      <td>M</td>
+      <td>Yes</td>
+      <td>No</td>
+      <td>No</td>
+      <td>Euthyroid</td>
+      <td>Multinodular goiter</td>
+      <td>Bilateral</td>
+      <td>Papillary</td>
+      <td>Multi-Focal</td>
+      <td>High</td>
+      <td>T4b</td>
+      <td>N1b</td>
+      <td>M0</td>
+      <td>IVA</td>
+      <td>Structural Incomplete</td>
+      <td>Yes</td>
+      <td>50+</td>
+    </tr>
+  </tbody>
+</table>
+<p>364 rows × 18 columns</p>
+</div>
+
+
+
+```python
+##################################
+# Preparing the working dataset
+# by excluding unnecessary columns
+##################################
+exclude_cols = ['Age', 'Recurred']
+thyroid_cancer_baseline_filtered = thyroid_cancer_baseline.drop(columns=exclude_cols)
+display(thyroid_cancer_baseline_filtered)
+```
+
+
+<div>
+<style scoped>
+    .dataframe tbody tr th:only-of-type {
+        vertical-align: middle;
+    }
+
+    .dataframe tbody tr th {
+        vertical-align: top;
+    }
+
+    .dataframe thead th {
+        text-align: right;
+    }
+</style>
+<table border="1" class="dataframe">
+  <thead>
+    <tr style="text-align: right;">
+      <th></th>
+      <th>Gender</th>
+      <th>Smoking</th>
+      <th>Hx_Smoking</th>
+      <th>Hx_Radiotherapy</th>
+      <th>Thyroid_Function</th>
+      <th>Physical_Examination</th>
+      <th>Adenopathy</th>
+      <th>Pathology</th>
+      <th>Focality</th>
+      <th>Risk</th>
+      <th>T</th>
+      <th>N</th>
+      <th>M</th>
+      <th>Stage</th>
+      <th>Response</th>
+      <th>Age_Group</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th>0</th>
+      <td>F</td>
+      <td>No</td>
+      <td>No</td>
+      <td>No</td>
+      <td>Euthyroid</td>
+      <td>Single nodular goiter-left</td>
+      <td>No</td>
+      <td>Micropapillary</td>
+      <td>Uni-Focal</td>
+      <td>Low</td>
+      <td>T1a</td>
+      <td>N0</td>
+      <td>M0</td>
+      <td>I</td>
+      <td>Indeterminate</td>
+      <td>&lt;50</td>
+    </tr>
+    <tr>
+      <th>1</th>
+      <td>F</td>
+      <td>No</td>
+      <td>Yes</td>
+      <td>No</td>
+      <td>Euthyroid</td>
+      <td>Multinodular goiter</td>
+      <td>No</td>
+      <td>Micropapillary</td>
+      <td>Uni-Focal</td>
+      <td>Low</td>
+      <td>T1a</td>
+      <td>N0</td>
+      <td>M0</td>
+      <td>I</td>
+      <td>Excellent</td>
+      <td>&lt;50</td>
+    </tr>
+    <tr>
+      <th>2</th>
+      <td>F</td>
+      <td>No</td>
+      <td>No</td>
+      <td>No</td>
+      <td>Euthyroid</td>
+      <td>Single nodular goiter-right</td>
+      <td>No</td>
+      <td>Micropapillary</td>
+      <td>Uni-Focal</td>
+      <td>Low</td>
+      <td>T1a</td>
+      <td>N0</td>
+      <td>M0</td>
+      <td>I</td>
+      <td>Excellent</td>
+      <td>&lt;50</td>
+    </tr>
+    <tr>
+      <th>3</th>
+      <td>F</td>
+      <td>No</td>
+      <td>No</td>
+      <td>No</td>
+      <td>Euthyroid</td>
+      <td>Single nodular goiter-right</td>
+      <td>No</td>
+      <td>Micropapillary</td>
+      <td>Uni-Focal</td>
+      <td>Low</td>
+      <td>T1a</td>
+      <td>N0</td>
+      <td>M0</td>
+      <td>I</td>
+      <td>Excellent</td>
+      <td>50+</td>
+    </tr>
+    <tr>
+      <th>4</th>
+      <td>F</td>
+      <td>No</td>
+      <td>No</td>
+      <td>No</td>
+      <td>Euthyroid</td>
+      <td>Multinodular goiter</td>
+      <td>No</td>
+      <td>Micropapillary</td>
+      <td>Multi-Focal</td>
+      <td>Low</td>
+      <td>T1a</td>
+      <td>N0</td>
+      <td>M0</td>
+      <td>I</td>
+      <td>Excellent</td>
+      <td>50+</td>
+    </tr>
+    <tr>
+      <th>...</th>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+    </tr>
+    <tr>
+      <th>378</th>
+      <td>M</td>
+      <td>Yes</td>
+      <td>Yes</td>
+      <td>Yes</td>
+      <td>Euthyroid</td>
+      <td>Single nodular goiter-right</td>
+      <td>Right</td>
+      <td>Papillary</td>
+      <td>Uni-Focal</td>
+      <td>High</td>
+      <td>T4b</td>
+      <td>N1b</td>
+      <td>M1</td>
+      <td>IVB</td>
+      <td>Biochemical Incomplete</td>
+      <td>50+</td>
+    </tr>
+    <tr>
+      <th>379</th>
+      <td>M</td>
+      <td>Yes</td>
+      <td>No</td>
+      <td>Yes</td>
+      <td>Euthyroid</td>
+      <td>Multinodular goiter</td>
+      <td>Extensive</td>
+      <td>Papillary</td>
+      <td>Multi-Focal</td>
+      <td>High</td>
+      <td>T4b</td>
+      <td>N1b</td>
+      <td>M1</td>
+      <td>IVB</td>
+      <td>Structural Incomplete</td>
+      <td>50+</td>
+    </tr>
+    <tr>
+      <th>380</th>
+      <td>M</td>
+      <td>Yes</td>
+      <td>Yes</td>
+      <td>No</td>
+      <td>Euthyroid</td>
+      <td>Multinodular goiter</td>
+      <td>Bilateral</td>
+      <td>Papillary</td>
+      <td>Multi-Focal</td>
+      <td>High</td>
+      <td>T4b</td>
+      <td>N1b</td>
+      <td>M1</td>
+      <td>IVB</td>
+      <td>Structural Incomplete</td>
+      <td>50+</td>
+    </tr>
+    <tr>
+      <th>381</th>
+      <td>M</td>
+      <td>Yes</td>
+      <td>Yes</td>
+      <td>Yes</td>
+      <td>Clinical Hyperthyroidism</td>
+      <td>Multinodular goiter</td>
+      <td>Extensive</td>
+      <td>Hurthle Cell</td>
+      <td>Multi-Focal</td>
+      <td>High</td>
+      <td>T4b</td>
+      <td>N1b</td>
+      <td>M0</td>
+      <td>IVA</td>
+      <td>Structural Incomplete</td>
+      <td>50+</td>
+    </tr>
+    <tr>
+      <th>382</th>
+      <td>M</td>
+      <td>Yes</td>
+      <td>No</td>
+      <td>No</td>
+      <td>Euthyroid</td>
+      <td>Multinodular goiter</td>
+      <td>Bilateral</td>
+      <td>Papillary</td>
+      <td>Multi-Focal</td>
+      <td>High</td>
+      <td>T4b</td>
+      <td>N1b</td>
+      <td>M0</td>
+      <td>IVA</td>
+      <td>Structural Incomplete</td>
+      <td>50+</td>
+    </tr>
+  </tbody>
+</table>
+<p>364 rows × 16 columns</p>
+</div>
+
+
+### 1.4.2 Category Aggregration and Encoding <a class="anchor" id="1.4.2"></a>
+
+
+```python
+##################################
+# Merging small categories into broader groups 
+# for certain categorical predictors
+# to ensure sufficient representation in statistical models 
+# and prevent sparsity issues in cross-validation
+##################################
+thyroid_cancer_baseline_filtered['Thyroid_Function'] = thyroid_cancer_baseline_filtered['Thyroid_Function'].map(lambda x: 'Euthyroid' if (x in ['Euthyroid'])  else 'Hypothyroidism or Hyperthyroidism').astype('category')
+thyroid_cancer_baseline_filtered['Physical_Examination'] = thyroid_cancer_baseline_filtered['Physical_Examination'].map(lambda x: 'Normal or Single Nodular Goiter' if (x in ['Normal', 'Single nodular goiter-left', 'Single nodular goiter-right'])  else 'Multinodular or Diffuse Goiter').astype('category')
+thyroid_cancer_baseline_filtered['Adenopathy'] = thyroid_cancer_baseline_filtered['Adenopathy'].map(lambda x: 'No' if x == 'No' else ('Yes' if pd.notna(x) and x != '' else x)).astype('category')
+thyroid_cancer_baseline_filtered['Pathology'] = thyroid_cancer_baseline_filtered['Pathology'].map(lambda x: 'Non-Papillary' if (x in ['Hurthle Cell', 'Follicular'])  else 'Papillary').astype('category')
+thyroid_cancer_baseline_filtered['Risk'] = thyroid_cancer_baseline_filtered['Risk'].map(lambda x: 'Low' if (x in ['Low'])  else 'Intermediate to High').astype('category')
+thyroid_cancer_baseline_filtered['T'] = thyroid_cancer_baseline_filtered['T'].map(lambda x: 'T1 to T2' if (x in ['T1a', 'T1b', 'T2'])  else 'T3 to T4b').astype('category')
+thyroid_cancer_baseline_filtered['N'] = thyroid_cancer_baseline_filtered['N'].map(lambda x: 'N0' if (x in ['N0'])  else 'N1').astype('category')
+thyroid_cancer_baseline_filtered['Stage'] = thyroid_cancer_baseline_filtered['Stage'].map(lambda x: 'I' if (x in ['I'])  else 'II to IVB').astype('category')
+thyroid_cancer_baseline_filtered['Response'] = thyroid_cancer_baseline_filtered['Response'].map(lambda x: 'Indeterminate or Incomplete' if (x in ['Indeterminate', 'Structural Incomplete', 'Biochemical Incomplete'])  else 'Excellent').astype('category')
+thyroid_cancer_baseline_filtered.head()
+
+```
+
+
+
+
+<div>
+<style scoped>
+    .dataframe tbody tr th:only-of-type {
+        vertical-align: middle;
+    }
+
+    .dataframe tbody tr th {
+        vertical-align: top;
+    }
+
+    .dataframe thead th {
+        text-align: right;
+    }
+</style>
+<table border="1" class="dataframe">
+  <thead>
+    <tr style="text-align: right;">
+      <th></th>
+      <th>Gender</th>
+      <th>Smoking</th>
+      <th>Hx_Smoking</th>
+      <th>Hx_Radiotherapy</th>
+      <th>Thyroid_Function</th>
+      <th>Physical_Examination</th>
+      <th>Adenopathy</th>
+      <th>Pathology</th>
+      <th>Focality</th>
+      <th>Risk</th>
+      <th>T</th>
+      <th>N</th>
+      <th>M</th>
+      <th>Stage</th>
+      <th>Response</th>
+      <th>Age_Group</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th>0</th>
+      <td>F</td>
+      <td>No</td>
+      <td>No</td>
+      <td>No</td>
+      <td>Euthyroid</td>
+      <td>Normal or Single Nodular Goiter</td>
+      <td>No</td>
+      <td>Papillary</td>
+      <td>Uni-Focal</td>
+      <td>Low</td>
+      <td>T1 to T2</td>
+      <td>N0</td>
+      <td>M0</td>
+      <td>I</td>
+      <td>Indeterminate or Incomplete</td>
+      <td>&lt;50</td>
+    </tr>
+    <tr>
+      <th>1</th>
+      <td>F</td>
+      <td>No</td>
+      <td>Yes</td>
+      <td>No</td>
+      <td>Euthyroid</td>
+      <td>Multinodular or Diffuse Goiter</td>
+      <td>No</td>
+      <td>Papillary</td>
+      <td>Uni-Focal</td>
+      <td>Low</td>
+      <td>T1 to T2</td>
+      <td>N0</td>
+      <td>M0</td>
+      <td>I</td>
+      <td>Excellent</td>
+      <td>&lt;50</td>
+    </tr>
+    <tr>
+      <th>2</th>
+      <td>F</td>
+      <td>No</td>
+      <td>No</td>
+      <td>No</td>
+      <td>Euthyroid</td>
+      <td>Normal or Single Nodular Goiter</td>
+      <td>No</td>
+      <td>Papillary</td>
+      <td>Uni-Focal</td>
+      <td>Low</td>
+      <td>T1 to T2</td>
+      <td>N0</td>
+      <td>M0</td>
+      <td>I</td>
+      <td>Excellent</td>
+      <td>&lt;50</td>
+    </tr>
+    <tr>
+      <th>3</th>
+      <td>F</td>
+      <td>No</td>
+      <td>No</td>
+      <td>No</td>
+      <td>Euthyroid</td>
+      <td>Normal or Single Nodular Goiter</td>
+      <td>No</td>
+      <td>Papillary</td>
+      <td>Uni-Focal</td>
+      <td>Low</td>
+      <td>T1 to T2</td>
+      <td>N0</td>
+      <td>M0</td>
+      <td>I</td>
+      <td>Excellent</td>
+      <td>50+</td>
+    </tr>
+    <tr>
+      <th>4</th>
+      <td>F</td>
+      <td>No</td>
+      <td>No</td>
+      <td>No</td>
+      <td>Euthyroid</td>
+      <td>Multinodular or Diffuse Goiter</td>
+      <td>No</td>
+      <td>Papillary</td>
+      <td>Multi-Focal</td>
+      <td>Low</td>
+      <td>T1 to T2</td>
+      <td>N0</td>
+      <td>M0</td>
+      <td>I</td>
+      <td>Excellent</td>
+      <td>50+</td>
+    </tr>
+  </tbody>
+</table>
+</div>
+
+
+
+### 1.4.3 Synthetic Outlier Labeling via Frequency-Based Tagging <a class="anchor" id="1.4.3"></a>
+
+
+```python
+##################################
+# Defining a function for implementing a
+# frequency-based outlier tagging
+##################################
+def frequency_based_outlier_tagging(df, threshold=0.005):
+    freq = df.value_counts(normalize=True)
+    rare_patterns = freq[freq < threshold].index
+    outlier_mask = df.apply(lambda row: tuple(row) in rare_patterns, axis=1)
+    labels = ['No', 'Yes']
+    return pd.Categorical(outlier_mask.map({True: 'Yes', False: 'No'}), categories=labels, ordered=True)
+thyroid_cancer_baseline_filtered['Outlier'] = frequency_based_outlier_tagging(thyroid_cancer_baseline_filtered.drop(columns='Outlier', errors='ignore'))
+display(thyroid_cancer_baseline_filtered)
+
+```
+
+
+<div>
+<style scoped>
+    .dataframe tbody tr th:only-of-type {
+        vertical-align: middle;
+    }
+
+    .dataframe tbody tr th {
+        vertical-align: top;
+    }
+
+    .dataframe thead th {
+        text-align: right;
+    }
+</style>
+<table border="1" class="dataframe">
+  <thead>
+    <tr style="text-align: right;">
+      <th></th>
+      <th>Gender</th>
+      <th>Smoking</th>
+      <th>Hx_Smoking</th>
+      <th>Hx_Radiotherapy</th>
+      <th>Thyroid_Function</th>
+      <th>Physical_Examination</th>
+      <th>Adenopathy</th>
+      <th>Pathology</th>
+      <th>Focality</th>
+      <th>Risk</th>
+      <th>T</th>
+      <th>N</th>
+      <th>M</th>
+      <th>Stage</th>
+      <th>Response</th>
+      <th>Age_Group</th>
+      <th>Outlier</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th>0</th>
+      <td>F</td>
+      <td>No</td>
+      <td>No</td>
+      <td>No</td>
+      <td>Euthyroid</td>
+      <td>Normal or Single Nodular Goiter</td>
+      <td>No</td>
+      <td>Papillary</td>
+      <td>Uni-Focal</td>
+      <td>Low</td>
+      <td>T1 to T2</td>
+      <td>N0</td>
+      <td>M0</td>
+      <td>I</td>
+      <td>Indeterminate or Incomplete</td>
+      <td>&lt;50</td>
+      <td>No</td>
+    </tr>
+    <tr>
+      <th>1</th>
+      <td>F</td>
+      <td>No</td>
+      <td>Yes</td>
+      <td>No</td>
+      <td>Euthyroid</td>
+      <td>Multinodular or Diffuse Goiter</td>
+      <td>No</td>
+      <td>Papillary</td>
+      <td>Uni-Focal</td>
+      <td>Low</td>
+      <td>T1 to T2</td>
+      <td>N0</td>
+      <td>M0</td>
+      <td>I</td>
+      <td>Excellent</td>
+      <td>&lt;50</td>
+      <td>Yes</td>
+    </tr>
+    <tr>
+      <th>2</th>
+      <td>F</td>
+      <td>No</td>
+      <td>No</td>
+      <td>No</td>
+      <td>Euthyroid</td>
+      <td>Normal or Single Nodular Goiter</td>
+      <td>No</td>
+      <td>Papillary</td>
+      <td>Uni-Focal</td>
+      <td>Low</td>
+      <td>T1 to T2</td>
+      <td>N0</td>
+      <td>M0</td>
+      <td>I</td>
+      <td>Excellent</td>
+      <td>&lt;50</td>
+      <td>No</td>
+    </tr>
+    <tr>
+      <th>3</th>
+      <td>F</td>
+      <td>No</td>
+      <td>No</td>
+      <td>No</td>
+      <td>Euthyroid</td>
+      <td>Normal or Single Nodular Goiter</td>
+      <td>No</td>
+      <td>Papillary</td>
+      <td>Uni-Focal</td>
+      <td>Low</td>
+      <td>T1 to T2</td>
+      <td>N0</td>
+      <td>M0</td>
+      <td>I</td>
+      <td>Excellent</td>
+      <td>50+</td>
+      <td>No</td>
+    </tr>
+    <tr>
+      <th>4</th>
+      <td>F</td>
+      <td>No</td>
+      <td>No</td>
+      <td>No</td>
+      <td>Euthyroid</td>
+      <td>Multinodular or Diffuse Goiter</td>
+      <td>No</td>
+      <td>Papillary</td>
+      <td>Multi-Focal</td>
+      <td>Low</td>
+      <td>T1 to T2</td>
+      <td>N0</td>
+      <td>M0</td>
+      <td>I</td>
+      <td>Excellent</td>
+      <td>50+</td>
+      <td>No</td>
+    </tr>
+    <tr>
+      <th>...</th>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+    </tr>
+    <tr>
+      <th>378</th>
+      <td>M</td>
+      <td>Yes</td>
+      <td>Yes</td>
+      <td>Yes</td>
+      <td>Euthyroid</td>
+      <td>Normal or Single Nodular Goiter</td>
+      <td>Yes</td>
+      <td>Papillary</td>
+      <td>Uni-Focal</td>
+      <td>Intermediate to High</td>
+      <td>T3 to T4b</td>
+      <td>N1</td>
+      <td>M1</td>
+      <td>II to IVB</td>
+      <td>Indeterminate or Incomplete</td>
+      <td>50+</td>
+      <td>Yes</td>
+    </tr>
+    <tr>
+      <th>379</th>
+      <td>M</td>
+      <td>Yes</td>
+      <td>No</td>
+      <td>Yes</td>
+      <td>Euthyroid</td>
+      <td>Multinodular or Diffuse Goiter</td>
+      <td>Yes</td>
+      <td>Papillary</td>
+      <td>Multi-Focal</td>
+      <td>Intermediate to High</td>
+      <td>T3 to T4b</td>
+      <td>N1</td>
+      <td>M1</td>
+      <td>II to IVB</td>
+      <td>Indeterminate or Incomplete</td>
+      <td>50+</td>
+      <td>Yes</td>
+    </tr>
+    <tr>
+      <th>380</th>
+      <td>M</td>
+      <td>Yes</td>
+      <td>Yes</td>
+      <td>No</td>
+      <td>Euthyroid</td>
+      <td>Multinodular or Diffuse Goiter</td>
+      <td>Yes</td>
+      <td>Papillary</td>
+      <td>Multi-Focal</td>
+      <td>Intermediate to High</td>
+      <td>T3 to T4b</td>
+      <td>N1</td>
+      <td>M1</td>
+      <td>II to IVB</td>
+      <td>Indeterminate or Incomplete</td>
+      <td>50+</td>
+      <td>Yes</td>
+    </tr>
+    <tr>
+      <th>381</th>
+      <td>M</td>
+      <td>Yes</td>
+      <td>Yes</td>
+      <td>Yes</td>
+      <td>Hypothyroidism or Hyperthyroidism</td>
+      <td>Multinodular or Diffuse Goiter</td>
+      <td>Yes</td>
+      <td>Non-Papillary</td>
+      <td>Multi-Focal</td>
+      <td>Intermediate to High</td>
+      <td>T3 to T4b</td>
+      <td>N1</td>
+      <td>M0</td>
+      <td>II to IVB</td>
+      <td>Indeterminate or Incomplete</td>
+      <td>50+</td>
+      <td>Yes</td>
+    </tr>
+    <tr>
+      <th>382</th>
+      <td>M</td>
+      <td>Yes</td>
+      <td>No</td>
+      <td>No</td>
+      <td>Euthyroid</td>
+      <td>Multinodular or Diffuse Goiter</td>
+      <td>Yes</td>
+      <td>Papillary</td>
+      <td>Multi-Focal</td>
+      <td>Intermediate to High</td>
+      <td>T3 to T4b</td>
+      <td>N1</td>
+      <td>M0</td>
+      <td>II to IVB</td>
+      <td>Indeterminate or Incomplete</td>
+      <td>50+</td>
+      <td>No</td>
+    </tr>
+  </tbody>
+</table>
+<p>364 rows × 17 columns</p>
+</div>
+
+
+
+```python
+##################################
+# Performing a general exploration of the categorical variable levels
+# based on the ordered categories
+##################################
+ordered_cat_cols = thyroid_cancer_baseline_filtered.columns
+for col in ordered_cat_cols:
+    print(f"Column: {col}")
+    print("Absolute Frequencies:")
+    print(thyroid_cancer_baseline_filtered[col].value_counts().reindex(thyroid_cancer_baseline_filtered[col].cat.categories))
+    print("\nNormalized Frequencies:")
+    print(thyroid_cancer_baseline_filtered[col].value_counts(normalize=True).reindex(thyroid_cancer_baseline_filtered[col].cat.categories))
+    print("-" * 50)
+    
+```
+
+    Column: Gender
+    Absolute Frequencies:
+    M     71
+    F    293
+    Name: count, dtype: int64
+    
+    Normalized Frequencies:
+    M    0.195055
+    F    0.804945
+    Name: proportion, dtype: float64
+    --------------------------------------------------
+    Column: Smoking
+    Absolute Frequencies:
+    No     315
+    Yes     49
+    Name: count, dtype: int64
+    
+    Normalized Frequencies:
+    No     0.865385
+    Yes    0.134615
+    Name: proportion, dtype: float64
+    --------------------------------------------------
+    Column: Hx_Smoking
+    Absolute Frequencies:
+    No     336
+    Yes     28
+    Name: count, dtype: int64
+    
+    Normalized Frequencies:
+    No     0.923077
+    Yes    0.076923
+    Name: proportion, dtype: float64
+    --------------------------------------------------
+    Column: Hx_Radiotherapy
+    Absolute Frequencies:
+    No     357
+    Yes      7
+    Name: count, dtype: int64
+    
+    Normalized Frequencies:
+    No     0.980769
+    Yes    0.019231
+    Name: proportion, dtype: float64
+    --------------------------------------------------
+    Column: Thyroid_Function
+    Absolute Frequencies:
+    Euthyroid                            313
+    Hypothyroidism or Hyperthyroidism     51
+    Name: count, dtype: int64
+    
+    Normalized Frequencies:
+    Euthyroid                            0.85989
+    Hypothyroidism or Hyperthyroidism    0.14011
+    Name: proportion, dtype: float64
+    --------------------------------------------------
+    Column: Physical_Examination
+    Absolute Frequencies:
+    Multinodular or Diffuse Goiter     142
+    Normal or Single Nodular Goiter    222
+    Name: count, dtype: int64
+    
+    Normalized Frequencies:
+    Multinodular or Diffuse Goiter     0.39011
+    Normal or Single Nodular Goiter    0.60989
+    Name: proportion, dtype: float64
+    --------------------------------------------------
+    Column: Adenopathy
+    Absolute Frequencies:
+    No     258
+    Yes    106
+    Name: count, dtype: int64
+    
+    Normalized Frequencies:
+    No     0.708791
+    Yes    0.291209
+    Name: proportion, dtype: float64
+    --------------------------------------------------
+    Column: Pathology
+    Absolute Frequencies:
+    Non-Papillary     48
+    Papillary        316
+    Name: count, dtype: int64
+    
+    Normalized Frequencies:
+    Non-Papillary    0.131868
+    Papillary        0.868132
+    Name: proportion, dtype: float64
+    --------------------------------------------------
+    Column: Focality
+    Absolute Frequencies:
+    Uni-Focal      228
+    Multi-Focal    136
+    Name: count, dtype: int64
+    
+    Normalized Frequencies:
+    Uni-Focal      0.626374
+    Multi-Focal    0.373626
+    Name: proportion, dtype: float64
+    --------------------------------------------------
+    Column: Risk
+    Absolute Frequencies:
+    Intermediate to High    134
+    Low                     230
+    Name: count, dtype: int64
+    
+    Normalized Frequencies:
+    Intermediate to High    0.368132
+    Low                     0.631868
+    Name: proportion, dtype: float64
+    --------------------------------------------------
+    Column: T
+    Absolute Frequencies:
+    T1 to T2     224
+    T3 to T4b    140
+    Name: count, dtype: int64
+    
+    Normalized Frequencies:
+    T1 to T2     0.615385
+    T3 to T4b    0.384615
+    Name: proportion, dtype: float64
+    --------------------------------------------------
+    Column: N
+    Absolute Frequencies:
+    N0    249
+    N1    115
+    Name: count, dtype: int64
+    
+    Normalized Frequencies:
+    N0    0.684066
+    N1    0.315934
+    Name: proportion, dtype: float64
+    --------------------------------------------------
+    Column: M
+    Absolute Frequencies:
+    M0    346
+    M1     18
+    Name: count, dtype: int64
+    
+    Normalized Frequencies:
+    M0    0.950549
+    M1    0.049451
+    Name: proportion, dtype: float64
+    --------------------------------------------------
+    Column: Stage
+    Absolute Frequencies:
+    I            314
+    II to IVB     50
+    Name: count, dtype: int64
+    
+    Normalized Frequencies:
+    I            0.862637
+    II to IVB    0.137363
+    Name: proportion, dtype: float64
+    --------------------------------------------------
+    Column: Response
+    Absolute Frequencies:
+    Excellent                      189
+    Indeterminate or Incomplete    175
+    Name: count, dtype: int64
+    
+    Normalized Frequencies:
+    Excellent                      0.519231
+    Indeterminate or Incomplete    0.480769
+    Name: proportion, dtype: float64
+    --------------------------------------------------
+    Column: Age_Group
+    Absolute Frequencies:
+    <50    258
+    50+    106
+    Name: count, dtype: int64
+    
+    Normalized Frequencies:
+    <50    0.708791
+    50+    0.291209
+    Name: proportion, dtype: float64
+    --------------------------------------------------
+    Column: Outlier
+    Absolute Frequencies:
+    No     220
+    Yes    144
+    Name: count, dtype: int64
+    
+    Normalized Frequencies:
+    No     0.604396
+    Yes    0.395604
+    Name: proportion, dtype: float64
+    --------------------------------------------------
+    
+
+### 1.4.4 Data Splitting <a class="anchor" id="1.4.4"></a>
+
+### 1.4.5 Data Preparation <a class="anchor" id="1.4.5"></a>
 
 ## 1.5. Data Exploration <a class="anchor" id="1.5"></a>
 
