@@ -157,6 +157,17 @@ import prince
 # Defining file paths
 ##################################
 DATASETS_ORIGINAL_PATH = r"datasets\original"
+DATASETS_FINAL_PATH = r"datasets\final\complete"
+DATASETS_FINAL_TRAIN_PATH = r"datasets\final\train"
+DATASETS_FINAL_TRAIN_FEATURES_PATH = r"datasets\final\train\features"
+DATASETS_FINAL_TRAIN_TARGET_PATH = r"datasets\final\train\target"
+DATASETS_FINAL_VALIDATION_PATH = r"datasets\final\validation"
+DATASETS_FINAL_VALIDATION_FEATURES_PATH = r"datasets\final\validation\features"
+DATASETS_FINAL_VALIDATION_TARGET_PATH = r"datasets\final\validation\target"
+DATASETS_FINAL_TEST_PATH = r"datasets\final\test"
+DATASETS_FINAL_TEST_FEATURES_PATH = r"datasets\final\test\features"
+DATASETS_FINAL_TEST_TARGET_PATH = r"datasets\final\test\target"
+MODELS_PATH = r"models"
 
 ```
 
@@ -4699,6 +4710,359 @@ for col in ordered_cat_cols:
     
 
 ### 1.4.4 Data Splitting <a class="anchor" id="1.4.4"></a>
+
+
+```python
+##################################
+# Creating a dataset copy
+# of the aggregated and encoded data
+##################################
+thyroid_cancer_presplitting = thyroid_cancer_baseline_filtered.copy()
+
+```
+
+
+```python
+##################################
+# Performing a general exploration
+# of the presplitting dataset
+##################################
+print('Final Dataset Dimensions: ')
+display(thyroid_cancer_presplitting.shape)
+
+```
+
+    Final Dataset Dimensions: 
+    
+
+
+    (364, 17)
+
+
+
+```python
+##################################
+# Exploring the outlier breakdown
+##################################
+print('Target Variable Breakdown: ')
+thyroid_cancer_breakdown = thyroid_cancer_presplitting.groupby('Outlier', observed=True).size().reset_index(name='Count')
+thyroid_cancer_breakdown['Percentage'] = (thyroid_cancer_breakdown['Count'] / len(thyroid_cancer_baseline)) * 100
+display(thyroid_cancer_breakdown)
+
+```
+
+    Target Variable Breakdown: 
+    
+
+
+<div>
+<style scoped>
+    .dataframe tbody tr th:only-of-type {
+        vertical-align: middle;
+    }
+
+    .dataframe tbody tr th {
+        vertical-align: top;
+    }
+
+    .dataframe thead th {
+        text-align: right;
+    }
+</style>
+<table border="1" class="dataframe">
+  <thead>
+    <tr style="text-align: right;">
+      <th></th>
+      <th>Outlier</th>
+      <th>Count</th>
+      <th>Percentage</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th>0</th>
+      <td>No</td>
+      <td>220</td>
+      <td>60.43956</td>
+    </tr>
+    <tr>
+      <th>1</th>
+      <td>Yes</td>
+      <td>144</td>
+      <td>39.56044</td>
+    </tr>
+  </tbody>
+</table>
+</div>
+
+
+
+```python
+##################################
+# Formulating the train and test data
+# from the final dataset
+# by applying stratification and
+# using a 75-25 ratio
+##################################
+thyroid_cancer_train_initial, thyroid_cancer_test = train_test_split(thyroid_cancer_presplitting, 
+                                                                     test_size=0.25, 
+                                                                     stratify=thyroid_cancer_presplitting['Outlier'], 
+                                                                     random_state=987654321)
+
+```
+
+
+```python
+##################################
+# Performing a general exploration
+# of the initial training dataset
+##################################
+X_train_initial = thyroid_cancer_train_initial.drop('Outlier', axis = 1)
+y_train_initial = thyroid_cancer_train_initial['Outlier']
+print('Initial Train Dataset Dimensions: ')
+display(X_train_initial.shape)
+display(y_train_initial.shape)
+print('Initial Train Target Variable Breakdown: ')
+display(y_train_initial.value_counts())
+print('Initial Train Target Variable Proportion: ')
+display(y_train_initial.value_counts(normalize = True))
+
+```
+
+    Initial Train Dataset Dimensions: 
+    
+
+
+    (273, 16)
+
+
+
+    (273,)
+
+
+    Initial Train Target Variable Breakdown: 
+    
+
+
+    Outlier
+    No     165
+    Yes    108
+    Name: count, dtype: int64
+
+
+    Initial Train Target Variable Proportion: 
+    
+
+
+    Outlier
+    No     0.604396
+    Yes    0.395604
+    Name: proportion, dtype: float64
+
+
+
+```python
+##################################
+# Performing a general exploration
+# of the test dataset
+##################################
+X_test = thyroid_cancer_test.drop('Outlier', axis = 1)
+y_test = thyroid_cancer_test['Outlier']
+print('Test Dataset Dimensions: ')
+display(X_test.shape)
+display(y_test.shape)
+print('Test Target Variable Breakdown: ')
+display(y_test.value_counts())
+print('Test Target Variable Proportion: ')
+display(y_test.value_counts(normalize = True))
+
+```
+
+    Test Dataset Dimensions: 
+    
+
+
+    (91, 16)
+
+
+
+    (91,)
+
+
+    Test Target Variable Breakdown: 
+    
+
+
+    Outlier
+    No     55
+    Yes    36
+    Name: count, dtype: int64
+
+
+    Test Target Variable Proportion: 
+    
+
+
+    Outlier
+    No     0.604396
+    Yes    0.395604
+    Name: proportion, dtype: float64
+
+
+
+```python
+##################################
+# Formulating the train and validation data
+# from the train dataset
+# by applying stratification and
+# using a 75-25 ratio
+##################################
+thyroid_cancer_train, thyroid_cancer_validation = train_test_split(thyroid_cancer_train_initial, 
+                                                                   test_size=0.25, 
+                                                                   stratify=thyroid_cancer_train_initial['Outlier'], 
+                                                                   random_state=987654321)
+
+```
+
+
+```python
+##################################
+# Performing a general exploration
+# of the final training dataset
+##################################
+X_train = thyroid_cancer_train.drop('Outlier', axis = 1)
+y_train = thyroid_cancer_train['Outlier']
+print('Final Train Dataset Dimensions: ')
+display(X_train.shape)
+display(y_train.shape)
+print('Final Train Target Variable Breakdown: ')
+display(y_train.value_counts())
+print('Final Train Target Variable Proportion: ')
+display(y_train.value_counts(normalize = True))
+
+```
+
+    Final Train Dataset Dimensions: 
+    
+
+
+    (204, 16)
+
+
+
+    (204,)
+
+
+    Final Train Target Variable Breakdown: 
+    
+
+
+    Outlier
+    No     123
+    Yes     81
+    Name: count, dtype: int64
+
+
+    Final Train Target Variable Proportion: 
+    
+
+
+    Outlier
+    No     0.602941
+    Yes    0.397059
+    Name: proportion, dtype: float64
+
+
+
+```python
+##################################
+# Performing a general exploration
+# of the validation dataset
+##################################
+X_validation = thyroid_cancer_validation.drop('Outlier', axis = 1)
+y_validation = thyroid_cancer_validation['Outlier']
+print('Validation Dataset Dimensions: ')
+display(X_validation.shape)
+display(y_validation.shape)
+print('Validation Target Variable Breakdown: ')
+display(y_validation.value_counts())
+print('Validation Target Variable Proportion: ')
+display(y_validation.value_counts(normalize = True))
+
+```
+
+    Validation Dataset Dimensions: 
+    
+
+
+    (69, 16)
+
+
+
+    (69,)
+
+
+    Validation Target Variable Breakdown: 
+    
+
+
+    Outlier
+    No     42
+    Yes    27
+    Name: count, dtype: int64
+
+
+    Validation Target Variable Proportion: 
+    
+
+
+    Outlier
+    No     0.608696
+    Yes    0.391304
+    Name: proportion, dtype: float64
+
+
+
+```python
+##################################
+# Saving the training data
+# to the DATASETS_FINAL_TRAIN_PATH
+# and DATASETS_FINAL_TRAIN_FEATURES_PATH
+# and DATASETS_FINAL_TRAIN_TARGET_PATH
+##################################
+thyroid_cancer_train.to_csv(os.path.join("..", DATASETS_FINAL_TRAIN_PATH, "thyroid_cancer_train.csv"), index=False)
+X_train.to_csv(os.path.join("..", DATASETS_FINAL_TRAIN_FEATURES_PATH, "X_train.csv"), index=False)
+y_train.to_csv(os.path.join("..", DATASETS_FINAL_TRAIN_TARGET_PATH, "y_train.csv"), index=False)
+
+```
+
+
+```python
+##################################
+# Saving the validation data
+# to the DATASETS_FINAL_VALIDATION_PATH
+# and DATASETS_FINAL_VALIDATION_FEATURE_PATH
+# and DATASETS_FINAL_VALIDATION_TARGET_PATH
+##################################
+thyroid_cancer_validation.to_csv(os.path.join("..", DATASETS_FINAL_VALIDATION_PATH, "thyroid_cancer_validation.csv"), index=False)
+X_validation.to_csv(os.path.join("..", DATASETS_FINAL_VALIDATION_FEATURES_PATH, "X_validation.csv"), index=False)
+y_validation.to_csv(os.path.join("..", DATASETS_FINAL_VALIDATION_TARGET_PATH, "y_validation.csv"), index=False)
+
+```
+
+
+```python
+##################################
+# Saving the test data
+# to the DATASETS_FINAL_TEST_PATH
+# and DATASETS_FINAL_TEST_FEATURES_PATH
+# and DATASETS_FINAL_TEST_TARGET_PATH
+##################################
+thyroid_cancer_test.to_csv(os.path.join("..", DATASETS_FINAL_TEST_PATH, "thyroid_cancer_test.csv"), index=False)
+X_test.to_csv(os.path.join("..", DATASETS_FINAL_TEST_FEATURES_PATH, "X_test.csv"), index=False)
+y_test.to_csv(os.path.join("..", DATASETS_FINAL_TEST_TARGET_PATH, "y_test.csv"), index=False)
+
+```
 
 ### 1.4.5 Data Preparation <a class="anchor" id="1.4.5"></a>
 

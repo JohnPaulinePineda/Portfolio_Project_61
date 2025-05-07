@@ -1,0 +1,70 @@
+Gender,Smoking,Hx_Smoking,Hx_Radiotherapy,Thyroid_Function,Physical_Examination,Adenopathy,Pathology,Focality,Risk,T,N,M,Stage,Response,Age_Group,Outlier
+M,Yes,No,No,Euthyroid,Normal or Single Nodular Goiter,Yes,Papillary,Multi-Focal,Intermediate to High,T3 to T4b,N1,M0,II to IVB,Indeterminate or Incomplete,50+,Yes
+M,No,No,No,Euthyroid,Normal or Single Nodular Goiter,Yes,Papillary,Uni-Focal,Intermediate to High,T1 to T2,N1,M0,I,Indeterminate or Incomplete,<50,No
+M,No,No,No,Euthyroid,Multinodular or Diffuse Goiter,No,Papillary,Multi-Focal,Low,T1 to T2,N0,M0,I,Excellent,<50,No
+M,No,No,No,Hypothyroidism or Hyperthyroidism,Normal or Single Nodular Goiter,No,Papillary,Uni-Focal,Low,T1 to T2,N0,M0,I,Excellent,<50,Yes
+F,No,No,No,Euthyroid,Normal or Single Nodular Goiter,No,Papillary,Uni-Focal,Low,T1 to T2,N0,M0,I,Excellent,<50,No
+M,Yes,No,No,Euthyroid,Multinodular or Diffuse Goiter,No,Papillary,Multi-Focal,Low,T1 to T2,N0,M0,I,Indeterminate or Incomplete,50+,Yes
+F,No,No,No,Euthyroid,Multinodular or Diffuse Goiter,Yes,Papillary,Multi-Focal,Intermediate to High,T3 to T4b,N1,M0,I,Indeterminate or Incomplete,<50,No
+F,No,No,No,Euthyroid,Normal or Single Nodular Goiter,Yes,Papillary,Uni-Focal,Intermediate to High,T1 to T2,N1,M0,I,Indeterminate or Incomplete,<50,No
+F,No,No,No,Euthyroid,Normal or Single Nodular Goiter,No,Papillary,Uni-Focal,Low,T1 to T2,N1,M0,I,Excellent,<50,No
+F,No,No,No,Euthyroid,Normal or Single Nodular Goiter,No,Non-Papillary,Multi-Focal,Intermediate to High,T3 to T4b,N0,M0,II to IVB,Indeterminate or Incomplete,50+,Yes
+F,No,No,No,Hypothyroidism or Hyperthyroidism,Normal or Single Nodular Goiter,No,Papillary,Uni-Focal,Low,T1 to T2,N0,M0,I,Excellent,<50,No
+F,No,No,No,Euthyroid,Normal or Single Nodular Goiter,No,Papillary,Uni-Focal,Low,T1 to T2,N0,M0,I,Indeterminate or Incomplete,<50,No
+F,No,No,No,Euthyroid,Normal or Single Nodular Goiter,No,Papillary,Uni-Focal,Low,T1 to T2,N0,M0,I,Excellent,<50,No
+F,No,No,No,Euthyroid,Multinodular or Diffuse Goiter,Yes,Papillary,Multi-Focal,Intermediate to High,T3 to T4b,N1,M0,I,Excellent,<50,No
+M,Yes,Yes,No,Hypothyroidism or Hyperthyroidism,Multinodular or Diffuse Goiter,No,Non-Papillary,Multi-Focal,Intermediate to High,T3 to T4b,N0,M0,I,Indeterminate or Incomplete,50+,Yes
+F,No,No,No,Euthyroid,Normal or Single Nodular Goiter,No,Papillary,Uni-Focal,Low,T1 to T2,N0,M0,I,Indeterminate or Incomplete,<50,No
+F,No,No,No,Hypothyroidism or Hyperthyroidism,Multinodular or Diffuse Goiter,No,Non-Papillary,Multi-Focal,Low,T3 to T4b,N0,M0,I,Excellent,<50,Yes
+M,No,No,No,Euthyroid,Multinodular or Diffuse Goiter,Yes,Papillary,Multi-Focal,Intermediate to High,T3 to T4b,N1,M0,I,Indeterminate or Incomplete,50+,Yes
+F,No,No,No,Hypothyroidism or Hyperthyroidism,Multinodular or Diffuse Goiter,No,Papillary,Multi-Focal,Low,T1 to T2,N0,M0,I,Excellent,<50,No
+M,Yes,No,No,Euthyroid,Normal or Single Nodular Goiter,Yes,Papillary,Multi-Focal,Intermediate to High,T3 to T4b,N1,M1,II to IVB,Indeterminate or Incomplete,50+,Yes
+F,No,No,No,Euthyroid,Normal or Single Nodular Goiter,No,Non-Papillary,Uni-Focal,Intermediate to High,T3 to T4b,N0,M0,I,Indeterminate or Incomplete,50+,Yes
+F,No,No,No,Euthyroid,Normal or Single Nodular Goiter,No,Papillary,Uni-Focal,Low,T1 to T2,N0,M0,I,Excellent,50+,No
+F,Yes,No,No,Euthyroid,Normal or Single Nodular Goiter,No,Non-Papillary,Uni-Focal,Low,T1 to T2,N0,M0,I,Indeterminate or Incomplete,<50,Yes
+F,No,No,No,Euthyroid,Multinodular or Diffuse Goiter,Yes,Papillary,Multi-Focal,Intermediate to High,T3 to T4b,N1,M1,II to IVB,Indeterminate or Incomplete,50+,Yes
+F,No,No,No,Hypothyroidism or Hyperthyroidism,Normal or Single Nodular Goiter,No,Papillary,Uni-Focal,Low,T1 to T2,N0,M0,I,Excellent,<50,No
+F,No,No,No,Euthyroid,Normal or Single Nodular Goiter,No,Papillary,Uni-Focal,Low,T1 to T2,N0,M0,I,Excellent,<50,No
+M,No,No,No,Euthyroid,Multinodular or Diffuse Goiter,No,Papillary,Uni-Focal,Low,T1 to T2,N0,M0,I,Indeterminate or Incomplete,50+,Yes
+F,No,No,No,Euthyroid,Normal or Single Nodular Goiter,Yes,Papillary,Multi-Focal,Intermediate to High,T3 to T4b,N1,M0,I,Indeterminate or Incomplete,<50,No
+F,No,No,No,Hypothyroidism or Hyperthyroidism,Multinodular or Diffuse Goiter,No,Papillary,Uni-Focal,Low,T1 to T2,N0,M0,I,Indeterminate or Incomplete,50+,Yes
+F,No,No,No,Euthyroid,Normal or Single Nodular Goiter,No,Papillary,Uni-Focal,Low,T1 to T2,N0,M0,I,Excellent,<50,No
+M,Yes,No,No,Euthyroid,Normal or Single Nodular Goiter,Yes,Papillary,Multi-Focal,Intermediate to High,T3 to T4b,N1,M1,II to IVB,Indeterminate or Incomplete,<50,No
+F,No,No,No,Euthyroid,Normal or Single Nodular Goiter,No,Papillary,Uni-Focal,Low,T1 to T2,N0,M0,I,Excellent,<50,No
+F,No,No,No,Euthyroid,Normal or Single Nodular Goiter,No,Papillary,Uni-Focal,Low,T1 to T2,N0,M0,I,Excellent,<50,No
+M,Yes,No,No,Euthyroid,Multinodular or Diffuse Goiter,Yes,Papillary,Multi-Focal,Intermediate to High,T3 to T4b,N1,M0,II to IVB,Indeterminate or Incomplete,50+,No
+M,Yes,No,No,Euthyroid,Normal or Single Nodular Goiter,No,Papillary,Uni-Focal,Low,T1 to T2,N0,M0,I,Excellent,50+,Yes
+F,No,No,No,Euthyroid,Normal or Single Nodular Goiter,No,Papillary,Uni-Focal,Low,T1 to T2,N0,M0,I,Excellent,<50,No
+F,No,Yes,No,Euthyroid,Multinodular or Diffuse Goiter,No,Papillary,Uni-Focal,Low,T1 to T2,N0,M0,I,Excellent,50+,Yes
+F,No,No,No,Euthyroid,Normal or Single Nodular Goiter,No,Non-Papillary,Multi-Focal,Low,T3 to T4b,N0,M0,I,Indeterminate or Incomplete,<50,Yes
+F,No,No,No,Euthyroid,Multinodular or Diffuse Goiter,No,Papillary,Multi-Focal,Low,T3 to T4b,N0,M0,I,Indeterminate or Incomplete,<50,No
+F,No,No,No,Euthyroid,Multinodular or Diffuse Goiter,No,Papillary,Uni-Focal,Low,T1 to T2,N0,M0,I,Indeterminate or Incomplete,<50,No
+M,No,No,No,Euthyroid,Normal or Single Nodular Goiter,Yes,Papillary,Uni-Focal,Intermediate to High,T1 to T2,N1,M0,I,Indeterminate or Incomplete,<50,No
+F,No,No,No,Euthyroid,Multinodular or Diffuse Goiter,No,Papillary,Uni-Focal,Low,T1 to T2,N0,M0,I,Excellent,<50,No
+F,No,No,No,Euthyroid,Normal or Single Nodular Goiter,No,Papillary,Uni-Focal,Low,T3 to T4b,N0,M0,I,Excellent,<50,No
+F,No,No,No,Hypothyroidism or Hyperthyroidism,Normal or Single Nodular Goiter,No,Papillary,Uni-Focal,Low,T1 to T2,N0,M0,I,Excellent,<50,No
+F,No,No,No,Euthyroid,Normal or Single Nodular Goiter,No,Papillary,Uni-Focal,Low,T1 to T2,N0,M0,I,Excellent,<50,No
+F,No,No,No,Euthyroid,Multinodular or Diffuse Goiter,No,Non-Papillary,Multi-Focal,Low,T3 to T4b,N0,M0,I,Excellent,<50,Yes
+F,No,No,No,Euthyroid,Normal or Single Nodular Goiter,No,Papillary,Multi-Focal,Low,T3 to T4b,N0,M0,I,Excellent,<50,No
+M,Yes,No,Yes,Euthyroid,Multinodular or Diffuse Goiter,Yes,Papillary,Multi-Focal,Intermediate to High,T3 to T4b,N1,M1,II to IVB,Indeterminate or Incomplete,50+,Yes
+F,No,No,No,Hypothyroidism or Hyperthyroidism,Multinodular or Diffuse Goiter,Yes,Papillary,Multi-Focal,Intermediate to High,T3 to T4b,N1,M0,II to IVB,Indeterminate or Incomplete,50+,Yes
+F,No,No,No,Euthyroid,Normal or Single Nodular Goiter,No,Papillary,Uni-Focal,Low,T1 to T2,N0,M0,I,Indeterminate or Incomplete,<50,No
+F,No,No,No,Euthyroid,Multinodular or Diffuse Goiter,Yes,Papillary,Multi-Focal,Intermediate to High,T3 to T4b,N1,M0,I,Indeterminate or Incomplete,<50,No
+F,No,No,No,Euthyroid,Multinodular or Diffuse Goiter,No,Papillary,Uni-Focal,Low,T3 to T4b,N0,M0,I,Indeterminate or Incomplete,<50,Yes
+F,No,No,No,Euthyroid,Normal or Single Nodular Goiter,Yes,Papillary,Uni-Focal,Intermediate to High,T3 to T4b,N1,M1,I,Indeterminate or Incomplete,<50,Yes
+F,No,No,No,Euthyroid,Normal or Single Nodular Goiter,No,Papillary,Uni-Focal,Low,T3 to T4b,N0,M0,I,Excellent,<50,No
+M,No,No,No,Euthyroid,Multinodular or Diffuse Goiter,Yes,Papillary,Multi-Focal,Intermediate to High,T3 to T4b,N1,M0,I,Indeterminate or Incomplete,<50,No
+F,No,No,No,Euthyroid,Multinodular or Diffuse Goiter,No,Papillary,Multi-Focal,Low,T1 to T2,N0,M0,I,Excellent,<50,No
+F,No,Yes,No,Hypothyroidism or Hyperthyroidism,Normal or Single Nodular Goiter,No,Papillary,Uni-Focal,Low,T1 to T2,N0,M0,I,Excellent,<50,No
+F,No,No,No,Euthyroid,Multinodular or Diffuse Goiter,No,Papillary,Multi-Focal,Low,T3 to T4b,N0,M0,I,Excellent,<50,Yes
+F,Yes,Yes,No,Euthyroid,Multinodular or Diffuse Goiter,Yes,Papillary,Uni-Focal,Intermediate to High,T3 to T4b,N1,M0,II to IVB,Indeterminate or Incomplete,50+,Yes
+F,No,No,No,Hypothyroidism or Hyperthyroidism,Multinodular or Diffuse Goiter,No,Papillary,Uni-Focal,Low,T1 to T2,N0,M0,I,Excellent,<50,No
+F,No,No,No,Euthyroid,Normal or Single Nodular Goiter,No,Papillary,Multi-Focal,Low,T3 to T4b,N0,M0,I,Indeterminate or Incomplete,<50,No
+F,No,No,No,Euthyroid,Normal or Single Nodular Goiter,No,Papillary,Uni-Focal,Low,T1 to T2,N0,M0,I,Excellent,<50,No
+F,No,No,No,Euthyroid,Normal or Single Nodular Goiter,No,Non-Papillary,Multi-Focal,Low,T3 to T4b,N0,M0,I,Indeterminate or Incomplete,50+,Yes
+F,No,No,No,Hypothyroidism or Hyperthyroidism,Multinodular or Diffuse Goiter,No,Non-Papillary,Multi-Focal,Intermediate to High,T3 to T4b,N0,M0,II to IVB,Indeterminate or Incomplete,50+,Yes
+F,No,No,No,Euthyroid,Multinodular or Diffuse Goiter,No,Papillary,Uni-Focal,Low,T1 to T2,N0,M0,I,Excellent,<50,No
+F,No,No,No,Euthyroid,Multinodular or Diffuse Goiter,Yes,Papillary,Uni-Focal,Intermediate to High,T3 to T4b,N1,M0,I,Indeterminate or Incomplete,50+,Yes
+F,No,No,No,Euthyroid,Multinodular or Diffuse Goiter,No,Papillary,Uni-Focal,Low,T1 to T2,N0,M0,I,Excellent,<50,No
+F,No,No,No,Hypothyroidism or Hyperthyroidism,Normal or Single Nodular Goiter,No,Non-Papillary,Multi-Focal,Low,T3 to T4b,N0,M0,I,Excellent,<50,Yes
+F,No,No,No,Euthyroid,Normal or Single Nodular Goiter,No,Papillary,Uni-Focal,Low,T1 to T2,N0,M0,I,Excellent,<50,No
