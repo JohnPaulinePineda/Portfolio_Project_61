@@ -2,7 +2,7 @@
 # Supervised | Unsupervised Learning : Detecting and Evaluating Anomalies in Categorical Data Under Supervised and Unsupervised Settings
 
 ***
-### [**John Pauline Pineda**](https://github.com/JohnPaulinePineda) <br> <br> *June 14, 2025*
+### [**John Pauline Pineda**](https://github.com/JohnPaulinePineda) <br> <br> *June 21, 2025*
 ***
 
 * [**1. Table of Contents**](#TOC)
@@ -18,23 +18,21 @@
     * [1.5 Data Exploration](#1.5)
         * [1.5.1 Exploratory Data Analysis](#1.5.1)
         * [1.5.2 Hypothesis Testing](#1.5.2)
-    * [1.6 Premodelling Data Preparation](#1.6)
-        * [1.6.1 Preprocessed Data Description](#1.6.1)
-        * [1.6.2 Preprocessing Pipeline Development](#1.6.2)
+    * [1.6 Model Evaluation Preparation](#1.6)
+        * [1.6.1 Model Evaluation Metrics Description](#1.6.1)
+        * [1.6.2 Model Evaluation Function Development](#1.6.2)
     * [1.7 Model Development With Synthetic Ground Truth Labels](#1.7)
         * [1.7.1 Isolation Forest](#1.7.1)
         * [1.7.2 Local Outlier Factor](#1.7.2)
         * [1.7.3 K-Nearest Neighbors Outlier Score](#1.7.3)
         * [1.7.4 Histogram-Based Outlier Score](#1.7.4)
-        * [1.7.5 RuleFit / Tree-Based Methods](#1.7.5)
-        * [1.7.6 High Leverage Points via Multiple Correspondence Analysis](#1.7.6)
+        * [1.7.5 High Leverage Points via Multiple Correspondence Analysis](#1.7.5)
     * [1.8 Model Development Without Ground Truth Labels](#1.8)
         * [1.8.1 Isolation Forest](#1.8.1)
         * [1.8.2 Local Outlier Factor](#1.8.2)
         * [1.8.3 K-Nearest Neighbors Outlier Score](#1.8.3)
         * [1.8.4 Histogram-Based Outlier Score](#1.8.4)
-        * [1.8.5 RuleFit / Tree-Based Methods](#1.8.5)
-        * [1.8.6 High Leverage Points via Multiple Correspondence Analysis](#1.8.6)
+        * [1.8.5 High Leverage Points via Multiple Correspondence Analysis](#1.8.5)
     * [1.9 Consolidated Findings](#1.9)
 * [**2. Summary**](#Summary)   
 * [**3. References**](#References)
@@ -128,7 +126,7 @@ import pickle
 from operator import add,mul,truediv
 from sklearn.experimental import enable_iterative_imputer
 from sklearn.impute import IterativeImputer
-from sklearn.preprocessing import OrdinalEncoder, StandardScaler, OrdinalEncoder
+from sklearn.preprocessing import OrdinalEncoder, StandardScaler, LabelEncoder
 from scipy import stats
 from scipy.stats import pointbiserialr, chi2_contingency
 from scipy.spatial.distance import cdist
@@ -139,13 +137,18 @@ from sklearn.neighbors import LocalOutlierFactor
 from sklearn.ensemble import IsolationForest
 from sklearn.neural_network import MLPClassifier
 from sklearn.svm import SVC
-from sklearn.metrics import silhouette_score
+from sklearn.metrics import silhouette_score, roc_auc_score, precision_score, f1_score, precision_recall_curve
 from sklearn.model_selection import train_test_split, GridSearchCV, RepeatedStratifiedKFold, KFold, cross_val_score
 from sklearn.tree import DecisionTreeClassifier
 from sklearn.decomposition import TruncatedSVD
+from scipy.spatial.distance import mahalanobis
 
 from pyod.models.knn import KNN
 from pyod.models.hbos import HBOS
+from pyod.models.cblof import CBLOF
+
+from kmodes.kmodes import KModes
+from mlxtend.frequent_patterns import apriori, association_rules
 
 import prince
 
@@ -5448,6 +5451,266 @@ display(thyroid_cancer_breakdown)
 
 ```python
 ##################################
+# Encoding categorical data through Label Encoding
+##################################
+thyroid_cancer_presplitting_verbose = thyroid_cancer_presplitting.copy()
+label_encoders = {}
+for col in thyroid_cancer_presplitting.columns:
+    le = LabelEncoder()
+    thyroid_cancer_presplitting[col] = le.fit_transform(thyroid_cancer_presplitting[col])
+    label_encoders[col] = le
+```
+
+
+```python
+##################################
+# Performing a general exploration
+# of the label encoded presplitting dataset
+##################################
+print('Final Dataset Dimensions: ')
+display(thyroid_cancer_presplitting.shape)
+display(thyroid_cancer_presplitting)
+```
+
+    Final Dataset Dimensions: 
+    
+
+
+    (364, 14)
+
+
+
+<div>
+<style scoped>
+    .dataframe tbody tr th:only-of-type {
+        vertical-align: middle;
+    }
+
+    .dataframe tbody tr th {
+        vertical-align: top;
+    }
+
+    .dataframe thead th {
+        text-align: right;
+    }
+</style>
+<table border="1" class="dataframe">
+  <thead>
+    <tr style="text-align: right;">
+      <th></th>
+      <th>Gender</th>
+      <th>Smoking</th>
+      <th>Thyroid_Function</th>
+      <th>Physical_Examination</th>
+      <th>Adenopathy</th>
+      <th>Pathology</th>
+      <th>Focality</th>
+      <th>Risk</th>
+      <th>T</th>
+      <th>N</th>
+      <th>Stage</th>
+      <th>Response</th>
+      <th>Age_Group</th>
+      <th>Outlier</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th>0</th>
+      <td>0</td>
+      <td>0</td>
+      <td>0</td>
+      <td>1</td>
+      <td>0</td>
+      <td>1</td>
+      <td>1</td>
+      <td>1</td>
+      <td>0</td>
+      <td>0</td>
+      <td>0</td>
+      <td>1</td>
+      <td>1</td>
+      <td>0</td>
+    </tr>
+    <tr>
+      <th>1</th>
+      <td>0</td>
+      <td>0</td>
+      <td>0</td>
+      <td>0</td>
+      <td>0</td>
+      <td>1</td>
+      <td>1</td>
+      <td>1</td>
+      <td>0</td>
+      <td>0</td>
+      <td>0</td>
+      <td>0</td>
+      <td>1</td>
+      <td>0</td>
+    </tr>
+    <tr>
+      <th>2</th>
+      <td>0</td>
+      <td>0</td>
+      <td>0</td>
+      <td>1</td>
+      <td>0</td>
+      <td>1</td>
+      <td>1</td>
+      <td>1</td>
+      <td>0</td>
+      <td>0</td>
+      <td>0</td>
+      <td>0</td>
+      <td>1</td>
+      <td>0</td>
+    </tr>
+    <tr>
+      <th>3</th>
+      <td>0</td>
+      <td>0</td>
+      <td>0</td>
+      <td>1</td>
+      <td>0</td>
+      <td>1</td>
+      <td>1</td>
+      <td>1</td>
+      <td>0</td>
+      <td>0</td>
+      <td>0</td>
+      <td>0</td>
+      <td>0</td>
+      <td>0</td>
+    </tr>
+    <tr>
+      <th>4</th>
+      <td>0</td>
+      <td>0</td>
+      <td>0</td>
+      <td>0</td>
+      <td>0</td>
+      <td>1</td>
+      <td>0</td>
+      <td>1</td>
+      <td>0</td>
+      <td>0</td>
+      <td>0</td>
+      <td>0</td>
+      <td>0</td>
+      <td>0</td>
+    </tr>
+    <tr>
+      <th>...</th>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+    </tr>
+    <tr>
+      <th>378</th>
+      <td>1</td>
+      <td>1</td>
+      <td>0</td>
+      <td>1</td>
+      <td>1</td>
+      <td>1</td>
+      <td>1</td>
+      <td>0</td>
+      <td>1</td>
+      <td>1</td>
+      <td>1</td>
+      <td>1</td>
+      <td>0</td>
+      <td>0</td>
+    </tr>
+    <tr>
+      <th>379</th>
+      <td>1</td>
+      <td>1</td>
+      <td>0</td>
+      <td>0</td>
+      <td>1</td>
+      <td>1</td>
+      <td>0</td>
+      <td>0</td>
+      <td>1</td>
+      <td>1</td>
+      <td>1</td>
+      <td>1</td>
+      <td>0</td>
+      <td>0</td>
+    </tr>
+    <tr>
+      <th>380</th>
+      <td>1</td>
+      <td>1</td>
+      <td>0</td>
+      <td>0</td>
+      <td>1</td>
+      <td>1</td>
+      <td>0</td>
+      <td>0</td>
+      <td>1</td>
+      <td>1</td>
+      <td>1</td>
+      <td>1</td>
+      <td>0</td>
+      <td>0</td>
+    </tr>
+    <tr>
+      <th>381</th>
+      <td>1</td>
+      <td>1</td>
+      <td>1</td>
+      <td>0</td>
+      <td>1</td>
+      <td>0</td>
+      <td>0</td>
+      <td>0</td>
+      <td>1</td>
+      <td>1</td>
+      <td>1</td>
+      <td>1</td>
+      <td>0</td>
+      <td>1</td>
+    </tr>
+    <tr>
+      <th>382</th>
+      <td>1</td>
+      <td>1</td>
+      <td>0</td>
+      <td>0</td>
+      <td>1</td>
+      <td>1</td>
+      <td>0</td>
+      <td>0</td>
+      <td>1</td>
+      <td>1</td>
+      <td>1</td>
+      <td>1</td>
+      <td>0</td>
+      <td>0</td>
+    </tr>
+  </tbody>
+</table>
+<p>364 rows × 14 columns</p>
+</div>
+
+
+
+```python
+##################################
 # Formulating the train and test data
 # from the final dataset
 # by applying stratification and
@@ -5494,8 +5757,8 @@ display(y_train_initial.value_counts(normalize = True))
 
 
     Outlier
-    No     183
-    Yes     90
+    0    183
+    1     90
     Name: count, dtype: int64
 
 
@@ -5504,8 +5767,8 @@ display(y_train_initial.value_counts(normalize = True))
 
 
     Outlier
-    No     0.67033
-    Yes    0.32967
+    0    0.67033
+    1    0.32967
     Name: proportion, dtype: float64
 
 
@@ -5543,8 +5806,8 @@ display(y_test.value_counts(normalize = True))
 
 
     Outlier
-    No     61
-    Yes    30
+    0    61
+    1    30
     Name: count, dtype: int64
 
 
@@ -5553,8 +5816,8 @@ display(y_test.value_counts(normalize = True))
 
 
     Outlier
-    No     0.67033
-    Yes    0.32967
+    0    0.67033
+    1    0.32967
     Name: proportion, dtype: float64
 
 
@@ -5607,8 +5870,8 @@ display(y_train.value_counts(normalize = True))
 
 
     Outlier
-    No     137
-    Yes     67
+    0    137
+    1     67
     Name: count, dtype: int64
 
 
@@ -5617,8 +5880,8 @@ display(y_train.value_counts(normalize = True))
 
 
     Outlier
-    No     0.671569
-    Yes    0.328431
+    0    0.671569
+    1    0.328431
     Name: proportion, dtype: float64
 
 
@@ -5656,8 +5919,8 @@ display(y_validation.value_counts(normalize = True))
 
 
     Outlier
-    No     46
-    Yes    23
+    0    46
+    1    23
     Name: count, dtype: int64
 
 
@@ -5666,8 +5929,8 @@ display(y_validation.value_counts(normalize = True))
 
 
     Outlier
-    No     0.666667
-    Yes    0.333333
+    0    0.666667
+    1    0.333333
     Name: proportion, dtype: float64
 
 
@@ -5721,25 +5984,686 @@ y_test.to_csv(os.path.join("..", DATASETS_FINAL_TEST_TARGET_PATH, "y_test.csv"),
 
 ### 1.5.2 Hypothesis Testing <a class="anchor" id="1.5.2"></a>
 
-## 1.6. Premodelling Data Preparation <a class="anchor" id="1.6"></a>
+## 1.6. Model Evaluation <a class="anchor" id="1.6"></a>
 
-### 1.6.1 Preprocessed Data Description <a class="anchor" id="1.6.1"></a>
+### 1.6.1 Model Evaluation Metrics Description <a class="anchor" id="1.6.1"></a>
 
-### 1.6.2 Preprocessing Pipeline Development <a class="anchor" id="1.6.2"></a>
+### 1.6.2 Model Evaluation Function Development <a class="anchor" id="1.6.2"></a>
+
+
+```python
+##################################
+# Creating a function for evaluating model metrics
+# for categorical outlier detection with ground truth
+##################################
+def evaluate_supervised_outlier_detection_model(model, X, y_true, name, top_n=None):
+    y_scores = model.decision_scores_ if hasattr(model, 'decision_scores_') else model.decision_function(X)
+    
+    roc_auc = roc_auc_score(y_true, y_scores)
+    
+    # Precision at N (N = number of actual outliers)
+    if top_n is None:
+        top_n = y_true.sum()
+    top_n_pred = np.argsort(y_scores)[-top_n:]
+    y_pred_top_n = np.zeros_like(y_true)
+    y_pred_top_n[top_n_pred] = 1
+    precision_at_n = precision_score(y_true, y_pred_top_n)
+    
+    # Threshold-based F1-score (e.g., 95th percentile cutoff)
+    threshold = np.percentile(y_scores, 95)
+    y_pred_f1 = (y_scores >= threshold).astype(int)
+    f1 = f1_score(y_true, y_pred_f1)
+
+    print("-" * 40)
+    print(f" {name}")
+    print(f"  ROC AUC       : {roc_auc:.3f}")
+    print(f"  Precision@N   : {precision_at_n:.3f}")
+    print(f"  F1-score      : {f1:.3f}")
+    print("-" * 40)
+```
+
+
+```python
+##################################
+# Creating a function for evaluating model metrics
+# forcategorical outlier detection with ground truth
+##################################
+def score_entropy(scores):
+    hist, _ = np.histogram(scores, bins=10, density=True)
+    return entropy(hist + 1e-10)
+
+def silhouette_on_scores(scores):
+    scores_reshaped = np.array(scores).reshape(-1, 1)
+    return silhouette_score(scores_reshaped, KMeans(n_clusters=2, n_init=10).fit_predict(scores_reshaped))
+
+def score_variance(scores):
+    return np.var(scores)
+
+def evaluate_unsupervised_outlier_detection_model(scores, name):
+    se = score_entropy(scores)
+    ss = silhouette_on_scores(scores)
+    sv = score_variance(scores)
+
+    print(f" {name}")
+    print(f"  Score Entropy     : {se:.3f}")
+    print(f"  Score Silhouette  : {ss:.3f}")
+    print(f"  Score Variance    : {sv:.3f}")
+    print("-" * 40)
+    
+    return {"Method": name, "Entropy": se, "Silhouette": ss, "Variance": sv}
+```
 
 ## 1.7. Model Development With Synthetic Ground Truth Labels <a class="anchor" id="1.7"></a>
 
 ### 1.7.1 Isolation Forest <a class="anchor" id="1.7.1"></a>
 
+
+```python
+##################################
+# Formulating a supervised learning model
+# based on Isolation Forest 
+##################################
+model_if = IsolationForest(random_state=42)
+model_if.fit(X_train)
+```
+
+
+
+
+<style>#sk-container-id-1 {
+  /* Definition of color scheme common for light and dark mode */
+  --sklearn-color-text: #000;
+  --sklearn-color-text-muted: #666;
+  --sklearn-color-line: gray;
+  /* Definition of color scheme for unfitted estimators */
+  --sklearn-color-unfitted-level-0: #fff5e6;
+  --sklearn-color-unfitted-level-1: #f6e4d2;
+  --sklearn-color-unfitted-level-2: #ffe0b3;
+  --sklearn-color-unfitted-level-3: chocolate;
+  /* Definition of color scheme for fitted estimators */
+  --sklearn-color-fitted-level-0: #f0f8ff;
+  --sklearn-color-fitted-level-1: #d4ebff;
+  --sklearn-color-fitted-level-2: #b3dbfd;
+  --sklearn-color-fitted-level-3: cornflowerblue;
+
+  /* Specific color for light theme */
+  --sklearn-color-text-on-default-background: var(--sg-text-color, var(--theme-code-foreground, var(--jp-content-font-color1, black)));
+  --sklearn-color-background: var(--sg-background-color, var(--theme-background, var(--jp-layout-color0, white)));
+  --sklearn-color-border-box: var(--sg-text-color, var(--theme-code-foreground, var(--jp-content-font-color1, black)));
+  --sklearn-color-icon: #696969;
+
+  @media (prefers-color-scheme: dark) {
+    /* Redefinition of color scheme for dark theme */
+    --sklearn-color-text-on-default-background: var(--sg-text-color, var(--theme-code-foreground, var(--jp-content-font-color1, white)));
+    --sklearn-color-background: var(--sg-background-color, var(--theme-background, var(--jp-layout-color0, #111)));
+    --sklearn-color-border-box: var(--sg-text-color, var(--theme-code-foreground, var(--jp-content-font-color1, white)));
+    --sklearn-color-icon: #878787;
+  }
+}
+
+#sk-container-id-1 {
+  color: var(--sklearn-color-text);
+}
+
+#sk-container-id-1 pre {
+  padding: 0;
+}
+
+#sk-container-id-1 input.sk-hidden--visually {
+  border: 0;
+  clip: rect(1px 1px 1px 1px);
+  clip: rect(1px, 1px, 1px, 1px);
+  height: 1px;
+  margin: -1px;
+  overflow: hidden;
+  padding: 0;
+  position: absolute;
+  width: 1px;
+}
+
+#sk-container-id-1 div.sk-dashed-wrapped {
+  border: 1px dashed var(--sklearn-color-line);
+  margin: 0 0.4em 0.5em 0.4em;
+  box-sizing: border-box;
+  padding-bottom: 0.4em;
+  background-color: var(--sklearn-color-background);
+}
+
+#sk-container-id-1 div.sk-container {
+  /* jupyter's `normalize.less` sets `[hidden] { display: none; }`
+     but bootstrap.min.css set `[hidden] { display: none !important; }`
+     so we also need the `!important` here to be able to override the
+     default hidden behavior on the sphinx rendered scikit-learn.org.
+     See: https://github.com/scikit-learn/scikit-learn/issues/21755 */
+  display: inline-block !important;
+  position: relative;
+}
+
+#sk-container-id-1 div.sk-text-repr-fallback {
+  display: none;
+}
+
+div.sk-parallel-item,
+div.sk-serial,
+div.sk-item {
+  /* draw centered vertical line to link estimators */
+  background-image: linear-gradient(var(--sklearn-color-text-on-default-background), var(--sklearn-color-text-on-default-background));
+  background-size: 2px 100%;
+  background-repeat: no-repeat;
+  background-position: center center;
+}
+
+/* Parallel-specific style estimator block */
+
+#sk-container-id-1 div.sk-parallel-item::after {
+  content: "";
+  width: 100%;
+  border-bottom: 2px solid var(--sklearn-color-text-on-default-background);
+  flex-grow: 1;
+}
+
+#sk-container-id-1 div.sk-parallel {
+  display: flex;
+  align-items: stretch;
+  justify-content: center;
+  background-color: var(--sklearn-color-background);
+  position: relative;
+}
+
+#sk-container-id-1 div.sk-parallel-item {
+  display: flex;
+  flex-direction: column;
+}
+
+#sk-container-id-1 div.sk-parallel-item:first-child::after {
+  align-self: flex-end;
+  width: 50%;
+}
+
+#sk-container-id-1 div.sk-parallel-item:last-child::after {
+  align-self: flex-start;
+  width: 50%;
+}
+
+#sk-container-id-1 div.sk-parallel-item:only-child::after {
+  width: 0;
+}
+
+/* Serial-specific style estimator block */
+
+#sk-container-id-1 div.sk-serial {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  background-color: var(--sklearn-color-background);
+  padding-right: 1em;
+  padding-left: 1em;
+}
+
+
+/* Toggleable style: style used for estimator/Pipeline/ColumnTransformer box that is
+clickable and can be expanded/collapsed.
+- Pipeline and ColumnTransformer use this feature and define the default style
+- Estimators will overwrite some part of the style using the `sk-estimator` class
+*/
+
+/* Pipeline and ColumnTransformer style (default) */
+
+#sk-container-id-1 div.sk-toggleable {
+  /* Default theme specific background. It is overwritten whether we have a
+  specific estimator or a Pipeline/ColumnTransformer */
+  background-color: var(--sklearn-color-background);
+}
+
+/* Toggleable label */
+#sk-container-id-1 label.sk-toggleable__label {
+  cursor: pointer;
+  display: flex;
+  width: 100%;
+  margin-bottom: 0;
+  padding: 0.5em;
+  box-sizing: border-box;
+  text-align: center;
+  align-items: start;
+  justify-content: space-between;
+  gap: 0.5em;
+}
+
+#sk-container-id-1 label.sk-toggleable__label .caption {
+  font-size: 0.6rem;
+  font-weight: lighter;
+  color: var(--sklearn-color-text-muted);
+}
+
+#sk-container-id-1 label.sk-toggleable__label-arrow:before {
+  /* Arrow on the left of the label */
+  content: "▸";
+  float: left;
+  margin-right: 0.25em;
+  color: var(--sklearn-color-icon);
+}
+
+#sk-container-id-1 label.sk-toggleable__label-arrow:hover:before {
+  color: var(--sklearn-color-text);
+}
+
+/* Toggleable content - dropdown */
+
+#sk-container-id-1 div.sk-toggleable__content {
+  max-height: 0;
+  max-width: 0;
+  overflow: hidden;
+  text-align: left;
+  /* unfitted */
+  background-color: var(--sklearn-color-unfitted-level-0);
+}
+
+#sk-container-id-1 div.sk-toggleable__content.fitted {
+  /* fitted */
+  background-color: var(--sklearn-color-fitted-level-0);
+}
+
+#sk-container-id-1 div.sk-toggleable__content pre {
+  margin: 0.2em;
+  border-radius: 0.25em;
+  color: var(--sklearn-color-text);
+  /* unfitted */
+  background-color: var(--sklearn-color-unfitted-level-0);
+}
+
+#sk-container-id-1 div.sk-toggleable__content.fitted pre {
+  /* unfitted */
+  background-color: var(--sklearn-color-fitted-level-0);
+}
+
+#sk-container-id-1 input.sk-toggleable__control:checked~div.sk-toggleable__content {
+  /* Expand drop-down */
+  max-height: 200px;
+  max-width: 100%;
+  overflow: auto;
+}
+
+#sk-container-id-1 input.sk-toggleable__control:checked~label.sk-toggleable__label-arrow:before {
+  content: "▾";
+}
+
+/* Pipeline/ColumnTransformer-specific style */
+
+#sk-container-id-1 div.sk-label input.sk-toggleable__control:checked~label.sk-toggleable__label {
+  color: var(--sklearn-color-text);
+  background-color: var(--sklearn-color-unfitted-level-2);
+}
+
+#sk-container-id-1 div.sk-label.fitted input.sk-toggleable__control:checked~label.sk-toggleable__label {
+  background-color: var(--sklearn-color-fitted-level-2);
+}
+
+/* Estimator-specific style */
+
+/* Colorize estimator box */
+#sk-container-id-1 div.sk-estimator input.sk-toggleable__control:checked~label.sk-toggleable__label {
+  /* unfitted */
+  background-color: var(--sklearn-color-unfitted-level-2);
+}
+
+#sk-container-id-1 div.sk-estimator.fitted input.sk-toggleable__control:checked~label.sk-toggleable__label {
+  /* fitted */
+  background-color: var(--sklearn-color-fitted-level-2);
+}
+
+#sk-container-id-1 div.sk-label label.sk-toggleable__label,
+#sk-container-id-1 div.sk-label label {
+  /* The background is the default theme color */
+  color: var(--sklearn-color-text-on-default-background);
+}
+
+/* On hover, darken the color of the background */
+#sk-container-id-1 div.sk-label:hover label.sk-toggleable__label {
+  color: var(--sklearn-color-text);
+  background-color: var(--sklearn-color-unfitted-level-2);
+}
+
+/* Label box, darken color on hover, fitted */
+#sk-container-id-1 div.sk-label.fitted:hover label.sk-toggleable__label.fitted {
+  color: var(--sklearn-color-text);
+  background-color: var(--sklearn-color-fitted-level-2);
+}
+
+/* Estimator label */
+
+#sk-container-id-1 div.sk-label label {
+  font-family: monospace;
+  font-weight: bold;
+  display: inline-block;
+  line-height: 1.2em;
+}
+
+#sk-container-id-1 div.sk-label-container {
+  text-align: center;
+}
+
+/* Estimator-specific */
+#sk-container-id-1 div.sk-estimator {
+  font-family: monospace;
+  border: 1px dotted var(--sklearn-color-border-box);
+  border-radius: 0.25em;
+  box-sizing: border-box;
+  margin-bottom: 0.5em;
+  /* unfitted */
+  background-color: var(--sklearn-color-unfitted-level-0);
+}
+
+#sk-container-id-1 div.sk-estimator.fitted {
+  /* fitted */
+  background-color: var(--sklearn-color-fitted-level-0);
+}
+
+/* on hover */
+#sk-container-id-1 div.sk-estimator:hover {
+  /* unfitted */
+  background-color: var(--sklearn-color-unfitted-level-2);
+}
+
+#sk-container-id-1 div.sk-estimator.fitted:hover {
+  /* fitted */
+  background-color: var(--sklearn-color-fitted-level-2);
+}
+
+/* Specification for estimator info (e.g. "i" and "?") */
+
+/* Common style for "i" and "?" */
+
+.sk-estimator-doc-link,
+a:link.sk-estimator-doc-link,
+a:visited.sk-estimator-doc-link {
+  float: right;
+  font-size: smaller;
+  line-height: 1em;
+  font-family: monospace;
+  background-color: var(--sklearn-color-background);
+  border-radius: 1em;
+  height: 1em;
+  width: 1em;
+  text-decoration: none !important;
+  margin-left: 0.5em;
+  text-align: center;
+  /* unfitted */
+  border: var(--sklearn-color-unfitted-level-1) 1pt solid;
+  color: var(--sklearn-color-unfitted-level-1);
+}
+
+.sk-estimator-doc-link.fitted,
+a:link.sk-estimator-doc-link.fitted,
+a:visited.sk-estimator-doc-link.fitted {
+  /* fitted */
+  border: var(--sklearn-color-fitted-level-1) 1pt solid;
+  color: var(--sklearn-color-fitted-level-1);
+}
+
+/* On hover */
+div.sk-estimator:hover .sk-estimator-doc-link:hover,
+.sk-estimator-doc-link:hover,
+div.sk-label-container:hover .sk-estimator-doc-link:hover,
+.sk-estimator-doc-link:hover {
+  /* unfitted */
+  background-color: var(--sklearn-color-unfitted-level-3);
+  color: var(--sklearn-color-background);
+  text-decoration: none;
+}
+
+div.sk-estimator.fitted:hover .sk-estimator-doc-link.fitted:hover,
+.sk-estimator-doc-link.fitted:hover,
+div.sk-label-container:hover .sk-estimator-doc-link.fitted:hover,
+.sk-estimator-doc-link.fitted:hover {
+  /* fitted */
+  background-color: var(--sklearn-color-fitted-level-3);
+  color: var(--sklearn-color-background);
+  text-decoration: none;
+}
+
+/* Span, style for the box shown on hovering the info icon */
+.sk-estimator-doc-link span {
+  display: none;
+  z-index: 9999;
+  position: relative;
+  font-weight: normal;
+  right: .2ex;
+  padding: .5ex;
+  margin: .5ex;
+  width: min-content;
+  min-width: 20ex;
+  max-width: 50ex;
+  color: var(--sklearn-color-text);
+  box-shadow: 2pt 2pt 4pt #999;
+  /* unfitted */
+  background: var(--sklearn-color-unfitted-level-0);
+  border: .5pt solid var(--sklearn-color-unfitted-level-3);
+}
+
+.sk-estimator-doc-link.fitted span {
+  /* fitted */
+  background: var(--sklearn-color-fitted-level-0);
+  border: var(--sklearn-color-fitted-level-3);
+}
+
+.sk-estimator-doc-link:hover span {
+  display: block;
+}
+
+/* "?"-specific style due to the `<a>` HTML tag */
+
+#sk-container-id-1 a.estimator_doc_link {
+  float: right;
+  font-size: 1rem;
+  line-height: 1em;
+  font-family: monospace;
+  background-color: var(--sklearn-color-background);
+  border-radius: 1rem;
+  height: 1rem;
+  width: 1rem;
+  text-decoration: none;
+  /* unfitted */
+  color: var(--sklearn-color-unfitted-level-1);
+  border: var(--sklearn-color-unfitted-level-1) 1pt solid;
+}
+
+#sk-container-id-1 a.estimator_doc_link.fitted {
+  /* fitted */
+  border: var(--sklearn-color-fitted-level-1) 1pt solid;
+  color: var(--sklearn-color-fitted-level-1);
+}
+
+/* On hover */
+#sk-container-id-1 a.estimator_doc_link:hover {
+  /* unfitted */
+  background-color: var(--sklearn-color-unfitted-level-3);
+  color: var(--sklearn-color-background);
+  text-decoration: none;
+}
+
+#sk-container-id-1 a.estimator_doc_link.fitted:hover {
+  /* fitted */
+  background-color: var(--sklearn-color-fitted-level-3);
+}
+</style><div id="sk-container-id-1" class="sk-top-container"><div class="sk-text-repr-fallback"><pre>IsolationForest(random_state=42)</pre><b>In a Jupyter environment, please rerun this cell to show the HTML representation or trust the notebook. <br />On GitHub, the HTML representation is unable to render, please try loading this page with nbviewer.org.</b></div><div class="sk-container" hidden><div class="sk-item"><div class="sk-estimator fitted sk-toggleable"><input class="sk-toggleable__control sk-hidden--visually" id="sk-estimator-id-1" type="checkbox" checked><label for="sk-estimator-id-1" class="sk-toggleable__label fitted sk-toggleable__label-arrow"><div><div>IsolationForest</div></div><div><a class="sk-estimator-doc-link fitted" rel="noreferrer" target="_blank" href="https://scikit-learn.org/1.6/modules/generated/sklearn.ensemble.IsolationForest.html">?<span>Documentation for IsolationForest</span></a><span class="sk-estimator-doc-link fitted">i<span>Fitted</span></span></div></label><div class="sk-toggleable__content fitted"><pre>IsolationForest(random_state=42)</pre></div> </div></div></div></div>
+
+
+
+
+```python
+##################################
+# Evaluating the apparent performance
+# of the supervised learning model
+# based on Isolation Forest 
+##################################
+X_scores_if = -model_if.decision_function(X_train)
+model_if.decision_scores_ = X_scores_if
+evaluate_supervised_outlier_detection_model(model_if, X_train, y_train, "Isolation Forest")
+```
+
+    ----------------------------------------
+     Isolation Forest
+      ROC AUC       : 0.960
+      Precision@N   : 0.821
+      F1-score      : 0.282
+    ----------------------------------------
+    
+
 ### 1.7.2 Local Outlier Factor <a class="anchor" id="1.7.2"></a>
+
+
+```python
+##################################
+# Formulating a supervised learning model
+# based on Local Outlier Factor
+##################################
+model_cblof = CBLOF()
+model_cblof.fit(X_train)
+```
+
+
+
+
+    CBLOF(alpha=0.9, beta=5, check_estimator=False, clustering_estimator=None,
+       contamination=0.1, n_clusters=8, n_jobs=None, random_state=None,
+       use_weights=False)
+
+
+
+
+```python
+##################################
+# Evaluating the apparent performance
+# of the supervised learning model
+# based on Local Outlier Factor
+##################################
+evaluate_supervised_outlier_detection_model(model_cblof, X_train, y_train, "CBLOF")
+```
+
+    ----------------------------------------
+     CBLOF
+      ROC AUC       : 0.942
+      Precision@N   : 0.791
+      F1-score      : 0.282
+    ----------------------------------------
+    
 
 ### 1.7.3 K-Nearest Neighbors Outlier Score <a class="anchor" id="1.7.3"></a>
 
+
+```python
+##################################
+# Formulating a supervised learning model
+# based on K-Nearest Neighbors Outlier Score
+##################################
+model_knn = KNN()
+model_knn.fit(X_train)
+```
+
+
+
+
+    KNN(algorithm='auto', contamination=0.1, leaf_size=30, method='largest',
+      metric='minkowski', metric_params=None, n_jobs=1, n_neighbors=5, p=2,
+      radius=1.0)
+
+
+
+
+```python
+##################################
+# Evaluating the apparent performance
+# of the supervised learning model
+# based on K-Nearest Neighbors Outlier Score
+##################################
+evaluate_supervised_outlier_detection_model(model_knn, X_train, y_train, "KNN")
+```
+
+    ----------------------------------------
+     KNN
+      ROC AUC       : 0.896
+      Precision@N   : 0.731
+      F1-score      : 0.395
+    ----------------------------------------
+    
+
 ### 1.7.4 Histogram-Based Outlier Score <a class="anchor" id="1.7.4"></a>
 
-### 1.7.5 RuleFit / Tree-Based Methods <a class="anchor" id="1.7.5"></a>
 
-### 1.7.6 High Leverage Points via Multiple Correspondence Analysis <a class="anchor" id="1.7.6"></a>
+```python
+##################################
+# Formulating a supervised learning model
+# based on Histogram-Based Outlier Score
+##################################
+model_hbos = HBOS()
+model_hbos.fit(X_train)
+```
+
+
+
+
+    HBOS(alpha=0.1, contamination=0.1, n_bins=10, tol=0.5)
+
+
+
+
+```python
+##################################
+# Evaluating the apparent performance
+# of the supervised learning model
+# based on Histogram-Based Outlier Score
+##################################
+evaluate_supervised_outlier_detection_model(model_hbos, X_train, y_train, "HBOS")
+```
+
+    ----------------------------------------
+     HBOS
+      ROC AUC       : 0.809
+      Precision@N   : 0.582
+      F1-score      : 0.128
+    ----------------------------------------
+    
+
+### 1.7.5 High Leverage Points via Multiple Correspondence Analysis <a class="anchor" id="1.7.5"></a>
+
+
+```python
+##################################
+# Formulating a supervised learning model
+# based on High Leverage Points via Multiple Correspondence Analysis
+##################################
+mca = prince.MCA(n_components=2, random_state=42)
+X_mca = mca.fit_transform(thyroid_cancer_train)
+
+##################################
+# Computing the Mahalanobis distance
+##################################
+center = X_mca.mean().values
+cov_inv = np.linalg.inv(np.cov(X_mca.T))
+m_dist = [mahalanobis(row, center, cov_inv) for row in X_mca.values]
+
+class DummyModel:
+    def __init__(self, scores): self.decision_scores_ = scores
+
+```
+
+
+```python
+##################################
+# Evaluating the apparent performance
+# of the supervised learning model
+# based on High Leverage Points via Multiple Correspondence Analysis
+##################################
+evaluate_supervised_outlier_detection_model(DummyModel(m_dist), X_train, y_train, "MCA + Mahalanobis")
+```
+
+    ----------------------------------------
+     MCA + Mahalanobis
+      ROC AUC       : 0.578
+      Precision@N   : 0.463
+      F1-score      : 0.282
+    ----------------------------------------
+    
 
 ## 1.8. Model Development Without Ground Truth Labels <a class="anchor" id="1.8"></a>
 
@@ -5751,9 +6675,7 @@ y_test.to_csv(os.path.join("..", DATASETS_FINAL_TEST_TARGET_PATH, "y_test.csv"),
 
 ### 1.8.4 Histogram-Based Outlier Score <a class="anchor" id="1.8.4"></a>
 
-### 1.8.5 RuleFit / Tree-Based Methods <a class="anchor" id="1.8.5"></a>
-
-### 1.8.6 High Leverage Points via Multiple Correspondence Analysis <a class="anchor" id="1.8.6"></a>
+### 1.8.5 High Leverage Points via Multiple Correspondence Analysis <a class="anchor" id="1.8.5"></a>
 
 # 2. Summary <a class="anchor" id="Summary"></a>
 
