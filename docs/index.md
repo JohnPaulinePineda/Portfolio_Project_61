@@ -128,7 +128,7 @@ from sklearn.experimental import enable_iterative_imputer
 from sklearn.impute import IterativeImputer
 from sklearn.preprocessing import OrdinalEncoder, StandardScaler, LabelEncoder
 from scipy import stats
-from scipy.stats import pointbiserialr, chi2_contingency
+from scipy.stats import pointbiserialr, chi2_contingency, entropy
 from scipy.spatial.distance import cdist
 
 from sklearn.pipeline import Pipeline
@@ -136,11 +136,13 @@ from sklearn.compose import ColumnTransformer
 from sklearn.neighbors import LocalOutlierFactor
 from sklearn.ensemble import IsolationForest
 from sklearn.neural_network import MLPClassifier
+from sklearn.cluster import KMeans
 from sklearn.svm import SVC
 from sklearn.metrics import silhouette_score, roc_auc_score, precision_score, f1_score, precision_recall_curve
 from sklearn.model_selection import train_test_split, GridSearchCV, RepeatedStratifiedKFold, KFold, cross_val_score
 from sklearn.tree import DecisionTreeClassifier
 from sklearn.decomposition import TruncatedSVD
+from sklearn.manifold import TSNE
 from scipy.spatial.distance import mahalanobis
 
 from pyod.models.knn import KNN
@@ -6020,13 +6022,14 @@ def evaluate_supervised_outlier_detection_model(model, X, y_true, name, top_n=No
     print(f"  Precision@N   : {precision_at_n:.3f}")
     print(f"  F1-score      : {f1:.3f}")
     print("-" * 40)
+    
 ```
 
 
 ```python
 ##################################
 # Creating a function for evaluating model metrics
-# forcategorical outlier detection with ground truth
+# for categorical outlier detection without ground truth
 ##################################
 def score_entropy(scores):
     hist, _ = np.histogram(scores, bins=10, density=True)
@@ -6044,6 +6047,7 @@ def evaluate_unsupervised_outlier_detection_model(scores, name):
     ss = silhouette_on_scores(scores)
     sv = score_variance(scores)
 
+    print("-" * 40)
     print(f" {name}")
     print(f"  Score Entropy     : {se:.3f}")
     print(f"  Score Silhouette  : {ss:.3f}")
@@ -6051,6 +6055,35 @@ def evaluate_unsupervised_outlier_detection_model(scores, name):
     print("-" * 40)
     
     return {"Method": name, "Entropy": se, "Silhouette": ss, "Variance": sv}
+    
+```
+
+
+```python
+##################################
+# Creating a function for visualizing outlier scores
+# for categorical outlier detection without ground truth
+##################################
+def visualize_unsupervised_outlier_detection_model(X_encoded, scores, method_name):
+    X_2d = TSNE(n_components=2, perplexity=30, random_state=42).fit_transform(X_encoded)
+    plt.figure(figsize=(7, 5))
+    plt.title(f"{method_name} : t-SNE with Outlier Scores")
+    plt.scatter(X_2d[:, 0], X_2d[:, 1], c=scores, cmap='coolwarm', s=30)
+    plt.colorbar(label="Outlier Score")
+    plt.show()
+
+class DummyModel:
+    def __init__(self, scores): self.decision_scores_ = scores
+    
+```
+
+
+```python
+##################################
+# Creating a container for consolidating the results
+# for categorical outlier detection without ground truth
+##################################
+unsupervised_results = []
 ```
 
 ## 1.7. Model Development With Synthetic Ground Truth Labels <a class="anchor" id="1.7"></a>
@@ -6065,6 +6098,7 @@ def evaluate_unsupervised_outlier_detection_model(scores, name):
 ##################################
 model_if = IsolationForest(random_state=42)
 model_if.fit(X_train)
+
 ```
 
 
@@ -6499,6 +6533,7 @@ div.sk-label-container:hover .sk-estimator-doc-link.fitted:hover,
 X_scores_if = -model_if.decision_function(X_train)
 model_if.decision_scores_ = X_scores_if
 evaluate_supervised_outlier_detection_model(model_if, X_train, y_train, "Isolation Forest")
+
 ```
 
     ----------------------------------------
@@ -6538,13 +6573,14 @@ model_cblof.fit(X_train)
 # based on Local Outlier Factor
 ##################################
 evaluate_supervised_outlier_detection_model(model_cblof, X_train, y_train, "CBLOF")
+
 ```
 
     ----------------------------------------
      CBLOF
-      ROC AUC       : 0.942
-      Precision@N   : 0.791
-      F1-score      : 0.282
+      ROC AUC       : 0.910
+      Precision@N   : 0.761
+      F1-score      : 0.231
     ----------------------------------------
     
 
@@ -6558,6 +6594,7 @@ evaluate_supervised_outlier_detection_model(model_cblof, X_train, y_train, "CBLO
 ##################################
 model_knn = KNN()
 model_knn.fit(X_train)
+
 ```
 
 
@@ -6577,6 +6614,7 @@ model_knn.fit(X_train)
 # based on K-Nearest Neighbors Outlier Score
 ##################################
 evaluate_supervised_outlier_detection_model(model_knn, X_train, y_train, "KNN")
+
 ```
 
     ----------------------------------------
@@ -6614,6 +6652,7 @@ model_hbos.fit(X_train)
 # based on Histogram-Based Outlier Score
 ##################################
 evaluate_supervised_outlier_detection_model(model_hbos, X_train, y_train, "HBOS")
+
 ```
 
     ----------------------------------------
@@ -6655,6 +6694,7 @@ class DummyModel:
 # based on High Leverage Points via Multiple Correspondence Analysis
 ##################################
 evaluate_supervised_outlier_detection_model(DummyModel(m_dist), X_train, y_train, "MCA + Mahalanobis")
+
 ```
 
     ----------------------------------------
@@ -6669,13 +6709,650 @@ evaluate_supervised_outlier_detection_model(DummyModel(m_dist), X_train, y_train
 
 ### 1.8.1 Isolation Forest <a class="anchor" id="1.8.1"></a>
 
+
+```python
+##################################
+# Formulating an unsupervised learning model
+# based on Isolation Forest 
+##################################
+model_if = IsolationForest(random_state=42)
+model_if.fit(X_train)
+```
+
+
+
+
+<style>#sk-container-id-2 {
+  /* Definition of color scheme common for light and dark mode */
+  --sklearn-color-text: #000;
+  --sklearn-color-text-muted: #666;
+  --sklearn-color-line: gray;
+  /* Definition of color scheme for unfitted estimators */
+  --sklearn-color-unfitted-level-0: #fff5e6;
+  --sklearn-color-unfitted-level-1: #f6e4d2;
+  --sklearn-color-unfitted-level-2: #ffe0b3;
+  --sklearn-color-unfitted-level-3: chocolate;
+  /* Definition of color scheme for fitted estimators */
+  --sklearn-color-fitted-level-0: #f0f8ff;
+  --sklearn-color-fitted-level-1: #d4ebff;
+  --sklearn-color-fitted-level-2: #b3dbfd;
+  --sklearn-color-fitted-level-3: cornflowerblue;
+
+  /* Specific color for light theme */
+  --sklearn-color-text-on-default-background: var(--sg-text-color, var(--theme-code-foreground, var(--jp-content-font-color1, black)));
+  --sklearn-color-background: var(--sg-background-color, var(--theme-background, var(--jp-layout-color0, white)));
+  --sklearn-color-border-box: var(--sg-text-color, var(--theme-code-foreground, var(--jp-content-font-color1, black)));
+  --sklearn-color-icon: #696969;
+
+  @media (prefers-color-scheme: dark) {
+    /* Redefinition of color scheme for dark theme */
+    --sklearn-color-text-on-default-background: var(--sg-text-color, var(--theme-code-foreground, var(--jp-content-font-color1, white)));
+    --sklearn-color-background: var(--sg-background-color, var(--theme-background, var(--jp-layout-color0, #111)));
+    --sklearn-color-border-box: var(--sg-text-color, var(--theme-code-foreground, var(--jp-content-font-color1, white)));
+    --sklearn-color-icon: #878787;
+  }
+}
+
+#sk-container-id-2 {
+  color: var(--sklearn-color-text);
+}
+
+#sk-container-id-2 pre {
+  padding: 0;
+}
+
+#sk-container-id-2 input.sk-hidden--visually {
+  border: 0;
+  clip: rect(1px 1px 1px 1px);
+  clip: rect(1px, 1px, 1px, 1px);
+  height: 1px;
+  margin: -1px;
+  overflow: hidden;
+  padding: 0;
+  position: absolute;
+  width: 1px;
+}
+
+#sk-container-id-2 div.sk-dashed-wrapped {
+  border: 1px dashed var(--sklearn-color-line);
+  margin: 0 0.4em 0.5em 0.4em;
+  box-sizing: border-box;
+  padding-bottom: 0.4em;
+  background-color: var(--sklearn-color-background);
+}
+
+#sk-container-id-2 div.sk-container {
+  /* jupyter's `normalize.less` sets `[hidden] { display: none; }`
+     but bootstrap.min.css set `[hidden] { display: none !important; }`
+     so we also need the `!important` here to be able to override the
+     default hidden behavior on the sphinx rendered scikit-learn.org.
+     See: https://github.com/scikit-learn/scikit-learn/issues/21755 */
+  display: inline-block !important;
+  position: relative;
+}
+
+#sk-container-id-2 div.sk-text-repr-fallback {
+  display: none;
+}
+
+div.sk-parallel-item,
+div.sk-serial,
+div.sk-item {
+  /* draw centered vertical line to link estimators */
+  background-image: linear-gradient(var(--sklearn-color-text-on-default-background), var(--sklearn-color-text-on-default-background));
+  background-size: 2px 100%;
+  background-repeat: no-repeat;
+  background-position: center center;
+}
+
+/* Parallel-specific style estimator block */
+
+#sk-container-id-2 div.sk-parallel-item::after {
+  content: "";
+  width: 100%;
+  border-bottom: 2px solid var(--sklearn-color-text-on-default-background);
+  flex-grow: 1;
+}
+
+#sk-container-id-2 div.sk-parallel {
+  display: flex;
+  align-items: stretch;
+  justify-content: center;
+  background-color: var(--sklearn-color-background);
+  position: relative;
+}
+
+#sk-container-id-2 div.sk-parallel-item {
+  display: flex;
+  flex-direction: column;
+}
+
+#sk-container-id-2 div.sk-parallel-item:first-child::after {
+  align-self: flex-end;
+  width: 50%;
+}
+
+#sk-container-id-2 div.sk-parallel-item:last-child::after {
+  align-self: flex-start;
+  width: 50%;
+}
+
+#sk-container-id-2 div.sk-parallel-item:only-child::after {
+  width: 0;
+}
+
+/* Serial-specific style estimator block */
+
+#sk-container-id-2 div.sk-serial {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  background-color: var(--sklearn-color-background);
+  padding-right: 1em;
+  padding-left: 1em;
+}
+
+
+/* Toggleable style: style used for estimator/Pipeline/ColumnTransformer box that is
+clickable and can be expanded/collapsed.
+- Pipeline and ColumnTransformer use this feature and define the default style
+- Estimators will overwrite some part of the style using the `sk-estimator` class
+*/
+
+/* Pipeline and ColumnTransformer style (default) */
+
+#sk-container-id-2 div.sk-toggleable {
+  /* Default theme specific background. It is overwritten whether we have a
+  specific estimator or a Pipeline/ColumnTransformer */
+  background-color: var(--sklearn-color-background);
+}
+
+/* Toggleable label */
+#sk-container-id-2 label.sk-toggleable__label {
+  cursor: pointer;
+  display: flex;
+  width: 100%;
+  margin-bottom: 0;
+  padding: 0.5em;
+  box-sizing: border-box;
+  text-align: center;
+  align-items: start;
+  justify-content: space-between;
+  gap: 0.5em;
+}
+
+#sk-container-id-2 label.sk-toggleable__label .caption {
+  font-size: 0.6rem;
+  font-weight: lighter;
+  color: var(--sklearn-color-text-muted);
+}
+
+#sk-container-id-2 label.sk-toggleable__label-arrow:before {
+  /* Arrow on the left of the label */
+  content: "▸";
+  float: left;
+  margin-right: 0.25em;
+  color: var(--sklearn-color-icon);
+}
+
+#sk-container-id-2 label.sk-toggleable__label-arrow:hover:before {
+  color: var(--sklearn-color-text);
+}
+
+/* Toggleable content - dropdown */
+
+#sk-container-id-2 div.sk-toggleable__content {
+  max-height: 0;
+  max-width: 0;
+  overflow: hidden;
+  text-align: left;
+  /* unfitted */
+  background-color: var(--sklearn-color-unfitted-level-0);
+}
+
+#sk-container-id-2 div.sk-toggleable__content.fitted {
+  /* fitted */
+  background-color: var(--sklearn-color-fitted-level-0);
+}
+
+#sk-container-id-2 div.sk-toggleable__content pre {
+  margin: 0.2em;
+  border-radius: 0.25em;
+  color: var(--sklearn-color-text);
+  /* unfitted */
+  background-color: var(--sklearn-color-unfitted-level-0);
+}
+
+#sk-container-id-2 div.sk-toggleable__content.fitted pre {
+  /* unfitted */
+  background-color: var(--sklearn-color-fitted-level-0);
+}
+
+#sk-container-id-2 input.sk-toggleable__control:checked~div.sk-toggleable__content {
+  /* Expand drop-down */
+  max-height: 200px;
+  max-width: 100%;
+  overflow: auto;
+}
+
+#sk-container-id-2 input.sk-toggleable__control:checked~label.sk-toggleable__label-arrow:before {
+  content: "▾";
+}
+
+/* Pipeline/ColumnTransformer-specific style */
+
+#sk-container-id-2 div.sk-label input.sk-toggleable__control:checked~label.sk-toggleable__label {
+  color: var(--sklearn-color-text);
+  background-color: var(--sklearn-color-unfitted-level-2);
+}
+
+#sk-container-id-2 div.sk-label.fitted input.sk-toggleable__control:checked~label.sk-toggleable__label {
+  background-color: var(--sklearn-color-fitted-level-2);
+}
+
+/* Estimator-specific style */
+
+/* Colorize estimator box */
+#sk-container-id-2 div.sk-estimator input.sk-toggleable__control:checked~label.sk-toggleable__label {
+  /* unfitted */
+  background-color: var(--sklearn-color-unfitted-level-2);
+}
+
+#sk-container-id-2 div.sk-estimator.fitted input.sk-toggleable__control:checked~label.sk-toggleable__label {
+  /* fitted */
+  background-color: var(--sklearn-color-fitted-level-2);
+}
+
+#sk-container-id-2 div.sk-label label.sk-toggleable__label,
+#sk-container-id-2 div.sk-label label {
+  /* The background is the default theme color */
+  color: var(--sklearn-color-text-on-default-background);
+}
+
+/* On hover, darken the color of the background */
+#sk-container-id-2 div.sk-label:hover label.sk-toggleable__label {
+  color: var(--sklearn-color-text);
+  background-color: var(--sklearn-color-unfitted-level-2);
+}
+
+/* Label box, darken color on hover, fitted */
+#sk-container-id-2 div.sk-label.fitted:hover label.sk-toggleable__label.fitted {
+  color: var(--sklearn-color-text);
+  background-color: var(--sklearn-color-fitted-level-2);
+}
+
+/* Estimator label */
+
+#sk-container-id-2 div.sk-label label {
+  font-family: monospace;
+  font-weight: bold;
+  display: inline-block;
+  line-height: 1.2em;
+}
+
+#sk-container-id-2 div.sk-label-container {
+  text-align: center;
+}
+
+/* Estimator-specific */
+#sk-container-id-2 div.sk-estimator {
+  font-family: monospace;
+  border: 1px dotted var(--sklearn-color-border-box);
+  border-radius: 0.25em;
+  box-sizing: border-box;
+  margin-bottom: 0.5em;
+  /* unfitted */
+  background-color: var(--sklearn-color-unfitted-level-0);
+}
+
+#sk-container-id-2 div.sk-estimator.fitted {
+  /* fitted */
+  background-color: var(--sklearn-color-fitted-level-0);
+}
+
+/* on hover */
+#sk-container-id-2 div.sk-estimator:hover {
+  /* unfitted */
+  background-color: var(--sklearn-color-unfitted-level-2);
+}
+
+#sk-container-id-2 div.sk-estimator.fitted:hover {
+  /* fitted */
+  background-color: var(--sklearn-color-fitted-level-2);
+}
+
+/* Specification for estimator info (e.g. "i" and "?") */
+
+/* Common style for "i" and "?" */
+
+.sk-estimator-doc-link,
+a:link.sk-estimator-doc-link,
+a:visited.sk-estimator-doc-link {
+  float: right;
+  font-size: smaller;
+  line-height: 1em;
+  font-family: monospace;
+  background-color: var(--sklearn-color-background);
+  border-radius: 1em;
+  height: 1em;
+  width: 1em;
+  text-decoration: none !important;
+  margin-left: 0.5em;
+  text-align: center;
+  /* unfitted */
+  border: var(--sklearn-color-unfitted-level-1) 1pt solid;
+  color: var(--sklearn-color-unfitted-level-1);
+}
+
+.sk-estimator-doc-link.fitted,
+a:link.sk-estimator-doc-link.fitted,
+a:visited.sk-estimator-doc-link.fitted {
+  /* fitted */
+  border: var(--sklearn-color-fitted-level-1) 1pt solid;
+  color: var(--sklearn-color-fitted-level-1);
+}
+
+/* On hover */
+div.sk-estimator:hover .sk-estimator-doc-link:hover,
+.sk-estimator-doc-link:hover,
+div.sk-label-container:hover .sk-estimator-doc-link:hover,
+.sk-estimator-doc-link:hover {
+  /* unfitted */
+  background-color: var(--sklearn-color-unfitted-level-3);
+  color: var(--sklearn-color-background);
+  text-decoration: none;
+}
+
+div.sk-estimator.fitted:hover .sk-estimator-doc-link.fitted:hover,
+.sk-estimator-doc-link.fitted:hover,
+div.sk-label-container:hover .sk-estimator-doc-link.fitted:hover,
+.sk-estimator-doc-link.fitted:hover {
+  /* fitted */
+  background-color: var(--sklearn-color-fitted-level-3);
+  color: var(--sklearn-color-background);
+  text-decoration: none;
+}
+
+/* Span, style for the box shown on hovering the info icon */
+.sk-estimator-doc-link span {
+  display: none;
+  z-index: 9999;
+  position: relative;
+  font-weight: normal;
+  right: .2ex;
+  padding: .5ex;
+  margin: .5ex;
+  width: min-content;
+  min-width: 20ex;
+  max-width: 50ex;
+  color: var(--sklearn-color-text);
+  box-shadow: 2pt 2pt 4pt #999;
+  /* unfitted */
+  background: var(--sklearn-color-unfitted-level-0);
+  border: .5pt solid var(--sklearn-color-unfitted-level-3);
+}
+
+.sk-estimator-doc-link.fitted span {
+  /* fitted */
+  background: var(--sklearn-color-fitted-level-0);
+  border: var(--sklearn-color-fitted-level-3);
+}
+
+.sk-estimator-doc-link:hover span {
+  display: block;
+}
+
+/* "?"-specific style due to the `<a>` HTML tag */
+
+#sk-container-id-2 a.estimator_doc_link {
+  float: right;
+  font-size: 1rem;
+  line-height: 1em;
+  font-family: monospace;
+  background-color: var(--sklearn-color-background);
+  border-radius: 1rem;
+  height: 1rem;
+  width: 1rem;
+  text-decoration: none;
+  /* unfitted */
+  color: var(--sklearn-color-unfitted-level-1);
+  border: var(--sklearn-color-unfitted-level-1) 1pt solid;
+}
+
+#sk-container-id-2 a.estimator_doc_link.fitted {
+  /* fitted */
+  border: var(--sklearn-color-fitted-level-1) 1pt solid;
+  color: var(--sklearn-color-fitted-level-1);
+}
+
+/* On hover */
+#sk-container-id-2 a.estimator_doc_link:hover {
+  /* unfitted */
+  background-color: var(--sklearn-color-unfitted-level-3);
+  color: var(--sklearn-color-background);
+  text-decoration: none;
+}
+
+#sk-container-id-2 a.estimator_doc_link.fitted:hover {
+  /* fitted */
+  background-color: var(--sklearn-color-fitted-level-3);
+}
+</style><div id="sk-container-id-2" class="sk-top-container"><div class="sk-text-repr-fallback"><pre>IsolationForest(random_state=42)</pre><b>In a Jupyter environment, please rerun this cell to show the HTML representation or trust the notebook. <br />On GitHub, the HTML representation is unable to render, please try loading this page with nbviewer.org.</b></div><div class="sk-container" hidden><div class="sk-item"><div class="sk-estimator fitted sk-toggleable"><input class="sk-toggleable__control sk-hidden--visually" id="sk-estimator-id-2" type="checkbox" checked><label for="sk-estimator-id-2" class="sk-toggleable__label fitted sk-toggleable__label-arrow"><div><div>IsolationForest</div></div><div><a class="sk-estimator-doc-link fitted" rel="noreferrer" target="_blank" href="https://scikit-learn.org/1.6/modules/generated/sklearn.ensemble.IsolationForest.html">?<span>Documentation for IsolationForest</span></a><span class="sk-estimator-doc-link fitted">i<span>Fitted</span></span></div></label><div class="sk-toggleable__content fitted"><pre>IsolationForest(random_state=42)</pre></div> </div></div></div></div>
+
+
+
+
+```python
+##################################
+# Evaluating the apparent performance
+# of the unsupervised learning model
+# based on Isolation Forest 
+##################################
+scores = -model_if.decision_function(X_train)
+visualize_unsupervised_outlier_detection_model(X_train, scores, "Isolation Forest")
+unsupervised_results.append(evaluate_unsupervised_outlier_detection_model(scores, "Isolation Forest"))
+```
+
+
+    
+![png](output_133_0.png)
+    
+
+
+    ----------------------------------------
+     Isolation Forest
+      Score Entropy     : 2.281
+      Score Silhouette  : 0.619
+      Score Variance    : 0.008
+    ----------------------------------------
+    
+
 ### 1.8.2 Local Outlier Factor <a class="anchor" id="1.8.2"></a>
+
+
+```python
+##################################
+# Formulating an unsupervised learning model
+# based on Local Outlier Factor
+##################################
+model_cblof = CBLOF()
+model_cblof.fit(X_train)
+
+```
+
+
+
+
+    CBLOF(alpha=0.9, beta=5, check_estimator=False, clustering_estimator=None,
+       contamination=0.1, n_clusters=8, n_jobs=None, random_state=None,
+       use_weights=False)
+
+
+
+
+```python
+##################################
+# Evaluating the apparent performance
+# of the unsupervised learning model
+# based on Local Outlier Factor 
+##################################
+scores = model_cblof.decision_scores_
+visualize_unsupervised_outlier_detection_model(X_train, scores, "CBLOF")
+unsupervised_results.append(evaluate_unsupervised_outlier_detection_model(scores, "CBLOF"))
+
+```
+
+
+    
+![png](output_136_0.png)
+    
+
+
+    ----------------------------------------
+     CBLOF
+      Score Entropy     : 2.175
+      Score Silhouette  : 0.604
+      Score Variance    : 0.178
+    ----------------------------------------
+    
 
 ### 1.8.3 K-Nearest Neighbors Outlier Score <a class="anchor" id="1.8.3"></a>
 
+
+```python
+##################################
+# Formulating an unsupervised learning model
+# based on K-Nearest Neighbors Outlier Score
+##################################
+model_knn = KNN()
+model_knn.fit(X_train)
+
+```
+
+
+
+
+    KNN(algorithm='auto', contamination=0.1, leaf_size=30, method='largest',
+      metric='minkowski', metric_params=None, n_jobs=1, n_neighbors=5, p=2,
+      radius=1.0)
+
+
+
+
+```python
+##################################
+# Evaluating the apparent performance
+# of the unsupervised learning model
+# based on K-Nearest Neighbors Outlier Score
+##################################
+scores = model_knn.decision_scores_
+visualize_unsupervised_outlier_detection_model(X_train, scores, "KNN")
+unsupervised_results.append(evaluate_unsupervised_outlier_detection_model(scores, "KNN"))
+
+```
+
+
+    
+![png](output_139_0.png)
+    
+
+
+    ----------------------------------------
+     KNN
+      Score Entropy     : 1.332
+      Score Silhouette  : 0.831
+      Score Variance    : 0.364
+    ----------------------------------------
+    
+
 ### 1.8.4 Histogram-Based Outlier Score <a class="anchor" id="1.8.4"></a>
 
+
+```python
+##################################
+# Formulating an unsupervised learning model
+# based on Histogram-Based Outlier Score 
+##################################
+model_hbos = HBOS()
+model_hbos.fit(X_train)
+
+```
+
+
+
+
+    HBOS(alpha=0.1, contamination=0.1, n_bins=10, tol=0.5)
+
+
+
+
+```python
+##################################
+# Evaluating the apparent performance
+# of the unsupervised learning model
+# based on Histogram-Based Outlier Score 
+##################################
+scores = model_hbos.decision_scores_
+visualize_unsupervised_outlier_detection_model(X_train, scores, "HBOS")
+unsupervised_results.append(evaluate_unsupervised_outlier_detection_model(scores, "HBOS"))
+
+```
+
+
+    
+![png](output_142_0.png)
+    
+
+
+    ----------------------------------------
+     HBOS
+      Score Entropy     : 1.869
+      Score Silhouette  : 0.668
+      Score Variance    : 14.089
+    ----------------------------------------
+    
+
 ### 1.8.5 High Leverage Points via Multiple Correspondence Analysis <a class="anchor" id="1.8.5"></a>
+
+
+```python
+##################################
+# Formulating an unsupervised learning model
+# based on High Leverage Points via Multiple Correspondence Analysis 
+##################################
+mca = prince.MCA(n_components=2, random_state=42)
+X_mca = mca.fit_transform(thyroid_cancer_train)
+center = X_mca.mean().values
+cov_inv = np.linalg.inv(np.cov(X_mca.T))
+
+```
+
+
+```python
+##################################
+# Evaluating the apparent performance
+# of the unsupervised learning model
+# based on High Leverage Points via Multiple Correspondence Analysis 
+##################################
+scores = [mahalanobis(row, center, cov_inv) for row in X_mca.values]
+visualize_unsupervised_outlier_detection_model(X_train, scores, "MCA + Mahalanobis")
+unsupervised_results.append(evaluate_unsupervised_outlier_detection_model(scores, "MCA + Mahalanobis"))
+
+```
+
+
+    
+![png](output_145_0.png)
+    
+
+
+    ----------------------------------------
+     MCA + Mahalanobis
+      Score Entropy     : 1.816
+      Score Silhouette  : 0.702
+      Score Variance    : 0.407
+    ----------------------------------------
+    
 
 # 2. Summary <a class="anchor" id="Summary"></a>
 
