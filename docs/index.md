@@ -6355,38 +6355,214 @@ evaluate_supervised_outlier_detection_model(model_iforest, X_validation, y_valid
 
 ```python
 ##################################
-# Formulating a supervised learning model
+# Formulating a hyperparameter tuning grid
 # based on Local Outlier Factor
 ##################################
-model_cblof = CBLOF()
-model_cblof.fit(X_train)
+cblof_grid = {
+    "alpha": [0.9, 0.8],
+    "n_clusters": [8, 12, 16],
+    "beta": [5, 10, 15],
+    "contamination": [0.30],
+    "random_state": [42]
+}
+
 ```
 
 
+```python
+##################################
+# Conducting hyperparameter tuning
+# using a Monte Carlo cross-validation setup
+# and identifying the optimal hyperparamter combination
+# based on Local Outlier Factor 
+##################################
+best_cblof_params, cblof_results_df = monte_carlo_cv(CBLOF, cblof_grid, X_train, y_train, model_name="CBLOF")
+model_cblof = CBLOF(**best_cblof_params)
+
+```
+
+    Best CBLOF params: {'alpha': 0.9, 'beta': 10, 'contamination': 0.3, 'n_clusters': 16, 'random_state': 42} with ROC AUC: 0.933
+    
+    Top Hyperparameter Combinations Ranked by Mean ROC AUC:
+    
 
 
-    CBLOF(alpha=0.9, beta=5, check_estimator=False, clustering_estimator=None,
-       contamination=0.1, n_clusters=8, n_jobs=None, random_state=None,
-       use_weights=False)
+<div>
+<style scoped>
+    .dataframe tbody tr th:only-of-type {
+        vertical-align: middle;
+    }
 
+    .dataframe tbody tr th {
+        vertical-align: top;
+    }
+
+    .dataframe thead th {
+        text-align: right;
+    }
+</style>
+<table border="1" class="dataframe">
+  <thead>
+    <tr style="text-align: right;">
+      <th></th>
+      <th>Params</th>
+      <th>Mean ROC AUC</th>
+      <th>Std ROC AUC</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th>0</th>
+      <td>{'alpha': 0.9, 'beta': 10, 'contamination': 0....</td>
+      <td>0.933494</td>
+      <td>0.028559</td>
+    </tr>
+    <tr>
+      <th>1</th>
+      <td>{'alpha': 0.9, 'beta': 5, 'contamination': 0.3...</td>
+      <td>0.933494</td>
+      <td>0.028559</td>
+    </tr>
+    <tr>
+      <th>2</th>
+      <td>{'alpha': 0.9, 'beta': 15, 'contamination': 0....</td>
+      <td>0.933494</td>
+      <td>0.028559</td>
+    </tr>
+    <tr>
+      <th>3</th>
+      <td>{'alpha': 0.9, 'beta': 5, 'contamination': 0.3...</td>
+      <td>0.925988</td>
+      <td>0.030373</td>
+    </tr>
+    <tr>
+      <th>4</th>
+      <td>{'alpha': 0.9, 'beta': 15, 'contamination': 0....</td>
+      <td>0.925988</td>
+      <td>0.030373</td>
+    </tr>
+    <tr>
+      <th>5</th>
+      <td>{'alpha': 0.9, 'beta': 10, 'contamination': 0....</td>
+      <td>0.925988</td>
+      <td>0.030373</td>
+    </tr>
+    <tr>
+      <th>6</th>
+      <td>{'alpha': 0.8, 'beta': 10, 'contamination': 0....</td>
+      <td>0.921214</td>
+      <td>0.029539</td>
+    </tr>
+    <tr>
+      <th>7</th>
+      <td>{'alpha': 0.8, 'beta': 15, 'contamination': 0....</td>
+      <td>0.921214</td>
+      <td>0.029539</td>
+    </tr>
+    <tr>
+      <th>8</th>
+      <td>{'alpha': 0.8, 'beta': 5, 'contamination': 0.3...</td>
+      <td>0.921214</td>
+      <td>0.029539</td>
+    </tr>
+    <tr>
+      <th>9</th>
+      <td>{'alpha': 0.9, 'beta': 5, 'contamination': 0.3...</td>
+      <td>0.919012</td>
+      <td>0.030480</td>
+    </tr>
+    <tr>
+      <th>10</th>
+      <td>{'alpha': 0.9, 'beta': 10, 'contamination': 0....</td>
+      <td>0.919012</td>
+      <td>0.030480</td>
+    </tr>
+    <tr>
+      <th>11</th>
+      <td>{'alpha': 0.9, 'beta': 15, 'contamination': 0....</td>
+      <td>0.919012</td>
+      <td>0.030480</td>
+    </tr>
+    <tr>
+      <th>12</th>
+      <td>{'alpha': 0.8, 'beta': 15, 'contamination': 0....</td>
+      <td>0.914137</td>
+      <td>0.031178</td>
+    </tr>
+    <tr>
+      <th>13</th>
+      <td>{'alpha': 0.8, 'beta': 5, 'contamination': 0.3...</td>
+      <td>0.914137</td>
+      <td>0.031178</td>
+    </tr>
+    <tr>
+      <th>14</th>
+      <td>{'alpha': 0.8, 'beta': 10, 'contamination': 0....</td>
+      <td>0.914137</td>
+      <td>0.031178</td>
+    </tr>
+    <tr>
+      <th>15</th>
+      <td>{'alpha': 0.8, 'beta': 5, 'contamination': 0.3...</td>
+      <td>0.907470</td>
+      <td>0.028361</td>
+    </tr>
+    <tr>
+      <th>16</th>
+      <td>{'alpha': 0.8, 'beta': 10, 'contamination': 0....</td>
+      <td>0.907470</td>
+      <td>0.028361</td>
+    </tr>
+    <tr>
+      <th>17</th>
+      <td>{'alpha': 0.8, 'beta': 15, 'contamination': 0....</td>
+      <td>0.907470</td>
+      <td>0.028361</td>
+    </tr>
+  </tbody>
+</table>
+</div>
 
 
 
 ```python
 ##################################
-# Evaluating the apparent performance
-# of the supervised learning model
-# based on Local Outlier Factor
+# Conducting apparent validation
+# of the optimal Local Outlier Factor 
+# using the train data
 ##################################
+model_cblof.fit(X_train)
+model_cblof.decision_scores_ = model_cblof.decision_function(X_train.values)
 evaluate_supervised_outlier_detection_model(model_cblof, X_train, y_train, "CBLOF")
 
 ```
 
     ----------------------------------------
      CBLOF
-      ROC AUC       : 0.911
-      Precision@N   : 0.701
-      F1-score      : 0.282
+      ROC AUC       : 0.918
+      Precision@N   : 0.791
+      F1-score      : 0.231
+    ----------------------------------------
+    
+
+
+```python
+##################################
+# Conducting external validation
+# of the optimal Local Outlier Factor 
+# using the validation data
+##################################
+model_cblof.fit(X_train)
+model_cblof.decision_scores_ = model_cblof.decision_function(X_validation.values)
+evaluate_supervised_outlier_detection_model(model_cblof, X_validation, y_validation, "CBLOF")
+
+```
+
+    ----------------------------------------
+     CBLOF
+      ROC AUC       : 0.954
+      Precision@N   : 0.826
+      F1-score      : 0.296
     ----------------------------------------
     
 
@@ -6961,7 +7137,7 @@ unsupervised_results.append(evaluate_unsupervised_outlier_detection_model(scores
 
 
     
-![png](output_136_0.png)
+![png](output_138_0.png)
     
 
 
@@ -7010,15 +7186,15 @@ unsupervised_results.append(evaluate_unsupervised_outlier_detection_model(scores
 
 
     
-![png](output_139_0.png)
+![png](output_141_0.png)
     
 
 
     ----------------------------------------
      CBLOF
-      Score Entropy     : 2.036
-      Score Silhouette  : 0.583
-      Score Variance    : 0.153
+      Score Entropy     : 2.043
+      Score Silhouette  : 0.567
+      Score Variance    : 0.139
     ----------------------------------------
     
 
@@ -7059,7 +7235,7 @@ unsupervised_results.append(evaluate_unsupervised_outlier_detection_model(scores
 
 
     
-![png](output_142_0.png)
+![png](output_144_0.png)
     
 
 
@@ -7106,7 +7282,7 @@ unsupervised_results.append(evaluate_unsupervised_outlier_detection_model(scores
 
 
     
-![png](output_145_0.png)
+![png](output_147_0.png)
     
 
 
@@ -7148,7 +7324,7 @@ unsupervised_results.append(evaluate_unsupervised_outlier_detection_model(scores
 
 
     
-![png](output_148_0.png)
+![png](output_150_0.png)
     
 
 
