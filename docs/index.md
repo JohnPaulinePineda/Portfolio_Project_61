@@ -6784,36 +6784,213 @@ evaluate_supervised_outlier_detection_model(model_knn, X_validation, y_validatio
 
 ```python
 ##################################
-# Formulating a supervised learning model
+# Formulating a hyperparameter tuning grid
 # based on Histogram-Based Outlier Score
 ##################################
-model_hbos = HBOS()
-model_hbos.fit(X_train)
+hbos_grid = {
+    "alpha": [0.1, 0.2],
+    "n_bins": [5, 10, 15],
+    "tol": [0.25, 0.50, 0.75],
+    "contamination": [0.30]
+}
+
 ```
 
 
+```python
+##################################
+# Conducting hyperparameter tuning
+# using a Monte Carlo cross-validation setup
+# and identifying the optimal hyperparamter combination
+# based on Histogram-Based Outlier Score
+##################################
+best_hbos_params, hbos_results_df = monte_carlo_cv(HBOS, hbos_grid, X_train, y_train, model_name="HBOS")
+model_hbos = HBOS(**best_hbos_params)
+
+```
+
+    Best HBOS params: {'alpha': 0.1, 'contamination': 0.3, 'n_bins': 15, 'tol': 0.75} with ROC AUC: 0.815
+    
+    Top Hyperparameter Combinations Ranked by Mean ROC AUC:
+    
 
 
-    HBOS(alpha=0.1, contamination=0.1, n_bins=10, tol=0.5)
+<div>
+<style scoped>
+    .dataframe tbody tr th:only-of-type {
+        vertical-align: middle;
+    }
 
+    .dataframe tbody tr th {
+        vertical-align: top;
+    }
+
+    .dataframe thead th {
+        text-align: right;
+    }
+</style>
+<table border="1" class="dataframe">
+  <thead>
+    <tr style="text-align: right;">
+      <th></th>
+      <th>Params</th>
+      <th>Mean ROC AUC</th>
+      <th>Std ROC AUC</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th>0</th>
+      <td>{'alpha': 0.1, 'contamination': 0.3, 'n_bins':...</td>
+      <td>0.815375</td>
+      <td>0.041409</td>
+    </tr>
+    <tr>
+      <th>1</th>
+      <td>{'alpha': 0.1, 'contamination': 0.3, 'n_bins':...</td>
+      <td>0.815375</td>
+      <td>0.041409</td>
+    </tr>
+    <tr>
+      <th>2</th>
+      <td>{'alpha': 0.1, 'contamination': 0.3, 'n_bins':...</td>
+      <td>0.815375</td>
+      <td>0.041409</td>
+    </tr>
+    <tr>
+      <th>3</th>
+      <td>{'alpha': 0.1, 'contamination': 0.3, 'n_bins':...</td>
+      <td>0.815298</td>
+      <td>0.041490</td>
+    </tr>
+    <tr>
+      <th>4</th>
+      <td>{'alpha': 0.1, 'contamination': 0.3, 'n_bins':...</td>
+      <td>0.815298</td>
+      <td>0.041490</td>
+    </tr>
+    <tr>
+      <th>5</th>
+      <td>{'alpha': 0.1, 'contamination': 0.3, 'n_bins':...</td>
+      <td>0.815298</td>
+      <td>0.041490</td>
+    </tr>
+    <tr>
+      <th>6</th>
+      <td>{'alpha': 0.2, 'contamination': 0.3, 'n_bins':...</td>
+      <td>0.815065</td>
+      <td>0.041436</td>
+    </tr>
+    <tr>
+      <th>7</th>
+      <td>{'alpha': 0.2, 'contamination': 0.3, 'n_bins':...</td>
+      <td>0.815065</td>
+      <td>0.041436</td>
+    </tr>
+    <tr>
+      <th>8</th>
+      <td>{'alpha': 0.2, 'contamination': 0.3, 'n_bins':...</td>
+      <td>0.815065</td>
+      <td>0.041436</td>
+    </tr>
+    <tr>
+      <th>9</th>
+      <td>{'alpha': 0.2, 'contamination': 0.3, 'n_bins':...</td>
+      <td>0.814857</td>
+      <td>0.041273</td>
+    </tr>
+    <tr>
+      <th>10</th>
+      <td>{'alpha': 0.2, 'contamination': 0.3, 'n_bins':...</td>
+      <td>0.814857</td>
+      <td>0.041273</td>
+    </tr>
+    <tr>
+      <th>11</th>
+      <td>{'alpha': 0.2, 'contamination': 0.3, 'n_bins':...</td>
+      <td>0.814857</td>
+      <td>0.041273</td>
+    </tr>
+    <tr>
+      <th>12</th>
+      <td>{'alpha': 0.1, 'contamination': 0.3, 'n_bins':...</td>
+      <td>0.814833</td>
+      <td>0.041295</td>
+    </tr>
+    <tr>
+      <th>13</th>
+      <td>{'alpha': 0.1, 'contamination': 0.3, 'n_bins':...</td>
+      <td>0.814833</td>
+      <td>0.041295</td>
+    </tr>
+    <tr>
+      <th>14</th>
+      <td>{'alpha': 0.1, 'contamination': 0.3, 'n_bins':...</td>
+      <td>0.814833</td>
+      <td>0.041295</td>
+    </tr>
+    <tr>
+      <th>15</th>
+      <td>{'alpha': 0.2, 'contamination': 0.3, 'n_bins':...</td>
+      <td>0.814208</td>
+      <td>0.041381</td>
+    </tr>
+    <tr>
+      <th>16</th>
+      <td>{'alpha': 0.2, 'contamination': 0.3, 'n_bins':...</td>
+      <td>0.814208</td>
+      <td>0.041381</td>
+    </tr>
+    <tr>
+      <th>17</th>
+      <td>{'alpha': 0.2, 'contamination': 0.3, 'n_bins':...</td>
+      <td>0.814208</td>
+      <td>0.041381</td>
+    </tr>
+  </tbody>
+</table>
+</div>
 
 
 
 ```python
 ##################################
-# Evaluating the apparent performance
-# of the supervised learning model
-# based on Histogram-Based Outlier Score
+# Conducting apparent validation
+# of the optimal Histogram-Based Outlier Score
+# using the train data
 ##################################
+model_hbos.fit(X_train)
+model_hbos.decision_scores_ = model_hbos.decision_function(X_train.values)
 evaluate_supervised_outlier_detection_model(model_hbos, X_train, y_train, "HBOS")
 
 ```
 
     ----------------------------------------
      HBOS
-      ROC AUC       : 0.809
+      ROC AUC       : 0.810
       Precision@N   : 0.582
       F1-score      : 0.128
+    ----------------------------------------
+    
+
+
+```python
+##################################
+# Conducting external validation
+# of the optimal Histogram-Based Outlier Score
+# using the validation data
+##################################
+model_hbos.fit(X_train)
+model_hbos.decision_scores_ = model_hbos.decision_function(X_validation.values)
+evaluate_supervised_outlier_detection_model(model_hbos, X_validation, y_validation, "HBOS")
+
+```
+
+    ----------------------------------------
+     HBOS
+      ROC AUC       : 0.757
+      Precision@N   : 0.522
+      F1-score      : 0.148
     ----------------------------------------
     
 
@@ -7267,7 +7444,7 @@ unsupervised_results.append(evaluate_unsupervised_outlier_detection_model(scores
 
 
     
-![png](output_137_0.png)
+![png](output_139_0.png)
     
 
 
@@ -7316,15 +7493,15 @@ unsupervised_results.append(evaluate_unsupervised_outlier_detection_model(scores
 
 
     
-![png](output_140_0.png)
+![png](output_142_0.png)
     
 
 
     ----------------------------------------
      CBLOF
-      Score Entropy     : 1.993
-      Score Silhouette  : 0.595
-      Score Variance    : 0.216
+      Score Entropy     : 2.138
+      Score Silhouette  : 0.617
+      Score Variance    : 0.194
     ----------------------------------------
     
 
@@ -7365,7 +7542,7 @@ unsupervised_results.append(evaluate_unsupervised_outlier_detection_model(scores
 
 
     
-![png](output_143_0.png)
+![png](output_145_0.png)
     
 
 
@@ -7412,7 +7589,7 @@ unsupervised_results.append(evaluate_unsupervised_outlier_detection_model(scores
 
 
     
-![png](output_146_0.png)
+![png](output_148_0.png)
     
 
 
