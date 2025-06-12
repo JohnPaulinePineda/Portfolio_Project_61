@@ -26,13 +26,11 @@
         * [1.7.2 Local Outlier Factor](#1.7.2)
         * [1.7.3 K-Nearest Neighbors Outlier Score](#1.7.3)
         * [1.7.4 Histogram-Based Outlier Score](#1.7.4)
-        * [1.7.5 High Leverage Points via Multiple Correspondence Analysis](#1.7.5)
     * [1.8 Model Development Without Ground Truth Labels](#1.8)
         * [1.8.1 Isolation Forest](#1.8.1)
         * [1.8.2 Local Outlier Factor](#1.8.2)
         * [1.8.3 K-Nearest Neighbors Outlier Score](#1.8.3)
         * [1.8.4 Histogram-Based Outlier Score](#1.8.4)
-        * [1.8.5 High Leverage Points via Multiple Correspondence Analysis](#1.8.5)
     * [1.9 Consolidated Findings](#1.9)
 * [**2. Summary**](#Summary)   
 * [**3. References**](#References)
@@ -41,7 +39,7 @@
 
 # 1. Table of Contents <a class="anchor" id="TOC"></a>
 
-This project explores various **Outlier Detection** techniques specifically tailored for datasets with purely categorical features, utilizing multiple tools and libraries available in <mark style="background-color: #CCECFF"><b>Python</b></mark>. The analysis was carried out in two distinct experimental settings: a **Supervised Setting** where synthetic outlier ground truth labels are available, and an **Unsupervised Setting** where no labels are assumed. The methods applied in both settings span a diverse range of non-deep learning techniques, including classical statistical, distance-based, and pattern-based models including: **Histogram-Based Outlier Score (HBOS)**, **K-Nearest Neighbors (KNN)**, **Clustering-Based Local Outlier Factor (CBLOF)**, **Isolation Forest**, **Multiple Correspondence Analysis + Mahalanobis Distance**, **K-Modes with Cluster Distance** and **Association Rule Violation Count**. In the supervised setting, outlier detection methods were evaluated using traditional classification metrics such as the **Area Under the Receiver Operating Characteristic Curve(AUROC)**, **F1-Score**, and **Precision@N** to assess their ability to distinguish true outliers from normal observations. In contrast, the unsupervised setting employed label-agnostic evaluation strategies, leveraging internal and score-based metrics such as **Outlier Score Entropy**, **Score Variance**, **Silhouette Score on Outlier Scores**, and **Clustering Stability**. These were complemented by **t-SNE Visualizations** to assess the score separability and clustering quality across methods. This dual-framework approach allows for a comprehensive understanding of how each method performs under both label-available and label-free conditions, providing a rigorous basis for outlier detection in categorical data contexts. All results were consolidated in a [<span style="color: #FF0000"><b>Summary</b></span>](#Summary) presented at the end of the document. 
+This project explores various **Outlier Detection** techniques specifically tailored for datasets with purely categorical features, utilizing multiple tools and libraries available in <mark style="background-color: #CCECFF"><b>Python</b></mark>. The analysis was carried out in two distinct experimental settings: a **Supervised Setting** where synthetic outlier ground truth labels are available, and an **Unsupervised Setting** where no labels are assumed. The methods applied in both settings span a diverse range of non-deep learning techniques, including classical statistical, distance-based, and pattern-based models including: **Isolation Forest**, **Clustering-Based Local Outlier Factor (CBLOF)**, **K-Nearest Neighbors (KNN)** and **Histogram-Based Outlier Score (HBOS)**. In the supervised setting, outlier detection methods were evaluated using traditional classification metrics such as the **Area Under the Receiver Operating Characteristic Curve(AUROC)**, **F1-Score**, and **Precision@N** to assess their ability to distinguish true outliers from normal observations. In contrast, the unsupervised setting employed label-agnostic evaluation strategies, leveraging internal and score-based metrics such as **Silhouette Score on Outlier Scores**, **Outlier Score Entropy** and **Score Variance**. These were complemented by **t-SNE Visualizations** to assess the score separability and clustering quality across methods. This dual-framework approach allows for a comprehensive understanding of how each method performs under both label-available and label-free conditions, providing a rigorous basis for outlier detection in categorical data contexts. All results were consolidated in a [<span style="color: #FF0000"><b>Summary</b></span>](#Summary) presented at the end of the document. 
 
 [Outlier Detection](https://link.springer.com/book/10.1007/978-3-319-47578-3) in datasets composed exclusively of categorical variables poses unique challenges because most traditional techniques rely on notions like distance, density, or variance—concepts naturally defined in numerical spaces. In contrast, categorical data lacks inherent numeric relationships or ordering, making it non-trivial to apply distance-based or distribution-based methods directly. However, there are still structured and principled approaches to identify anomalies in such datasets. At its core, an outlier in categorical data is an observation that exhibits a rare or unexpected combination of attribute levels. While each individual variable may contain common categories, their joint configuration may be highly improbable, making the observation an outlier even if no single variable is unusual in isolation. The most basic yet powerful approach begins by examining frequency distributions by way of tallying the count of each unique record configuration and flagging those that occur rarely or not at all in the rest of the data as potential anomalies. To go a step further, one can estimate probabilities of individual variable levels and their joint probabilities across combinations of features. This idea underlies models where the joint likelihood of feature values is used as an outlier score. However, due to the curse of dimensionality — even with a moderate number of variables — the number of possible category combinations grows exponentially, making pure joint frequency estimation unreliable in high dimensions. This motivates the use of dimensionality reduction techniques which maps categorical data into a continuous latent space. In this lower-dimensional space, standard outlier detection techniques can be applied more reliably. In other cases, categorical variables are transformed using encoding schemes to enable the use of well-established numeric algorithms. For instance, one-hot encoding represents each level of a categorical variable as a binary vector, while ordinal encoding assigns arbitrary numeric values to categories. More advanced encodings like entity embeddings can preserve semantic similarity between categories learned via neural networks. Once encoded, various outlier detection methods can be applied, provided the encoding faithfully retains category relationships. An alternative family of methods relies on clustering to group similar categorical records. Outliers are identified either as records not belonging to any dense cluster, or as records that lie far from their cluster's central profile. Finally, rule-based outlier detection extract conditional patterns and flag records that violate these frequent rules. In conclusion, while outlier detection in categorical data is fundamentally different from numeric data due to the lack of inherent distances or ordering, a combination of probability modeling, encoding and transformation, rule learning, and clustering can be used to detect anomalies effectively. The choice of method depends on the structure of the data, the cardinality of features, and whether interpretability or predictive performance is prioritized.
 
@@ -6571,39 +6569,213 @@ evaluate_supervised_outlier_detection_model(model_cblof, X_validation, y_validat
 
 ```python
 ##################################
-# Formulating a supervised learning model
+# Formulating a hyperparameter tuning grid
 # based on K-Nearest Neighbors Outlier Score
 ##################################
-model_knn = KNN()
-model_knn.fit(X_train)
+knn_grid = {
+    "method": ["largest", "mean"],
+    "n_neighbors": [5, 10, 15],
+    "metric": ["minkowski", "euclidean", "manhattan"],
+    "contamination": [0.30]
+}
 
 ```
 
 
+```python
+##################################
+# Conducting hyperparameter tuning
+# using a Monte Carlo cross-validation setup
+# and identifying the optimal hyperparamter combination
+# based on K-Nearest Neighbors Outlier Score
+##################################
+best_knn_params, knn_results_df = monte_carlo_cv(KNN, knn_grid, X_train, y_train, model_name="KNN")
+model_knn = KNN(**best_knn_params)
+
+```
+
+    Best KNN params: {'contamination': 0.3, 'method': 'mean', 'metric': 'euclidean', 'n_neighbors': 5} with ROC AUC: 0.955
+    
+    Top Hyperparameter Combinations Ranked by Mean ROC AUC:
+    
 
 
-    KNN(algorithm='auto', contamination=0.1, leaf_size=30, method='largest',
-      metric='minkowski', metric_params=None, n_jobs=1, n_neighbors=5, p=2,
-      radius=1.0)
+<div>
+<style scoped>
+    .dataframe tbody tr th:only-of-type {
+        vertical-align: middle;
+    }
 
+    .dataframe tbody tr th {
+        vertical-align: top;
+    }
+
+    .dataframe thead th {
+        text-align: right;
+    }
+</style>
+<table border="1" class="dataframe">
+  <thead>
+    <tr style="text-align: right;">
+      <th></th>
+      <th>Params</th>
+      <th>Mean ROC AUC</th>
+      <th>Std ROC AUC</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th>0</th>
+      <td>{'contamination': 0.3, 'method': 'mean', 'metr...</td>
+      <td>0.955196</td>
+      <td>0.022237</td>
+    </tr>
+    <tr>
+      <th>1</th>
+      <td>{'contamination': 0.3, 'method': 'mean', 'metr...</td>
+      <td>0.955196</td>
+      <td>0.022237</td>
+    </tr>
+    <tr>
+      <th>2</th>
+      <td>{'contamination': 0.3, 'method': 'mean', 'metr...</td>
+      <td>0.943851</td>
+      <td>0.022956</td>
+    </tr>
+    <tr>
+      <th>3</th>
+      <td>{'contamination': 0.3, 'method': 'mean', 'metr...</td>
+      <td>0.943738</td>
+      <td>0.020793</td>
+    </tr>
+    <tr>
+      <th>4</th>
+      <td>{'contamination': 0.3, 'method': 'mean', 'metr...</td>
+      <td>0.943738</td>
+      <td>0.020793</td>
+    </tr>
+    <tr>
+      <th>5</th>
+      <td>{'contamination': 0.3, 'method': 'mean', 'metr...</td>
+      <td>0.935262</td>
+      <td>0.022335</td>
+    </tr>
+    <tr>
+      <th>6</th>
+      <td>{'contamination': 0.3, 'method': 'mean', 'metr...</td>
+      <td>0.935262</td>
+      <td>0.022335</td>
+    </tr>
+    <tr>
+      <th>7</th>
+      <td>{'contamination': 0.3, 'method': 'mean', 'metr...</td>
+      <td>0.934351</td>
+      <td>0.021058</td>
+    </tr>
+    <tr>
+      <th>8</th>
+      <td>{'contamination': 0.3, 'method': 'mean', 'metr...</td>
+      <td>0.925899</td>
+      <td>0.023090</td>
+    </tr>
+    <tr>
+      <th>9</th>
+      <td>{'contamination': 0.3, 'method': 'largest', 'm...</td>
+      <td>0.910048</td>
+      <td>0.027892</td>
+    </tr>
+    <tr>
+      <th>10</th>
+      <td>{'contamination': 0.3, 'method': 'largest', 'm...</td>
+      <td>0.910048</td>
+      <td>0.027892</td>
+    </tr>
+    <tr>
+      <th>11</th>
+      <td>{'contamination': 0.3, 'method': 'largest', 'm...</td>
+      <td>0.910048</td>
+      <td>0.027892</td>
+    </tr>
+    <tr>
+      <th>12</th>
+      <td>{'contamination': 0.3, 'method': 'largest', 'm...</td>
+      <td>0.888018</td>
+      <td>0.028322</td>
+    </tr>
+    <tr>
+      <th>13</th>
+      <td>{'contamination': 0.3, 'method': 'largest', 'm...</td>
+      <td>0.888018</td>
+      <td>0.028322</td>
+    </tr>
+    <tr>
+      <th>14</th>
+      <td>{'contamination': 0.3, 'method': 'largest', 'm...</td>
+      <td>0.888018</td>
+      <td>0.028322</td>
+    </tr>
+    <tr>
+      <th>15</th>
+      <td>{'contamination': 0.3, 'method': 'largest', 'm...</td>
+      <td>0.876476</td>
+      <td>0.031751</td>
+    </tr>
+    <tr>
+      <th>16</th>
+      <td>{'contamination': 0.3, 'method': 'largest', 'm...</td>
+      <td>0.876476</td>
+      <td>0.031751</td>
+    </tr>
+    <tr>
+      <th>17</th>
+      <td>{'contamination': 0.3, 'method': 'largest', 'm...</td>
+      <td>0.876476</td>
+      <td>0.031751</td>
+    </tr>
+  </tbody>
+</table>
+</div>
 
 
 
 ```python
 ##################################
-# Evaluating the apparent performance
-# of the supervised learning model
-# based on K-Nearest Neighbors Outlier Score
+# Conducting apparent validation
+# of the optimal K-Nearest Neighbors Outlier Score 
+# using the train data
 ##################################
+model_knn.fit(X_train)
+model_knn.decision_scores_ = model_knn.decision_function(X_train.values)
 evaluate_supervised_outlier_detection_model(model_knn, X_train, y_train, "KNN")
 
 ```
 
     ----------------------------------------
      KNN
-      ROC AUC       : 0.896
-      Precision@N   : 0.731
-      F1-score      : 0.395
+      ROC AUC       : 0.967
+      Precision@N   : 0.806
+      F1-score      : 0.304
+    ----------------------------------------
+    
+
+
+```python
+##################################
+# Conducting external validation
+# of the optimal K-Nearest Neighbors Outlier Score
+# using the validation data
+##################################
+model_knn.fit(X_train)
+model_knn.decision_scores_ = model_knn.decision_function(X_validation.values)
+evaluate_supervised_outlier_detection_model(model_knn, X_validation, y_validation, "KNN")
+
+```
+
+    ----------------------------------------
+     KNN
+      ROC AUC       : 0.968
+      Precision@N   : 0.826
+      F1-score      : 0.296
     ----------------------------------------
     
 
@@ -6642,48 +6814,6 @@ evaluate_supervised_outlier_detection_model(model_hbos, X_train, y_train, "HBOS"
       ROC AUC       : 0.809
       Precision@N   : 0.582
       F1-score      : 0.128
-    ----------------------------------------
-    
-
-### 1.7.5 High Leverage Points via Multiple Correspondence Analysis <a class="anchor" id="1.7.5"></a>
-
-
-```python
-##################################
-# Formulating a supervised learning model
-# based on High Leverage Points via Multiple Correspondence Analysis
-##################################
-mca = prince.MCA(n_components=2, random_state=42)
-X_mca = mca.fit_transform(thyroid_cancer_train)
-
-##################################
-# Computing the Mahalanobis distance
-##################################
-center = X_mca.mean().values
-cov_inv = np.linalg.inv(np.cov(X_mca.T))
-m_dist = [mahalanobis(row, center, cov_inv) for row in X_mca.values]
-
-class DummyModel:
-    def __init__(self, scores): self.decision_scores_ = scores
-
-```
-
-
-```python
-##################################
-# Evaluating the apparent performance
-# of the supervised learning model
-# based on High Leverage Points via Multiple Correspondence Analysis
-##################################
-evaluate_supervised_outlier_detection_model(DummyModel(m_dist), X_train, y_train, "MCA + Mahalanobis")
-
-```
-
-    ----------------------------------------
-     MCA + Mahalanobis
-      ROC AUC       : 0.578
-      Precision@N   : 0.463
-      F1-score      : 0.282
     ----------------------------------------
     
 
@@ -7137,7 +7267,7 @@ unsupervised_results.append(evaluate_unsupervised_outlier_detection_model(scores
 
 
     
-![png](output_138_0.png)
+![png](output_137_0.png)
     
 
 
@@ -7186,15 +7316,15 @@ unsupervised_results.append(evaluate_unsupervised_outlier_detection_model(scores
 
 
     
-![png](output_141_0.png)
+![png](output_140_0.png)
     
 
 
     ----------------------------------------
      CBLOF
-      Score Entropy     : 2.043
-      Score Silhouette  : 0.567
-      Score Variance    : 0.139
+      Score Entropy     : 1.993
+      Score Silhouette  : 0.595
+      Score Variance    : 0.216
     ----------------------------------------
     
 
@@ -7235,7 +7365,7 @@ unsupervised_results.append(evaluate_unsupervised_outlier_detection_model(scores
 
 
     
-![png](output_144_0.png)
+![png](output_143_0.png)
     
 
 
@@ -7282,7 +7412,7 @@ unsupervised_results.append(evaluate_unsupervised_outlier_detection_model(scores
 
 
     
-![png](output_147_0.png)
+![png](output_146_0.png)
     
 
 
@@ -7291,48 +7421,6 @@ unsupervised_results.append(evaluate_unsupervised_outlier_detection_model(scores
       Score Entropy     : 1.869
       Score Silhouette  : 0.668
       Score Variance    : 14.089
-    ----------------------------------------
-    
-
-### 1.8.5 High Leverage Points via Multiple Correspondence Analysis <a class="anchor" id="1.8.5"></a>
-
-
-```python
-##################################
-# Formulating an unsupervised learning model
-# based on High Leverage Points via Multiple Correspondence Analysis 
-##################################
-mca = prince.MCA(n_components=2, random_state=42)
-X_mca = mca.fit_transform(thyroid_cancer_train)
-center = X_mca.mean().values
-cov_inv = np.linalg.inv(np.cov(X_mca.T))
-
-```
-
-
-```python
-##################################
-# Evaluating the apparent performance
-# of the unsupervised learning model
-# based on High Leverage Points via Multiple Correspondence Analysis 
-##################################
-scores = [mahalanobis(row, center, cov_inv) for row in X_mca.values]
-visualize_unsupervised_outlier_detection_model(X_train, scores, "MCA + Mahalanobis")
-unsupervised_results.append(evaluate_unsupervised_outlier_detection_model(scores, "MCA + Mahalanobis"))
-
-```
-
-
-    
-![png](output_150_0.png)
-    
-
-
-    ----------------------------------------
-     MCA + Mahalanobis
-      Score Entropy     : 1.816
-      Score Silhouette  : 0.702
-      Score Variance    : 0.407
     ----------------------------------------
     
 
