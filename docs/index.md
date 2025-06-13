@@ -18,9 +18,9 @@
     * [1.5 Data Exploration](#1.5)
         * [1.5.1 Exploratory Data Analysis](#1.5.1)
         * [1.5.2 Hypothesis Testing](#1.5.2)
-    * [1.6 Model Evaluation Preparation](#1.6)
+    * [1.6 Model Hyperparameter Tuning and Evaluation Preparation](#1.6)
         * [1.6.1 Model Evaluation Metrics Description](#1.6.1)
-        * [1.6.2 Model Evaluation Function Development](#1.6.2)
+        * [1.6.2 Model Hyperparameter Tuning and Evaluation Function Development](#1.6.2)
     * [1.7 Model Development With Synthetic Ground Truth Labels](#1.7)
         * [1.7.1 Isolation Forest](#1.7.1)
         * [1.7.2 Local Outlier Factor](#1.7.2)
@@ -39,7 +39,7 @@
 
 # 1. Table of Contents <a class="anchor" id="TOC"></a>
 
-This project explores various **Outlier Detection** techniques specifically tailored for datasets with purely categorical features, utilizing multiple tools and libraries available in <mark style="background-color: #CCECFF"><b>Python</b></mark>. The analysis was carried out in two distinct experimental settings: a **Supervised Setting** where synthetic outlier ground truth labels are available, and an **Unsupervised Setting** where no labels are assumed. The methods applied in both settings span a diverse range of non-deep learning techniques, including classical statistical, distance-based, and pattern-based models including: **Isolation Forest**, **Clustering-Based Local Outlier Factor (CBLOF)**, **K-Nearest Neighbors (KNN)** and **Histogram-Based Outlier Score (HBOS)**. In the supervised setting, outlier detection methods were evaluated using traditional classification metrics such as the **Area Under the Receiver Operating Characteristic Curve(AUROC)**, **F1-Score**, and **Precision@N** to assess their ability to distinguish true outliers from normal observations. In contrast, the unsupervised setting employed label-agnostic evaluation strategies, leveraging internal and score-based metrics such as **Silhouette Score on Outlier Scores**, **Outlier Score Entropy** and **Score Variance**. These were complemented by **t-SNE Visualizations** to assess the score separability and clustering quality across methods. This dual-framework approach allows for a comprehensive understanding of how each method performs under both label-available and label-free conditions, providing a rigorous basis for outlier detection in categorical data contexts. All results were consolidated in a [<span style="color: #FF0000"><b>Summary</b></span>](#Summary) presented at the end of the document. 
+This project explores various **Outlier Detection** techniques specifically tailored for datasets with purely categorical features, utilizing multiple tools and libraries available in <mark style="background-color: #CCECFF"><b>Python</b></mark>. The analysis was carried out in two distinct experimental settings: a **Supervised Setting** where synthetic outlier ground truth labels are available, and an **Unsupervised Setting** where no labels are assumed. The methods applied in both settings span a diverse range of non-deep learning techniques, including classical statistical, distance-based, and pattern-based models including: **Isolation Forest**, **Clustering-Based Local Outlier Factor (CBLOF)**, **K-Nearest Neighbors (KNN)** and **Histogram-Based Outlier Score (HBOS)**. In the supervised setting, outlier detection methods were evaluated using traditional classification metrics such as the **Area Under the Receiver Operating Characteristic Curve(AUROC)**, **F1-Score**, and **Precision@N** to assess their ability to distinguish true outliers from normal observations. In contrast, the unsupervised setting employed label-agnostic evaluation strategies, leveraging internal and score-based metrics such as **Silhouette Score on Outlier Scores**, **Outlier Score Entropy** and **Score Variance**. These were complemented by **Principal Component Analysis (PCA) and Uniform Manifold Approximation and Projection (UMAP) Visualizations** to assess the score separability and clustering quality across methods. This dual-framework approach allows for a comprehensive understanding of how each method performs under both label-available and label-free conditions, providing a rigorous basis for outlier detection in categorical data contexts. All results were consolidated in a [<span style="color: #FF0000"><b>Summary</b></span>](#Summary) presented at the end of the document. 
 
 [Outlier Detection](https://link.springer.com/book/10.1007/978-3-319-47578-3) in datasets composed exclusively of categorical variables poses unique challenges because most traditional techniques rely on notions like distance, density, or variance—concepts naturally defined in numerical spaces. In contrast, categorical data lacks inherent numeric relationships or ordering, making it non-trivial to apply distance-based or distribution-based methods directly. However, there are still structured and principled approaches to identify anomalies in such datasets. At its core, an outlier in categorical data is an observation that exhibits a rare or unexpected combination of attribute levels. While each individual variable may contain common categories, their joint configuration may be highly improbable, making the observation an outlier even if no single variable is unusual in isolation. The most basic yet powerful approach begins by examining frequency distributions by way of tallying the count of each unique record configuration and flagging those that occur rarely or not at all in the rest of the data as potential anomalies. To go a step further, one can estimate probabilities of individual variable levels and their joint probabilities across combinations of features. This idea underlies models where the joint likelihood of feature values is used as an outlier score. However, due to the curse of dimensionality — even with a moderate number of variables — the number of possible category combinations grows exponentially, making pure joint frequency estimation unreliable in high dimensions. This motivates the use of dimensionality reduction techniques which maps categorical data into a continuous latent space. In this lower-dimensional space, standard outlier detection techniques can be applied more reliably. In other cases, categorical variables are transformed using encoding schemes to enable the use of well-established numeric algorithms. For instance, one-hot encoding represents each level of a categorical variable as a binary vector, while ordinal encoding assigns arbitrary numeric values to categories. More advanced encodings like entity embeddings can preserve semantic similarity between categories learned via neural networks. Once encoded, various outlier detection methods can be applied, provided the encoding faithfully retains category relationships. An alternative family of methods relies on clustering to group similar categorical records. Outliers are identified either as records not belonging to any dense cluster, or as records that lie far from their cluster's central profile. Finally, rule-based outlier detection extract conditional patterns and flag records that violate these frequent rules. In conclusion, while outlier detection in categorical data is fundamentally different from numeric data due to the lack of inherent distances or ordering, a combination of probability modeling, encoding and transformation, rule learning, and clustering can be used to detect anomalies effectively. The choice of method depends on the structure of the data, the cardinality of features, and whether interpretability or predictive performance is prioritized.
 
@@ -135,6 +135,7 @@ from sklearn.neighbors import LocalOutlierFactor
 from sklearn.ensemble import IsolationForest
 from sklearn.neural_network import MLPClassifier
 from sklearn.cluster import KMeans
+from sklearn.decomposition import PCA
 from sklearn.svm import SVC
 from sklearn.metrics import silhouette_score, roc_auc_score, precision_score, f1_score, precision_recall_curve
 from sklearn.model_selection import train_test_split, GridSearchCV, RepeatedStratifiedKFold, KFold, cross_val_score, StratifiedShuffleSplit, ParameterGrid
@@ -142,6 +143,7 @@ from sklearn.tree import DecisionTreeClassifier
 from sklearn.decomposition import TruncatedSVD
 from sklearn.manifold import TSNE
 from scipy.spatial.distance import mahalanobis
+import umap.umap_ as umap
 
 from pyod.models.knn import KNN
 from pyod.models.hbos import HBOS
@@ -152,6 +154,9 @@ from kmodes.kmodes import KModes
 from mlxtend.frequent_patterns import apriori, association_rules
 
 import prince
+
+import warnings
+warnings.filterwarnings("ignore", category=FutureWarning, module="sklearn")
 
 ```
 
@@ -3837,10 +3842,11 @@ print(thyroid_cancer_baseline['Age_Group'].value_counts(normalize=True).reindex(
 ```python
 ##################################
 # Preparing the working dataset
-# by excluding unnecessary columns
+# by excluding columns that are
+# irrelevant and had data quality issues
 ##################################
-exclude_cols = ['Age', 'Recurred', 'Hx_Smoking', 'Hx_Radiotherapy', 'M']
-thyroid_cancer_baseline_filtered = thyroid_cancer_baseline.drop(columns=exclude_cols)
+exclude_cols_irrelevant_dataquality = ['Age', 'Recurred', 'Hx_Smoking', 'Hx_Radiotherapy', 'M']
+thyroid_cancer_baseline_filtered = thyroid_cancer_baseline.drop(columns=exclude_cols_irrelevant_dataquality)
 display(thyroid_cancer_baseline_filtered)
 ```
 
@@ -4063,7 +4069,7 @@ display(thyroid_cancer_baseline_filtered)
 
 ### 1.4.2 Category Aggregration and Encoding <a class="anchor" id="1.4.2"></a>
 
-2. 9 categorical predictors were observed with categories consisting of too few cases exhibiting high cardinality:
+1. 9 categorical predictors were observed with categories consisting of too few cases exhibiting high cardinality:
     * <span style="color: #FF0000">Thyroid_Function</span>: 
         * **313** <span style="color: #FF0000">Thyroid_Function=Euthyroid</span>: 85.98%
         * **14** <span style="color: #FF0000">Thyroid_Function=Subclinical Hypothyroidism</span>: 3.86%
@@ -4143,6 +4149,25 @@ display(thyroid_cancer_baseline_filtered)
     * <span style="color: #FF0000">Response</span>:
         * **189** <span style="color: #FF0000">Response=Excellent</span>: 51.92%
         * **175** <span style="color: #FF0000">Response=Indeterminate or Incomplete</span>: 48.07%
+3. To focus on potential outliers from factors specifically pertaining to the clinicopathological characteristics of patients, only 6 categorical predictors were chosen to be contextually valid for the upstream analysis:
+    * <span style="color: #FF0000">Gender</span>: 
+        * **313** <span style="color: #FF0000">Gender=M</span>: 19.50%
+        * **51** <span style="color: #FF0000">Gender=F</span>: 80.49%
+    * <span style="color: #FF0000">Thyroid_Function</span>: 
+        * **313** <span style="color: #FF0000">Thyroid_Function=Euthyroid</span>: 85.98%
+        * **51** <span style="color: #FF0000">Thyroid_Function=Hypothyroidism or Hyperthyroidism</span>: 14.01%
+    * <span style="color: #FF0000">Physical_Examination</span>:
+        * **142** <span style="color: #FF0000">Physical_Examination=Normal or Single Nodular Goiter </span>: 39.01%
+        * **222** <span style="color: #FF0000">Physical_Examination=Multinodular or Diffuse Goiter</span>: 60.98%
+    * <span style="color: #FF0000">Adenopathy</span>:
+        * **258** <span style="color: #FF0000">Adenopathy=No</span>: 70.87%
+        * **106** <span style="color: #FF0000">Adenopathy=Yes</span>: 29.12%
+    * <span style="color: #FF0000">Pathology</span>:
+        * **48** <span style="color: #FF0000">Pathology=Non-Papillary </span>: 13.18%
+        * **316** <span style="color: #FF0000">Pathology=Papillary</span>: 86.81%
+    * <span style="color: #FF0000">Age_Group</span>: 
+        * **313** <span style="color: #FF0000">Age_Group=<50</span>: 70.88%
+        * **51** <span style="color: #FF0000">Age_Group=50+</span>: 29.12%
 
 
 
@@ -4502,6 +4527,151 @@ thyroid_cancer_baseline_filtered.head()
 
 ```python
 ##################################
+# Preparing the working dataset
+# by excluding columns that 
+# were contextually unnecessary for the analysis
+##################################
+exclude_cols_contextuallyunnecessary = ['Smoking', 'Focality', 'Risk', 'T', 'N', 'Stage', 'Response']
+thyroid_cancer_baseline_filtered = thyroid_cancer_baseline_filtered.drop(columns=exclude_cols_contextuallyunnecessary)
+display(thyroid_cancer_baseline_filtered)
+```
+
+
+<div>
+<style scoped>
+    .dataframe tbody tr th:only-of-type {
+        vertical-align: middle;
+    }
+
+    .dataframe tbody tr th {
+        vertical-align: top;
+    }
+
+    .dataframe thead th {
+        text-align: right;
+    }
+</style>
+<table border="1" class="dataframe">
+  <thead>
+    <tr style="text-align: right;">
+      <th></th>
+      <th>Gender</th>
+      <th>Thyroid_Function</th>
+      <th>Physical_Examination</th>
+      <th>Adenopathy</th>
+      <th>Pathology</th>
+      <th>Age_Group</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th>0</th>
+      <td>F</td>
+      <td>Euthyroid</td>
+      <td>Normal or Single Nodular Goiter</td>
+      <td>No</td>
+      <td>Papillary</td>
+      <td>&lt;50</td>
+    </tr>
+    <tr>
+      <th>1</th>
+      <td>F</td>
+      <td>Euthyroid</td>
+      <td>Multinodular or Diffuse Goiter</td>
+      <td>No</td>
+      <td>Papillary</td>
+      <td>&lt;50</td>
+    </tr>
+    <tr>
+      <th>2</th>
+      <td>F</td>
+      <td>Euthyroid</td>
+      <td>Normal or Single Nodular Goiter</td>
+      <td>No</td>
+      <td>Papillary</td>
+      <td>&lt;50</td>
+    </tr>
+    <tr>
+      <th>3</th>
+      <td>F</td>
+      <td>Euthyroid</td>
+      <td>Normal or Single Nodular Goiter</td>
+      <td>No</td>
+      <td>Papillary</td>
+      <td>50+</td>
+    </tr>
+    <tr>
+      <th>4</th>
+      <td>F</td>
+      <td>Euthyroid</td>
+      <td>Multinodular or Diffuse Goiter</td>
+      <td>No</td>
+      <td>Papillary</td>
+      <td>50+</td>
+    </tr>
+    <tr>
+      <th>...</th>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+    </tr>
+    <tr>
+      <th>378</th>
+      <td>M</td>
+      <td>Euthyroid</td>
+      <td>Normal or Single Nodular Goiter</td>
+      <td>Yes</td>
+      <td>Papillary</td>
+      <td>50+</td>
+    </tr>
+    <tr>
+      <th>379</th>
+      <td>M</td>
+      <td>Euthyroid</td>
+      <td>Multinodular or Diffuse Goiter</td>
+      <td>Yes</td>
+      <td>Papillary</td>
+      <td>50+</td>
+    </tr>
+    <tr>
+      <th>380</th>
+      <td>M</td>
+      <td>Euthyroid</td>
+      <td>Multinodular or Diffuse Goiter</td>
+      <td>Yes</td>
+      <td>Papillary</td>
+      <td>50+</td>
+    </tr>
+    <tr>
+      <th>381</th>
+      <td>M</td>
+      <td>Hypothyroidism or Hyperthyroidism</td>
+      <td>Multinodular or Diffuse Goiter</td>
+      <td>Yes</td>
+      <td>Non-Papillary</td>
+      <td>50+</td>
+    </tr>
+    <tr>
+      <th>382</th>
+      <td>M</td>
+      <td>Euthyroid</td>
+      <td>Multinodular or Diffuse Goiter</td>
+      <td>Yes</td>
+      <td>Papillary</td>
+      <td>50+</td>
+    </tr>
+  </tbody>
+</table>
+<p>364 rows × 6 columns</p>
+</div>
+
+
+
+```python
+##################################
 # Performing a general exploration of the categorical variable levels
 # based on the ordered categories
 # after category aggregation
@@ -4525,17 +4695,6 @@ for col in ordered_cat_cols:
     Normalized Frequencies:
     M    0.195055
     F    0.804945
-    Name: proportion, dtype: float64
-    --------------------------------------------------
-    Column: Smoking
-    Absolute Frequencies:
-    No     315
-    Yes     49
-    Name: count, dtype: int64
-    
-    Normalized Frequencies:
-    No     0.865385
-    Yes    0.134615
     Name: proportion, dtype: float64
     --------------------------------------------------
     Column: Thyroid_Function
@@ -4582,72 +4741,6 @@ for col in ordered_cat_cols:
     Papillary        0.868132
     Name: proportion, dtype: float64
     --------------------------------------------------
-    Column: Focality
-    Absolute Frequencies:
-    Uni-Focal      228
-    Multi-Focal    136
-    Name: count, dtype: int64
-    
-    Normalized Frequencies:
-    Uni-Focal      0.626374
-    Multi-Focal    0.373626
-    Name: proportion, dtype: float64
-    --------------------------------------------------
-    Column: Risk
-    Absolute Frequencies:
-    Intermediate to High    134
-    Low                     230
-    Name: count, dtype: int64
-    
-    Normalized Frequencies:
-    Intermediate to High    0.368132
-    Low                     0.631868
-    Name: proportion, dtype: float64
-    --------------------------------------------------
-    Column: T
-    Absolute Frequencies:
-    T1 to T2     224
-    T3 to T4b    140
-    Name: count, dtype: int64
-    
-    Normalized Frequencies:
-    T1 to T2     0.615385
-    T3 to T4b    0.384615
-    Name: proportion, dtype: float64
-    --------------------------------------------------
-    Column: N
-    Absolute Frequencies:
-    N0    249
-    N1    115
-    Name: count, dtype: int64
-    
-    Normalized Frequencies:
-    N0    0.684066
-    N1    0.315934
-    Name: proportion, dtype: float64
-    --------------------------------------------------
-    Column: Stage
-    Absolute Frequencies:
-    I            314
-    II to IVB     50
-    Name: count, dtype: int64
-    
-    Normalized Frequencies:
-    I            0.862637
-    II to IVB    0.137363
-    Name: proportion, dtype: float64
-    --------------------------------------------------
-    Column: Response
-    Absolute Frequencies:
-    Excellent                      189
-    Indeterminate or Incomplete    175
-    Name: count, dtype: int64
-    
-    Normalized Frequencies:
-    Excellent                      0.519231
-    Indeterminate or Incomplete    0.480769
-    Name: proportion, dtype: float64
-    --------------------------------------------------
     Column: Age_Group
     Absolute Frequencies:
     <50    258
@@ -4665,8 +4758,8 @@ for col in ordered_cat_cols:
 
 1. A synthetic outlier label named <span style="color: #FF0000">Outlier</span> that will serve as the new response variable was generated containing two categorical levels:
     * <span style="color: #FF0000">Outlier</span>: 
-        * **244** <span style="color: #FF0000">Outlier=No</span>: 67.03% (common patterns representing =>3% of categorical combinations based on frequency tagging)
-        * **120** <span style="color: #FF0000">Outlier=Yes</span>: 32.97% (rare patterns representing <3% of categorical combinations based on frequency tagging)
+        * **325** <span style="color: #FF0000">Outlier=No</span>: 89.28% (common patterns representing =>10% of categorical combinations based on frequency tagging)
+        * **39** <span style="color: #FF0000">Outlier=Yes</span>: 10.71% (rare patterns representing <10% of categorical combinations based on frequency tagging)
 
 
 ```python
@@ -4674,7 +4767,7 @@ for col in ordered_cat_cols:
 # Defining a function for implementing a
 # frequency-based outlier tagging
 ##################################
-def frequency_based_outlier_tagging(df, threshold=0.003):
+def frequency_based_outlier_tagging(df, threshold=0.01):
     freq = df.value_counts(normalize=True)
     rare_patterns = freq[freq < threshold].index
     outlier_mask = df.apply(lambda row: tuple(row) in rare_patterns, axis=1)
@@ -4705,17 +4798,10 @@ display(thyroid_cancer_baseline_filtered)
     <tr style="text-align: right;">
       <th></th>
       <th>Gender</th>
-      <th>Smoking</th>
       <th>Thyroid_Function</th>
       <th>Physical_Examination</th>
       <th>Adenopathy</th>
       <th>Pathology</th>
-      <th>Focality</th>
-      <th>Risk</th>
-      <th>T</th>
-      <th>N</th>
-      <th>Stage</th>
-      <th>Response</th>
       <th>Age_Group</th>
       <th>Outlier</th>
     </tr>
@@ -4724,85 +4810,50 @@ display(thyroid_cancer_baseline_filtered)
     <tr>
       <th>0</th>
       <td>F</td>
-      <td>No</td>
       <td>Euthyroid</td>
       <td>Normal or Single Nodular Goiter</td>
       <td>No</td>
       <td>Papillary</td>
-      <td>Uni-Focal</td>
-      <td>Low</td>
-      <td>T1 to T2</td>
-      <td>N0</td>
-      <td>I</td>
-      <td>Indeterminate or Incomplete</td>
       <td>&lt;50</td>
       <td>No</td>
     </tr>
     <tr>
       <th>1</th>
       <td>F</td>
-      <td>No</td>
       <td>Euthyroid</td>
       <td>Multinodular or Diffuse Goiter</td>
       <td>No</td>
       <td>Papillary</td>
-      <td>Uni-Focal</td>
-      <td>Low</td>
-      <td>T1 to T2</td>
-      <td>N0</td>
-      <td>I</td>
-      <td>Excellent</td>
       <td>&lt;50</td>
       <td>No</td>
     </tr>
     <tr>
       <th>2</th>
       <td>F</td>
-      <td>No</td>
       <td>Euthyroid</td>
       <td>Normal or Single Nodular Goiter</td>
       <td>No</td>
       <td>Papillary</td>
-      <td>Uni-Focal</td>
-      <td>Low</td>
-      <td>T1 to T2</td>
-      <td>N0</td>
-      <td>I</td>
-      <td>Excellent</td>
       <td>&lt;50</td>
       <td>No</td>
     </tr>
     <tr>
       <th>3</th>
       <td>F</td>
-      <td>No</td>
       <td>Euthyroid</td>
       <td>Normal or Single Nodular Goiter</td>
       <td>No</td>
       <td>Papillary</td>
-      <td>Uni-Focal</td>
-      <td>Low</td>
-      <td>T1 to T2</td>
-      <td>N0</td>
-      <td>I</td>
-      <td>Excellent</td>
       <td>50+</td>
       <td>No</td>
     </tr>
     <tr>
       <th>4</th>
       <td>F</td>
-      <td>No</td>
       <td>Euthyroid</td>
       <td>Multinodular or Diffuse Goiter</td>
       <td>No</td>
       <td>Papillary</td>
-      <td>Multi-Focal</td>
-      <td>Low</td>
-      <td>T1 to T2</td>
-      <td>N0</td>
-      <td>I</td>
-      <td>Excellent</td>
       <td>50+</td>
       <td>No</td>
     </tr>
@@ -4815,102 +4866,60 @@ display(thyroid_cancer_baseline_filtered)
       <td>...</td>
       <td>...</td>
       <td>...</td>
-      <td>...</td>
-      <td>...</td>
-      <td>...</td>
-      <td>...</td>
-      <td>...</td>
-      <td>...</td>
-      <td>...</td>
     </tr>
     <tr>
       <th>378</th>
       <td>M</td>
-      <td>Yes</td>
       <td>Euthyroid</td>
       <td>Normal or Single Nodular Goiter</td>
       <td>Yes</td>
       <td>Papillary</td>
-      <td>Uni-Focal</td>
-      <td>Intermediate to High</td>
-      <td>T3 to T4b</td>
-      <td>N1</td>
-      <td>II to IVB</td>
-      <td>Indeterminate or Incomplete</td>
       <td>50+</td>
       <td>No</td>
     </tr>
     <tr>
       <th>379</th>
       <td>M</td>
-      <td>Yes</td>
       <td>Euthyroid</td>
       <td>Multinodular or Diffuse Goiter</td>
       <td>Yes</td>
       <td>Papillary</td>
-      <td>Multi-Focal</td>
-      <td>Intermediate to High</td>
-      <td>T3 to T4b</td>
-      <td>N1</td>
-      <td>II to IVB</td>
-      <td>Indeterminate or Incomplete</td>
       <td>50+</td>
       <td>No</td>
     </tr>
     <tr>
       <th>380</th>
       <td>M</td>
-      <td>Yes</td>
       <td>Euthyroid</td>
       <td>Multinodular or Diffuse Goiter</td>
       <td>Yes</td>
       <td>Papillary</td>
-      <td>Multi-Focal</td>
-      <td>Intermediate to High</td>
-      <td>T3 to T4b</td>
-      <td>N1</td>
-      <td>II to IVB</td>
-      <td>Indeterminate or Incomplete</td>
       <td>50+</td>
       <td>No</td>
     </tr>
     <tr>
       <th>381</th>
       <td>M</td>
-      <td>Yes</td>
       <td>Hypothyroidism or Hyperthyroidism</td>
       <td>Multinodular or Diffuse Goiter</td>
       <td>Yes</td>
       <td>Non-Papillary</td>
-      <td>Multi-Focal</td>
-      <td>Intermediate to High</td>
-      <td>T3 to T4b</td>
-      <td>N1</td>
-      <td>II to IVB</td>
-      <td>Indeterminate or Incomplete</td>
       <td>50+</td>
       <td>Yes</td>
     </tr>
     <tr>
       <th>382</th>
       <td>M</td>
-      <td>Yes</td>
       <td>Euthyroid</td>
       <td>Multinodular or Diffuse Goiter</td>
       <td>Yes</td>
       <td>Papillary</td>
-      <td>Multi-Focal</td>
-      <td>Intermediate to High</td>
-      <td>T3 to T4b</td>
-      <td>N1</td>
-      <td>II to IVB</td>
-      <td>Indeterminate or Incomplete</td>
       <td>50+</td>
       <td>No</td>
     </tr>
   </tbody>
 </table>
-<p>364 rows × 14 columns</p>
+<p>364 rows × 7 columns</p>
 </div>
 
 
@@ -4944,17 +4953,6 @@ for col in ordered_cat_cols:
     F    0.804945
     Name: proportion, dtype: float64
     --------------------------------------------------
-    Column: Smoking
-    Absolute Frequencies:
-    No     315
-    Yes     49
-    Name: count, dtype: int64
-    
-    Normalized Frequencies:
-    No     0.865385
-    Yes    0.134615
-    Name: proportion, dtype: float64
-    --------------------------------------------------
     Column: Thyroid_Function
     Absolute Frequencies:
     Euthyroid                            313
@@ -4999,72 +4997,6 @@ for col in ordered_cat_cols:
     Papillary        0.868132
     Name: proportion, dtype: float64
     --------------------------------------------------
-    Column: Focality
-    Absolute Frequencies:
-    Uni-Focal      228
-    Multi-Focal    136
-    Name: count, dtype: int64
-    
-    Normalized Frequencies:
-    Uni-Focal      0.626374
-    Multi-Focal    0.373626
-    Name: proportion, dtype: float64
-    --------------------------------------------------
-    Column: Risk
-    Absolute Frequencies:
-    Intermediate to High    134
-    Low                     230
-    Name: count, dtype: int64
-    
-    Normalized Frequencies:
-    Intermediate to High    0.368132
-    Low                     0.631868
-    Name: proportion, dtype: float64
-    --------------------------------------------------
-    Column: T
-    Absolute Frequencies:
-    T1 to T2     224
-    T3 to T4b    140
-    Name: count, dtype: int64
-    
-    Normalized Frequencies:
-    T1 to T2     0.615385
-    T3 to T4b    0.384615
-    Name: proportion, dtype: float64
-    --------------------------------------------------
-    Column: N
-    Absolute Frequencies:
-    N0    249
-    N1    115
-    Name: count, dtype: int64
-    
-    Normalized Frequencies:
-    N0    0.684066
-    N1    0.315934
-    Name: proportion, dtype: float64
-    --------------------------------------------------
-    Column: Stage
-    Absolute Frequencies:
-    I            314
-    II to IVB     50
-    Name: count, dtype: int64
-    
-    Normalized Frequencies:
-    I            0.862637
-    II to IVB    0.137363
-    Name: proportion, dtype: float64
-    --------------------------------------------------
-    Column: Response
-    Absolute Frequencies:
-    Excellent                      189
-    Indeterminate or Incomplete    175
-    Name: count, dtype: int64
-    
-    Normalized Frequencies:
-    Excellent                      0.519231
-    Indeterminate or Incomplete    0.480769
-    Name: proportion, dtype: float64
-    --------------------------------------------------
     Column: Age_Group
     Absolute Frequencies:
     <50    258
@@ -5078,13 +5010,13 @@ for col in ordered_cat_cols:
     --------------------------------------------------
     Column: Outlier
     Absolute Frequencies:
-    No     244
-    Yes    120
+    No     325
+    Yes     39
     Name: count, dtype: int64
     
     Normalized Frequencies:
-    No     0.67033
-    Yes    0.32967
+    No     0.892857
+    Yes    0.107143
     Name: proportion, dtype: float64
     --------------------------------------------------
     
@@ -5093,22 +5025,15 @@ for col in ordered_cat_cols:
 
 1. The baseline dataset after preprocessing is comprised of:
     * **364 rows** (observations)
-        * **244 Outlier=No**: 67.03%
-        * **120 Outlier=Yes**: 32.97%
-    * **13 columns** (variables)
-        * **13/13 predictor** (categorical)
+        * **325 Outlier=No**: 89.28%
+        * **39 Outlier=Yes**: 10.71%
+    * **6 columns** (variables)
+        * **6/6 predictor** (categorical)
              * <span style="color: #FF0000">Gender</span>
-             * <span style="color: #FF0000">Smoking</span>
              * <span style="color: #FF0000">Thyroid_Function</span>
              * <span style="color: #FF0000">Physical_Examination</span>
              * <span style="color: #FF0000">Adenopathy</span>
-             * <span style="color: #FF0000">Pathology</span>
-             * <span style="color: #FF0000">Focality</span>
-             * <span style="color: #FF0000">Risk</span>
-             * <span style="color: #FF0000">T</span>
-             * <span style="color: #FF0000">N</span>
-             * <span style="color: #FF0000">Stage</span>
-             * <span style="color: #FF0000">Response</span>
+             * <span style="color: #FF0000">Pathology</span>            
              * <span style="color: #FF0000">Age_Group</span>
 2. The baseline dataset was divided into three subsets using a fixed random seed:
     * **test data**: 25% of the original data with class stratification applied
@@ -5120,19 +5045,19 @@ for col in ordered_cat_cols:
 5. Performance of the selected final model (and other candidate models for post-model selection comparison) were evaluated using the **test data**. 
 6. The **train data (final)** subset is comprised of:
     * **204 rows** (observations)
-        * **137 Recurred=No**: 67.16%
-        * **67 Recurred=Yes**: 32.84%
-    * **13 columns** (variables)
+        * **182 Recurred=No**: 89.22%
+        * **22 Recurred=Yes**: 10.78%
+    * **6 columns** (variables)
 7. The **validation data** subset is comprised of:
     * **69 rows** (observations)
-        * **46 Recurred=No**: 66.67%
-        * **23 Recurred=Yes**: 33.33%
-    * **17 columns** (variables)
+        * **62 Recurred=No**: 89.85%
+        * **7 Recurred=Yes**: 10.14%
+    * **6 columns** (variables)
 8. The **test data** subset is comprised of:
     * **91 rows** (observations)
-        * **61 Recurred=No**: 67.03%
-        * **30 Recurred=Yes**: 32.97%
-    * **13 columns** (variables)
+        * **81 Recurred=No**: 89.01%
+        * **10 Recurred=Yes**: 10.99%
+    * **6 columns** (variables)
 
 
 
@@ -5160,7 +5085,7 @@ display(thyroid_cancer_presplitting)
     
 
 
-    (364, 14)
+    (364, 7)
 
 
 
@@ -5183,17 +5108,10 @@ display(thyroid_cancer_presplitting)
     <tr style="text-align: right;">
       <th></th>
       <th>Gender</th>
-      <th>Smoking</th>
       <th>Thyroid_Function</th>
       <th>Physical_Examination</th>
       <th>Adenopathy</th>
       <th>Pathology</th>
-      <th>Focality</th>
-      <th>Risk</th>
-      <th>T</th>
-      <th>N</th>
-      <th>Stage</th>
-      <th>Response</th>
       <th>Age_Group</th>
       <th>Outlier</th>
     </tr>
@@ -5202,85 +5120,50 @@ display(thyroid_cancer_presplitting)
     <tr>
       <th>0</th>
       <td>F</td>
-      <td>No</td>
       <td>Euthyroid</td>
       <td>Normal or Single Nodular Goiter</td>
       <td>No</td>
       <td>Papillary</td>
-      <td>Uni-Focal</td>
-      <td>Low</td>
-      <td>T1 to T2</td>
-      <td>N0</td>
-      <td>I</td>
-      <td>Indeterminate or Incomplete</td>
       <td>&lt;50</td>
       <td>No</td>
     </tr>
     <tr>
       <th>1</th>
       <td>F</td>
-      <td>No</td>
       <td>Euthyroid</td>
       <td>Multinodular or Diffuse Goiter</td>
       <td>No</td>
       <td>Papillary</td>
-      <td>Uni-Focal</td>
-      <td>Low</td>
-      <td>T1 to T2</td>
-      <td>N0</td>
-      <td>I</td>
-      <td>Excellent</td>
       <td>&lt;50</td>
       <td>No</td>
     </tr>
     <tr>
       <th>2</th>
       <td>F</td>
-      <td>No</td>
       <td>Euthyroid</td>
       <td>Normal or Single Nodular Goiter</td>
       <td>No</td>
       <td>Papillary</td>
-      <td>Uni-Focal</td>
-      <td>Low</td>
-      <td>T1 to T2</td>
-      <td>N0</td>
-      <td>I</td>
-      <td>Excellent</td>
       <td>&lt;50</td>
       <td>No</td>
     </tr>
     <tr>
       <th>3</th>
       <td>F</td>
-      <td>No</td>
       <td>Euthyroid</td>
       <td>Normal or Single Nodular Goiter</td>
       <td>No</td>
       <td>Papillary</td>
-      <td>Uni-Focal</td>
-      <td>Low</td>
-      <td>T1 to T2</td>
-      <td>N0</td>
-      <td>I</td>
-      <td>Excellent</td>
       <td>50+</td>
       <td>No</td>
     </tr>
     <tr>
       <th>4</th>
       <td>F</td>
-      <td>No</td>
       <td>Euthyroid</td>
       <td>Multinodular or Diffuse Goiter</td>
       <td>No</td>
       <td>Papillary</td>
-      <td>Multi-Focal</td>
-      <td>Low</td>
-      <td>T1 to T2</td>
-      <td>N0</td>
-      <td>I</td>
-      <td>Excellent</td>
       <td>50+</td>
       <td>No</td>
     </tr>
@@ -5293,102 +5176,60 @@ display(thyroid_cancer_presplitting)
       <td>...</td>
       <td>...</td>
       <td>...</td>
-      <td>...</td>
-      <td>...</td>
-      <td>...</td>
-      <td>...</td>
-      <td>...</td>
-      <td>...</td>
-      <td>...</td>
     </tr>
     <tr>
       <th>378</th>
       <td>M</td>
-      <td>Yes</td>
       <td>Euthyroid</td>
       <td>Normal or Single Nodular Goiter</td>
       <td>Yes</td>
       <td>Papillary</td>
-      <td>Uni-Focal</td>
-      <td>Intermediate to High</td>
-      <td>T3 to T4b</td>
-      <td>N1</td>
-      <td>II to IVB</td>
-      <td>Indeterminate or Incomplete</td>
       <td>50+</td>
       <td>No</td>
     </tr>
     <tr>
       <th>379</th>
       <td>M</td>
-      <td>Yes</td>
       <td>Euthyroid</td>
       <td>Multinodular or Diffuse Goiter</td>
       <td>Yes</td>
       <td>Papillary</td>
-      <td>Multi-Focal</td>
-      <td>Intermediate to High</td>
-      <td>T3 to T4b</td>
-      <td>N1</td>
-      <td>II to IVB</td>
-      <td>Indeterminate or Incomplete</td>
       <td>50+</td>
       <td>No</td>
     </tr>
     <tr>
       <th>380</th>
       <td>M</td>
-      <td>Yes</td>
       <td>Euthyroid</td>
       <td>Multinodular or Diffuse Goiter</td>
       <td>Yes</td>
       <td>Papillary</td>
-      <td>Multi-Focal</td>
-      <td>Intermediate to High</td>
-      <td>T3 to T4b</td>
-      <td>N1</td>
-      <td>II to IVB</td>
-      <td>Indeterminate or Incomplete</td>
       <td>50+</td>
       <td>No</td>
     </tr>
     <tr>
       <th>381</th>
       <td>M</td>
-      <td>Yes</td>
       <td>Hypothyroidism or Hyperthyroidism</td>
       <td>Multinodular or Diffuse Goiter</td>
       <td>Yes</td>
       <td>Non-Papillary</td>
-      <td>Multi-Focal</td>
-      <td>Intermediate to High</td>
-      <td>T3 to T4b</td>
-      <td>N1</td>
-      <td>II to IVB</td>
-      <td>Indeterminate or Incomplete</td>
       <td>50+</td>
       <td>Yes</td>
     </tr>
     <tr>
       <th>382</th>
       <td>M</td>
-      <td>Yes</td>
       <td>Euthyroid</td>
       <td>Multinodular or Diffuse Goiter</td>
       <td>Yes</td>
       <td>Papillary</td>
-      <td>Multi-Focal</td>
-      <td>Intermediate to High</td>
-      <td>T3 to T4b</td>
-      <td>N1</td>
-      <td>II to IVB</td>
-      <td>Indeterminate or Incomplete</td>
       <td>50+</td>
       <td>No</td>
     </tr>
   </tbody>
 </table>
-<p>364 rows × 14 columns</p>
+<p>364 rows × 7 columns</p>
 </div>
 
 
@@ -5435,14 +5276,14 @@ display(thyroid_cancer_breakdown)
     <tr>
       <th>0</th>
       <td>No</td>
-      <td>244</td>
-      <td>67.032967</td>
+      <td>325</td>
+      <td>89.285714</td>
     </tr>
     <tr>
       <th>1</th>
       <td>Yes</td>
-      <td>120</td>
-      <td>32.967033</td>
+      <td>39</td>
+      <td>10.714286</td>
     </tr>
   </tbody>
 </table>
@@ -5477,7 +5318,7 @@ display(thyroid_cancer_presplitting)
     
 
 
-    (364, 14)
+    (364, 7)
 
 
 
@@ -5500,17 +5341,10 @@ display(thyroid_cancer_presplitting)
     <tr style="text-align: right;">
       <th></th>
       <th>Gender</th>
-      <th>Smoking</th>
       <th>Thyroid_Function</th>
       <th>Physical_Examination</th>
       <th>Adenopathy</th>
       <th>Pathology</th>
-      <th>Focality</th>
-      <th>Risk</th>
-      <th>T</th>
-      <th>N</th>
-      <th>Stage</th>
-      <th>Response</th>
       <th>Age_Group</th>
       <th>Outlier</th>
     </tr>
@@ -5520,14 +5354,7 @@ display(thyroid_cancer_presplitting)
       <th>0</th>
       <td>0</td>
       <td>0</td>
-      <td>0</td>
       <td>1</td>
-      <td>0</td>
-      <td>1</td>
-      <td>1</td>
-      <td>1</td>
-      <td>0</td>
-      <td>0</td>
       <td>0</td>
       <td>1</td>
       <td>1</td>
@@ -5539,14 +5366,7 @@ display(thyroid_cancer_presplitting)
       <td>0</td>
       <td>0</td>
       <td>0</td>
-      <td>0</td>
       <td>1</td>
-      <td>1</td>
-      <td>1</td>
-      <td>0</td>
-      <td>0</td>
-      <td>0</td>
-      <td>0</td>
       <td>1</td>
       <td>0</td>
     </tr>
@@ -5554,16 +5374,9 @@ display(thyroid_cancer_presplitting)
       <th>2</th>
       <td>0</td>
       <td>0</td>
-      <td>0</td>
       <td>1</td>
       <td>0</td>
       <td>1</td>
-      <td>1</td>
-      <td>1</td>
-      <td>0</td>
-      <td>0</td>
-      <td>0</td>
-      <td>0</td>
       <td>1</td>
       <td>0</td>
     </tr>
@@ -5571,16 +5384,9 @@ display(thyroid_cancer_presplitting)
       <th>3</th>
       <td>0</td>
       <td>0</td>
-      <td>0</td>
       <td>1</td>
       <td>0</td>
       <td>1</td>
-      <td>1</td>
-      <td>1</td>
-      <td>0</td>
-      <td>0</td>
-      <td>0</td>
-      <td>0</td>
       <td>0</td>
       <td>0</td>
     </tr>
@@ -5590,14 +5396,7 @@ display(thyroid_cancer_presplitting)
       <td>0</td>
       <td>0</td>
       <td>0</td>
-      <td>0</td>
       <td>1</td>
-      <td>0</td>
-      <td>1</td>
-      <td>0</td>
-      <td>0</td>
-      <td>0</td>
-      <td>0</td>
       <td>0</td>
       <td>0</td>
     </tr>
@@ -5610,25 +5409,11 @@ display(thyroid_cancer_presplitting)
       <td>...</td>
       <td>...</td>
       <td>...</td>
-      <td>...</td>
-      <td>...</td>
-      <td>...</td>
-      <td>...</td>
-      <td>...</td>
-      <td>...</td>
-      <td>...</td>
     </tr>
     <tr>
       <th>378</th>
       <td>1</td>
-      <td>1</td>
       <td>0</td>
-      <td>1</td>
-      <td>1</td>
-      <td>1</td>
-      <td>1</td>
-      <td>0</td>
-      <td>1</td>
       <td>1</td>
       <td>1</td>
       <td>1</td>
@@ -5638,15 +5423,8 @@ display(thyroid_cancer_presplitting)
     <tr>
       <th>379</th>
       <td>1</td>
-      <td>1</td>
       <td>0</td>
       <td>0</td>
-      <td>1</td>
-      <td>1</td>
-      <td>0</td>
-      <td>0</td>
-      <td>1</td>
-      <td>1</td>
       <td>1</td>
       <td>1</td>
       <td>0</td>
@@ -5655,15 +5433,8 @@ display(thyroid_cancer_presplitting)
     <tr>
       <th>380</th>
       <td>1</td>
-      <td>1</td>
       <td>0</td>
       <td>0</td>
-      <td>1</td>
-      <td>1</td>
-      <td>0</td>
-      <td>0</td>
-      <td>1</td>
-      <td>1</td>
       <td>1</td>
       <td>1</td>
       <td>0</td>
@@ -5673,31 +5444,17 @@ display(thyroid_cancer_presplitting)
       <th>381</th>
       <td>1</td>
       <td>1</td>
-      <td>1</td>
       <td>0</td>
       <td>1</td>
       <td>0</td>
-      <td>0</td>
-      <td>0</td>
-      <td>1</td>
-      <td>1</td>
-      <td>1</td>
-      <td>1</td>
       <td>0</td>
       <td>1</td>
     </tr>
     <tr>
       <th>382</th>
       <td>1</td>
-      <td>1</td>
       <td>0</td>
       <td>0</td>
-      <td>1</td>
-      <td>1</td>
-      <td>0</td>
-      <td>0</td>
-      <td>1</td>
-      <td>1</td>
       <td>1</td>
       <td>1</td>
       <td>0</td>
@@ -5705,7 +5462,7 @@ display(thyroid_cancer_presplitting)
     </tr>
   </tbody>
 </table>
-<p>364 rows × 14 columns</p>
+<p>364 rows × 7 columns</p>
 </div>
 
 
@@ -5746,7 +5503,7 @@ display(y_train_initial.value_counts(normalize = True))
     
 
 
-    (273, 13)
+    (273, 6)
 
 
 
@@ -5758,8 +5515,8 @@ display(y_train_initial.value_counts(normalize = True))
 
 
     Outlier
-    0    183
-    1     90
+    0    244
+    1     29
     Name: count, dtype: int64
 
 
@@ -5768,8 +5525,8 @@ display(y_train_initial.value_counts(normalize = True))
 
 
     Outlier
-    0    0.67033
-    1    0.32967
+    0    0.893773
+    1    0.106227
     Name: proportion, dtype: float64
 
 
@@ -5795,7 +5552,7 @@ display(y_test.value_counts(normalize = True))
     
 
 
-    (91, 13)
+    (91, 6)
 
 
 
@@ -5807,8 +5564,8 @@ display(y_test.value_counts(normalize = True))
 
 
     Outlier
-    0    61
-    1    30
+    0    81
+    1    10
     Name: count, dtype: int64
 
 
@@ -5817,8 +5574,8 @@ display(y_test.value_counts(normalize = True))
 
 
     Outlier
-    0    0.67033
-    1    0.32967
+    0    0.89011
+    1    0.10989
     Name: proportion, dtype: float64
 
 
@@ -5859,7 +5616,7 @@ display(y_train.value_counts(normalize = True))
     
 
 
-    (204, 13)
+    (204, 6)
 
 
 
@@ -5871,8 +5628,8 @@ display(y_train.value_counts(normalize = True))
 
 
     Outlier
-    0    137
-    1     67
+    0    182
+    1     22
     Name: count, dtype: int64
 
 
@@ -5881,8 +5638,8 @@ display(y_train.value_counts(normalize = True))
 
 
     Outlier
-    0    0.671569
-    1    0.328431
+    0    0.892157
+    1    0.107843
     Name: proportion, dtype: float64
 
 
@@ -5908,7 +5665,7 @@ display(y_validation.value_counts(normalize = True))
     
 
 
-    (69, 13)
+    (69, 6)
 
 
 
@@ -5920,8 +5677,8 @@ display(y_validation.value_counts(normalize = True))
 
 
     Outlier
-    0    46
-    1    23
+    0    62
+    1     7
     Name: count, dtype: int64
 
 
@@ -5930,8 +5687,8 @@ display(y_validation.value_counts(normalize = True))
 
 
     Outlier
-    0    0.666667
-    1    0.333333
+    0    0.898551
+    1    0.101449
     Name: proportion, dtype: float64
 
 
@@ -5985,11 +5742,11 @@ y_test.to_csv(os.path.join("..", DATASETS_FINAL_TEST_TARGET_PATH, "y_test.csv"),
 
 ### 1.5.2 Hypothesis Testing <a class="anchor" id="1.5.2"></a>
 
-## 1.6. Model Evaluation <a class="anchor" id="1.6"></a>
+## 1.6. Model Hyperparameter Tuning and Evaluation <a class="anchor" id="1.6"></a>
 
 ### 1.6.1 Model Evaluation Metrics Description <a class="anchor" id="1.6.1"></a>
 
-### 1.6.2 Model Evaluation Function Development <a class="anchor" id="1.6.2"></a>
+### 1.6.2 Model Hyperparameter Tuning and Evaluation Function Development <a class="anchor" id="1.6.2"></a>
 
 
 ```python
@@ -5998,7 +5755,7 @@ y_test.to_csv(os.path.join("..", DATASETS_FINAL_TEST_TARGET_PATH, "y_test.csv"),
 # hyperparameter tuning using Monte Carlo cross-validation 
 # for categorical outlier detection with ground truth
 ##################################
-def monte_carlo_cv(model_class, param_grid, X, y, model_name="Model", n_splits=100, test_size=0.3):
+def run_monte_carlo_cv_supervised_outlier_detection_model(model_class, param_grid, X, y, model_name="Model", n_splits=100, test_size=0.3):
     cv = StratifiedShuffleSplit(n_splits=n_splits, test_size=test_size, random_state=42)
     param_combinations = list(ParameterGrid(param_grid))
     results = {str(params): [] for params in param_combinations}
@@ -6014,21 +5771,21 @@ def monte_carlo_cv(model_class, param_grid, X, y, model_name="Model", n_splits=1
             auc = roc_auc_score(y_val, y_scores)
             results[str(params)].append(auc)
 
-    # Computing mean and std ROC AUC for each combination
+    # Computing mean and std AUROC for each combination
     summary_data = [
-        {"Params": k, "Mean ROC AUC": np.mean(v), "Std ROC AUC": np.std(v)}
+        {"Params": k, "Mean AUROC": np.mean(v), "Std AUROC": np.std(v)}
         for k, v in results.items()
     ]
     summary_df = pd.DataFrame(summary_data)
-    summary_df = summary_df.sort_values(by="Mean ROC AUC", ascending=False).reset_index(drop=True)
+    summary_df = summary_df.sort_values(by="Mean AUROC", ascending=False).reset_index(drop=True)
 
-    # Showing the best parameters
+    # Showing the best hyperparameter combination
     best_row = summary_df.iloc[0]
     best_params = eval(best_row["Params"])
-    print(f"Best {model_name} params: {best_row['Params']} with ROC AUC: {best_row['Mean ROC AUC']:.3f}")
+    print(f"Best {model_name} params: {best_row['Params']} with AUROC: {best_row['Mean AUROC']:.3f}")
     
-    # Optional: Display top combinations
-    print("\nTop Hyperparameter Combinations Ranked by Mean ROC AUC:")
+    # Displaying top hyperparameter combinations
+    print("\nTop Hyperparameter Combinations Ranked by Mean AUROC:")
     display(summary_df)
 
     return best_params, summary_df
@@ -6046,7 +5803,7 @@ def evaluate_supervised_outlier_detection_model(model, X, y_true, name, top_n=No
     
     roc_auc = roc_auc_score(y_true, y_scores)
     
-    # Precision at N (N = number of actual outliers)
+    # Computing Precision at N (N = number of actual outliers)
     if top_n is None:
         top_n = y_true.sum()
     top_n_pred = np.argsort(y_scores)[-top_n:]
@@ -6054,18 +5811,63 @@ def evaluate_supervised_outlier_detection_model(model, X, y_true, name, top_n=No
     y_pred_top_n[top_n_pred] = 1
     precision_at_n = precision_score(y_true, y_pred_top_n)
     
-    # Threshold-based F1-score (e.g., 95th percentile cutoff)
-    threshold = np.percentile(y_scores, 95)
+    # Computing Threshold-based F1-score using a 70th percentile cutoff
+    threshold = np.percentile(y_scores, 70)
     y_pred_f1 = (y_scores >= threshold).astype(int)
     f1 = f1_score(y_true, y_pred_f1)
 
     print("-" * 40)
     print(f" {name}")
-    print(f"  ROC AUC       : {roc_auc:.3f}")
+    print(f"  AUROC       : {roc_auc:.3f}")
     print(f"  Precision@N   : {precision_at_n:.3f}")
     print(f"  F1-score      : {f1:.3f}")
     print("-" * 40)
     
+```
+
+
+```python
+##################################
+# Creating a function for performing
+# hyperparameter tuning using Monte Carlo cross-validation 
+# for categorical outlier detection without ground truth
+##################################
+def run_monte_carlo_cv_unsupervised_outlier_detection_model(model_class, param_grid, X, model_name="Model", n_splits=100, test_size=0.3):
+    cv = StratifiedShuffleSplit(n_splits=n_splits, test_size=test_size, random_state=42)
+    param_combinations = list(ParameterGrid(param_grid))
+    results = {str(params): [] for params in param_combinations}
+
+    for train_idx, test_idx in cv.split(X, np.zeros(len(X))):  # using dummy y for stratification
+        X_train, X_val = X.iloc[train_idx].values, X.iloc[test_idx].values
+
+        for params in param_combinations:
+            model = model_class(**params)
+            model.fit(X_train)
+            scores = model.decision_function(X_val)
+            try:
+                sil_score = silhouette_on_scores(scores)
+                results[str(params)].append(sil_score)
+            except:
+                continue  # Skipping if silhouette fails (e.g., degenerate clusters)
+
+    # Computing mean and std Silhouette Scores for each combination
+    summary_data = [
+        {"Params": k, "Mean Silhouette": np.mean(v), "Std Silhouette": np.std(v)}
+        for k, v in results.items() if v
+    ]
+    summary_df = pd.DataFrame(summary_data)
+    summary_df = summary_df.sort_values(by="Mean Silhouette", ascending=False).reset_index(drop=True)
+
+    # Showing the best hyperparameter combination
+    best_row = summary_df.iloc[0]
+    best_params = eval(best_row["Params"])
+    print(f"Best {model_name} params: {best_row['Params']} with Silhouette: {best_row['Mean Silhouette']:.3f}")
+    
+    # Displaying top hyperparameter combinations
+    print("\nTop Hyperparameter Combinations Ranked by Mean Silhouette Score:")
+    display(summary_df)
+
+    return best_params, summary_df
 ```
 
 
@@ -6096,9 +5898,7 @@ def evaluate_unsupervised_outlier_detection_model(scores, name):
     print(f"  Score Silhouette  : {ss:.3f}")
     print(f"  Score Variance    : {sv:.3f}")
     print("-" * 40)
-    
-    return {"Method": name, "Entropy": se, "Silhouette": ss, "Variance": sv}
-    
+        
 ```
 
 
@@ -6106,28 +5906,42 @@ def evaluate_unsupervised_outlier_detection_model(scores, name):
 ##################################
 # Creating a function for visualizing outlier scores
 # for categorical outlier detection without ground truth
+# Using PCA (Principal Component Analysis)
 ##################################
-def visualize_unsupervised_outlier_detection_model(X_encoded, scores, method_name):
-    X_2d = TSNE(n_components=2, perplexity=30, random_state=42).fit_transform(X_encoded)
+def pca_visualize_unsupervised_outlier_detection_model(X_train, X_val, train_scores, val_scores, method_name):
+    # Implemeting PCA from the training data
+    pca = PCA(n_components=2)
+    X_train_2d = pca.fit_transform(X_train)
+    X_val_2d = pca.transform(X_val)
+
+    # Plotting PCA of the validation data based on the computations made from training data
     plt.figure(figsize=(7, 5))
-    plt.title(f"{method_name} : t-SNE with Outlier Scores")
-    plt.scatter(X_2d[:, 0], X_2d[:, 1], c=scores, cmap='coolwarm', s=30)
+    plt.title(f"{method_name} : PCA on Outlier Scores")
+    plt.scatter(X_val_2d[:, 0], X_val_2d[:, 1], c=-val_scores, cmap='coolwarm', s=30)
     plt.colorbar(label="Outlier Score")
     plt.show()
 
-class DummyModel:
-    def __init__(self, scores): self.decision_scores_ = scores
-    
 ```
 
 
 ```python
 ##################################
-# Creating a container for consolidating the results
+# Creating a function for visualizing outlier scores
 # for categorical outlier detection without ground truth
+# using UMAP (Uniform Manifold Approximation and Projection)
 ##################################
-unsupervised_results = []
+def umap_visualize_unsupervised_outlier_detection_model(X_train, X_val, train_scores, val_scores, method_name):
+    # Implemeting UMAP from the training data
+    reducer = umap.UMAP(n_components=2)
+    X_train_2d = reducer.fit_transform(X_train)
+    X_val_2d = reducer.transform(X_val)
 
+    # Plotting UMAP of the validation data based on the computations made from training data
+    plt.figure(figsize=(7, 5))
+    plt.title(f"{method_name} : UMAP on Outlier Scores")
+    plt.scatter(X_val_2d[:, 0], X_val_2d[:, 1], c=-val_scores, cmap='coolwarm', s=30)
+    plt.colorbar(label="Outlier Score")
+    plt.show()
 ```
 
 ## 1.7. Model Development With Synthetic Ground Truth Labels <a class="anchor" id="1.7"></a>
@@ -6144,7 +5958,7 @@ iforest_grid = {
     "n_estimators": [100, 200],
     "max_samples": [0.5, 0.8, 1.0],
     "max_features": [0.5, 0.8, 1.0],
-    "contamination": [0.30],
+    "contamination": [0.10],
     "random_state": [42]
 }
 
@@ -6158,14 +5972,14 @@ iforest_grid = {
 # and identifying the optimal hyperparamter combination
 # based on Isolation Forest 
 ##################################
-best_iforest_params, iforest_results_df = monte_carlo_cv(IForest, iforest_grid, X_train, y_train, model_name="Isolation Forest")
-model_iforest = IForest(**best_iforest_params)
+best_supervised_model_iforest_params, supervised_model_iforest_results_df = run_monte_carlo_cv_supervised_outlier_detection_model(IForest, iforest_grid, X_train, y_train, model_name="Isolation Forest")
+supervised_model_iforest = IForest(**best_supervised_model_iforest_params)
 
 ```
 
-    Best Isolation Forest params: {'contamination': 0.3, 'max_features': 0.8, 'max_samples': 1.0, 'n_estimators': 100, 'random_state': 42} with ROC AUC: 0.922
+    Best Isolation Forest params: {'contamination': 0.1, 'max_features': 0.8, 'max_samples': 1.0, 'n_estimators': 200, 'random_state': 42} with AUROC: 0.986
     
-    Top Hyperparameter Combinations Ranked by Mean ROC AUC:
+    Top Hyperparameter Combinations Ranked by Mean AUROC:
     
 
 
@@ -6188,118 +6002,118 @@ model_iforest = IForest(**best_iforest_params)
     <tr style="text-align: right;">
       <th></th>
       <th>Params</th>
-      <th>Mean ROC AUC</th>
-      <th>Std ROC AUC</th>
+      <th>Mean AUROC</th>
+      <th>Std AUROC</th>
     </tr>
   </thead>
   <tbody>
     <tr>
       <th>0</th>
-      <td>{'contamination': 0.3, 'max_features': 0.8, 'm...</td>
-      <td>0.921548</td>
-      <td>0.025573</td>
+      <td>{'contamination': 0.1, 'max_features': 0.8, 'm...</td>
+      <td>0.985740</td>
+      <td>0.011769</td>
     </tr>
     <tr>
       <th>1</th>
-      <td>{'contamination': 0.3, 'max_features': 0.8, 'm...</td>
-      <td>0.921524</td>
-      <td>0.025355</td>
+      <td>{'contamination': 0.1, 'max_features': 0.8, 'm...</td>
+      <td>0.985195</td>
+      <td>0.012224</td>
     </tr>
     <tr>
       <th>2</th>
-      <td>{'contamination': 0.3, 'max_features': 1.0, 'm...</td>
-      <td>0.918976</td>
-      <td>0.025173</td>
+      <td>{'contamination': 0.1, 'max_features': 0.5, 'm...</td>
+      <td>0.985065</td>
+      <td>0.013061</td>
     </tr>
     <tr>
       <th>3</th>
-      <td>{'contamination': 0.3, 'max_features': 1.0, 'm...</td>
-      <td>0.918179</td>
-      <td>0.024805</td>
+      <td>{'contamination': 0.1, 'max_features': 0.5, 'm...</td>
+      <td>0.984701</td>
+      <td>0.013386</td>
     </tr>
     <tr>
       <th>4</th>
-      <td>{'contamination': 0.3, 'max_features': 0.8, 'm...</td>
-      <td>0.917726</td>
-      <td>0.026283</td>
+      <td>{'contamination': 0.1, 'max_features': 0.8, 'm...</td>
+      <td>0.984545</td>
+      <td>0.012588</td>
     </tr>
     <tr>
       <th>5</th>
-      <td>{'contamination': 0.3, 'max_features': 0.8, 'm...</td>
-      <td>0.915905</td>
-      <td>0.026157</td>
+      <td>{'contamination': 0.1, 'max_features': 0.8, 'm...</td>
+      <td>0.983792</td>
+      <td>0.012693</td>
     </tr>
     <tr>
       <th>6</th>
-      <td>{'contamination': 0.3, 'max_features': 1.0, 'm...</td>
-      <td>0.914905</td>
-      <td>0.026863</td>
+      <td>{'contamination': 0.1, 'max_features': 0.5, 'm...</td>
+      <td>0.983610</td>
+      <td>0.014268</td>
     </tr>
     <tr>
       <th>7</th>
-      <td>{'contamination': 0.3, 'max_features': 1.0, 'm...</td>
-      <td>0.914143</td>
-      <td>0.026586</td>
+      <td>{'contamination': 0.1, 'max_features': 0.5, 'm...</td>
+      <td>0.983273</td>
+      <td>0.014200</td>
     </tr>
     <tr>
       <th>8</th>
-      <td>{'contamination': 0.3, 'max_features': 0.5, 'm...</td>
-      <td>0.907667</td>
-      <td>0.027839</td>
+      <td>{'contamination': 0.1, 'max_features': 0.5, 'm...</td>
+      <td>0.983169</td>
+      <td>0.014370</td>
     </tr>
     <tr>
       <th>9</th>
-      <td>{'contamination': 0.3, 'max_features': 0.8, 'm...</td>
-      <td>0.906464</td>
-      <td>0.030277</td>
+      <td>{'contamination': 0.1, 'max_features': 0.8, 'm...</td>
+      <td>0.982312</td>
+      <td>0.013684</td>
     </tr>
     <tr>
       <th>10</th>
-      <td>{'contamination': 0.3, 'max_features': 1.0, 'm...</td>
-      <td>0.906280</td>
-      <td>0.027601</td>
+      <td>{'contamination': 0.1, 'max_features': 0.8, 'm...</td>
+      <td>0.981351</td>
+      <td>0.013398</td>
     </tr>
     <tr>
       <th>11</th>
-      <td>{'contamination': 0.3, 'max_features': 0.8, 'm...</td>
-      <td>0.906274</td>
-      <td>0.029745</td>
+      <td>{'contamination': 0.1, 'max_features': 1.0, 'm...</td>
+      <td>0.981247</td>
+      <td>0.013708</td>
     </tr>
     <tr>
       <th>12</th>
-      <td>{'contamination': 0.3, 'max_features': 0.5, 'm...</td>
-      <td>0.905643</td>
-      <td>0.027871</td>
+      <td>{'contamination': 0.1, 'max_features': 0.5, 'm...</td>
+      <td>0.980675</td>
+      <td>0.015218</td>
     </tr>
     <tr>
       <th>13</th>
-      <td>{'contamination': 0.3, 'max_features': 1.0, 'm...</td>
-      <td>0.905167</td>
-      <td>0.028209</td>
+      <td>{'contamination': 0.1, 'max_features': 1.0, 'm...</td>
+      <td>0.979792</td>
+      <td>0.015583</td>
     </tr>
     <tr>
       <th>14</th>
-      <td>{'contamination': 0.3, 'max_features': 0.5, 'm...</td>
-      <td>0.903083</td>
-      <td>0.028588</td>
+      <td>{'contamination': 0.1, 'max_features': 1.0, 'm...</td>
+      <td>0.978312</td>
+      <td>0.017387</td>
     </tr>
     <tr>
       <th>15</th>
-      <td>{'contamination': 0.3, 'max_features': 0.5, 'm...</td>
-      <td>0.900857</td>
-      <td>0.029957</td>
+      <td>{'contamination': 0.1, 'max_features': 1.0, 'm...</td>
+      <td>0.978000</td>
+      <td>0.018496</td>
     </tr>
     <tr>
       <th>16</th>
-      <td>{'contamination': 0.3, 'max_features': 0.5, 'm...</td>
-      <td>0.892762</td>
-      <td>0.030862</td>
+      <td>{'contamination': 0.1, 'max_features': 1.0, 'm...</td>
+      <td>0.976078</td>
+      <td>0.017861</td>
     </tr>
     <tr>
       <th>17</th>
-      <td>{'contamination': 0.3, 'max_features': 0.5, 'm...</td>
-      <td>0.889595</td>
-      <td>0.031282</td>
+      <td>{'contamination': 0.1, 'max_features': 1.0, 'm...</td>
+      <td>0.975091</td>
+      <td>0.018918</td>
     </tr>
   </tbody>
 </table>
@@ -6313,17 +6127,17 @@ model_iforest = IForest(**best_iforest_params)
 # of the optimal Isolation Forest 
 # using the train data
 ##################################
-model_iforest.fit(X_train)
-model_iforest.decision_scores_ = model_iforest.decision_function(X_train.values)
-evaluate_supervised_outlier_detection_model(model_iforest, X_train, y_train, "Isolation Forest")
+supervised_model_iforest.fit(X_train)
+supervised_model_iforest.decision_scores_ = supervised_model_iforest.decision_function(X_train.values)
+evaluate_supervised_outlier_detection_model(supervised_model_iforest, X_train, y_train, "Supervised Outlier Detection Using Isolation Forest (Training Performance)")
 
 ```
 
     ----------------------------------------
-     Isolation Forest
-      ROC AUC       : 0.951
-      Precision@N   : 0.821
-      F1-score      : 0.282
+     Supervised Outlier Detection Using Isolation Forest (Training Performance)
+      AUROC       : 0.992
+      Precision@N   : 0.818
+      F1-score      : 0.524
     ----------------------------------------
     
 
@@ -6334,17 +6148,17 @@ evaluate_supervised_outlier_detection_model(model_iforest, X_train, y_train, "Is
 # of the optimal Isolation Forest 
 # using the validation data
 ##################################
-model_iforest.fit(X_train)
-model_iforest.decision_scores_ = model_iforest.decision_function(X_validation.values)
-evaluate_supervised_outlier_detection_model(model_iforest, X_validation, y_validation, "Isolation Forest")
+supervised_model_iforest.fit(X_train)
+supervised_model_iforest.decision_scores_ = supervised_model_iforest.decision_function(X_validation.values)
+evaluate_supervised_outlier_detection_model(supervised_model_iforest, X_validation, y_validation, "Supervised Outlier Detection Using Isolation Forest (Validation Performance)")
 
 ```
 
     ----------------------------------------
-     Isolation Forest
-      ROC AUC       : 0.896
-      Precision@N   : 0.739
-      F1-score      : 0.296
+     Supervised Outlier Detection Using Isolation Forest (Validation Performance)
+      AUROC       : 0.982
+      Precision@N   : 0.857
+      F1-score      : 0.500
     ----------------------------------------
     
 
@@ -6360,7 +6174,7 @@ cblof_grid = {
     "alpha": [0.9, 0.8],
     "n_clusters": [8, 12, 16],
     "beta": [5, 10, 15],
-    "contamination": [0.30],
+    "contamination": [0.10],
     "random_state": [42]
 }
 
@@ -6374,14 +6188,14 @@ cblof_grid = {
 # and identifying the optimal hyperparamter combination
 # based on Local Outlier Factor 
 ##################################
-best_cblof_params, cblof_results_df = monte_carlo_cv(CBLOF, cblof_grid, X_train, y_train, model_name="CBLOF")
-model_cblof = CBLOF(**best_cblof_params)
+best_supervised_model_cblof_params, supervised_model_cblof_results_df = run_monte_carlo_cv_supervised_outlier_detection_model(CBLOF, cblof_grid, X_train, y_train, model_name="CBLOF")
+supervised_model_cblof = CBLOF(**best_supervised_model_cblof_params)
 
 ```
 
-    Best CBLOF params: {'alpha': 0.9, 'beta': 10, 'contamination': 0.3, 'n_clusters': 16, 'random_state': 42} with ROC AUC: 0.933
+    Best CBLOF params: {'alpha': 0.9, 'beta': 5, 'contamination': 0.1, 'n_clusters': 8, 'random_state': 42} with AUROC: 0.971
     
-    Top Hyperparameter Combinations Ranked by Mean ROC AUC:
+    Top Hyperparameter Combinations Ranked by Mean AUROC:
     
 
 
@@ -6404,118 +6218,118 @@ model_cblof = CBLOF(**best_cblof_params)
     <tr style="text-align: right;">
       <th></th>
       <th>Params</th>
-      <th>Mean ROC AUC</th>
-      <th>Std ROC AUC</th>
+      <th>Mean AUROC</th>
+      <th>Std AUROC</th>
     </tr>
   </thead>
   <tbody>
     <tr>
       <th>0</th>
-      <td>{'alpha': 0.9, 'beta': 10, 'contamination': 0....</td>
-      <td>0.933494</td>
-      <td>0.028559</td>
+      <td>{'alpha': 0.9, 'beta': 5, 'contamination': 0.1...</td>
+      <td>0.971143</td>
+      <td>0.025175</td>
     </tr>
     <tr>
       <th>1</th>
-      <td>{'alpha': 0.9, 'beta': 5, 'contamination': 0.3...</td>
-      <td>0.933494</td>
-      <td>0.028559</td>
+      <td>{'alpha': 0.9, 'beta': 10, 'contamination': 0....</td>
+      <td>0.971143</td>
+      <td>0.025175</td>
     </tr>
     <tr>
       <th>2</th>
       <td>{'alpha': 0.9, 'beta': 15, 'contamination': 0....</td>
-      <td>0.933494</td>
-      <td>0.028559</td>
+      <td>0.971143</td>
+      <td>0.025175</td>
     </tr>
     <tr>
       <th>3</th>
-      <td>{'alpha': 0.9, 'beta': 5, 'contamination': 0.3...</td>
-      <td>0.925988</td>
-      <td>0.030373</td>
+      <td>{'alpha': 0.9, 'beta': 15, 'contamination': 0....</td>
+      <td>0.966662</td>
+      <td>0.028600</td>
     </tr>
     <tr>
       <th>4</th>
-      <td>{'alpha': 0.9, 'beta': 15, 'contamination': 0....</td>
-      <td>0.925988</td>
-      <td>0.030373</td>
+      <td>{'alpha': 0.9, 'beta': 10, 'contamination': 0....</td>
+      <td>0.966662</td>
+      <td>0.028600</td>
     </tr>
     <tr>
       <th>5</th>
-      <td>{'alpha': 0.9, 'beta': 10, 'contamination': 0....</td>
-      <td>0.925988</td>
-      <td>0.030373</td>
+      <td>{'alpha': 0.9, 'beta': 5, 'contamination': 0.1...</td>
+      <td>0.966260</td>
+      <td>0.028503</td>
     </tr>
     <tr>
       <th>6</th>
-      <td>{'alpha': 0.8, 'beta': 10, 'contamination': 0....</td>
-      <td>0.921214</td>
-      <td>0.029539</td>
+      <td>{'alpha': 0.8, 'beta': 5, 'contamination': 0.1...</td>
+      <td>0.963104</td>
+      <td>0.030046</td>
     </tr>
     <tr>
       <th>7</th>
-      <td>{'alpha': 0.8, 'beta': 15, 'contamination': 0....</td>
-      <td>0.921214</td>
-      <td>0.029539</td>
+      <td>{'alpha': 0.8, 'beta': 10, 'contamination': 0....</td>
+      <td>0.963104</td>
+      <td>0.030046</td>
     </tr>
     <tr>
       <th>8</th>
-      <td>{'alpha': 0.8, 'beta': 5, 'contamination': 0.3...</td>
-      <td>0.921214</td>
-      <td>0.029539</td>
+      <td>{'alpha': 0.8, 'beta': 15, 'contamination': 0....</td>
+      <td>0.963104</td>
+      <td>0.030046</td>
     </tr>
     <tr>
       <th>9</th>
-      <td>{'alpha': 0.9, 'beta': 5, 'contamination': 0.3...</td>
-      <td>0.919012</td>
-      <td>0.030480</td>
+      <td>{'alpha': 0.9, 'beta': 5, 'contamination': 0.1...</td>
+      <td>0.962805</td>
+      <td>0.028618</td>
     </tr>
     <tr>
       <th>10</th>
-      <td>{'alpha': 0.9, 'beta': 10, 'contamination': 0....</td>
-      <td>0.919012</td>
-      <td>0.030480</td>
+      <td>{'alpha': 0.9, 'beta': 15, 'contamination': 0....</td>
+      <td>0.962805</td>
+      <td>0.028618</td>
     </tr>
     <tr>
       <th>11</th>
-      <td>{'alpha': 0.9, 'beta': 15, 'contamination': 0....</td>
-      <td>0.919012</td>
-      <td>0.030480</td>
+      <td>{'alpha': 0.9, 'beta': 10, 'contamination': 0....</td>
+      <td>0.962805</td>
+      <td>0.028618</td>
     </tr>
     <tr>
       <th>12</th>
       <td>{'alpha': 0.8, 'beta': 15, 'contamination': 0....</td>
-      <td>0.914137</td>
-      <td>0.031178</td>
+      <td>0.957506</td>
+      <td>0.033477</td>
     </tr>
     <tr>
       <th>13</th>
-      <td>{'alpha': 0.8, 'beta': 5, 'contamination': 0.3...</td>
-      <td>0.914137</td>
-      <td>0.031178</td>
+      <td>{'alpha': 0.8, 'beta': 10, 'contamination': 0....</td>
+      <td>0.957506</td>
+      <td>0.033477</td>
     </tr>
     <tr>
       <th>14</th>
-      <td>{'alpha': 0.8, 'beta': 10, 'contamination': 0....</td>
-      <td>0.914137</td>
-      <td>0.031178</td>
+      <td>{'alpha': 0.8, 'beta': 5, 'contamination': 0.1...</td>
+      <td>0.957390</td>
+      <td>0.033472</td>
     </tr>
     <tr>
       <th>15</th>
-      <td>{'alpha': 0.8, 'beta': 5, 'contamination': 0.3...</td>
-      <td>0.907470</td>
-      <td>0.028361</td>
+      <td>{'alpha': 0.8, 'beta': 5, 'contamination': 0.1...</td>
+      <td>0.954805</td>
+      <td>0.034959</td>
     </tr>
     <tr>
       <th>16</th>
       <td>{'alpha': 0.8, 'beta': 10, 'contamination': 0....</td>
-      <td>0.907470</td>
-      <td>0.028361</td>
+      <td>0.954805</td>
+      <td>0.034959</td>
     </tr>
     <tr>
       <th>17</th>
       <td>{'alpha': 0.8, 'beta': 15, 'contamination': 0....</td>
-      <td>0.907470</td>
-      <td>0.028361</td>
+      <td>0.954805</td>
+      <td>0.034959</td>
     </tr>
   </tbody>
 </table>
@@ -6529,17 +6343,17 @@ model_cblof = CBLOF(**best_cblof_params)
 # of the optimal Local Outlier Factor 
 # using the train data
 ##################################
-model_cblof.fit(X_train)
-model_cblof.decision_scores_ = model_cblof.decision_function(X_train.values)
-evaluate_supervised_outlier_detection_model(model_cblof, X_train, y_train, "CBLOF")
+supervised_model_cblof.fit(X_train)
+supervised_model_cblof.decision_scores_ = supervised_model_cblof.decision_function(X_train.values)
+evaluate_supervised_outlier_detection_model(supervised_model_cblof, X_train, y_train, "Supervised Outlier Detection Using CBLOF (Training Performance)")
 
 ```
 
     ----------------------------------------
-     CBLOF
-      ROC AUC       : 0.918
-      Precision@N   : 0.791
-      F1-score      : 0.231
+     Supervised Outlier Detection Using CBLOF (Training Performance)
+      AUROC       : 0.985
+      Precision@N   : 0.773
+      F1-score      : 0.463
     ----------------------------------------
     
 
@@ -6550,17 +6364,17 @@ evaluate_supervised_outlier_detection_model(model_cblof, X_train, y_train, "CBLO
 # of the optimal Local Outlier Factor 
 # using the validation data
 ##################################
-model_cblof.fit(X_train)
-model_cblof.decision_scores_ = model_cblof.decision_function(X_validation.values)
-evaluate_supervised_outlier_detection_model(model_cblof, X_validation, y_validation, "CBLOF")
+supervised_model_cblof.fit(X_train)
+supervised_model_cblof.decision_scores_ = supervised_model_cblof.decision_function(X_validation.values)
+evaluate_supervised_outlier_detection_model(supervised_model_cblof, X_validation, y_validation, "Supervised Outlier Detection Using CBLOF (Validation Performance)")
 
 ```
 
     ----------------------------------------
-     CBLOF
-      ROC AUC       : 0.954
-      Precision@N   : 0.826
-      F1-score      : 0.296
+     Supervised Outlier Detection Using CBLOF (Validation Performance)
+      AUROC       : 0.965
+      Precision@N   : 0.571
+      F1-score      : 0.483
     ----------------------------------------
     
 
@@ -6576,7 +6390,7 @@ knn_grid = {
     "method": ["largest", "mean"],
     "n_neighbors": [5, 10, 15],
     "metric": ["minkowski", "euclidean", "manhattan"],
-    "contamination": [0.30]
+    "contamination": [0.10]
 }
 
 ```
@@ -6589,14 +6403,14 @@ knn_grid = {
 # and identifying the optimal hyperparamter combination
 # based on K-Nearest Neighbors Outlier Score
 ##################################
-best_knn_params, knn_results_df = monte_carlo_cv(KNN, knn_grid, X_train, y_train, model_name="KNN")
-model_knn = KNN(**best_knn_params)
+best_supervised_model_knn_params, supervised_model_knn_results_df = run_monte_carlo_cv_supervised_outlier_detection_model(KNN, knn_grid, X_train, y_train, model_name="KNN")
+supervised_model_knn = KNN(**best_supervised_model_knn_params)
 
 ```
 
-    Best KNN params: {'contamination': 0.3, 'method': 'mean', 'metric': 'euclidean', 'n_neighbors': 5} with ROC AUC: 0.955
+    Best KNN params: {'contamination': 0.1, 'method': 'mean', 'metric': 'minkowski', 'n_neighbors': 10} with AUROC: 0.994
     
-    Top Hyperparameter Combinations Ranked by Mean ROC AUC:
+    Top Hyperparameter Combinations Ranked by Mean AUROC:
     
 
 
@@ -6619,118 +6433,118 @@ model_knn = KNN(**best_knn_params)
     <tr style="text-align: right;">
       <th></th>
       <th>Params</th>
-      <th>Mean ROC AUC</th>
-      <th>Std ROC AUC</th>
+      <th>Mean AUROC</th>
+      <th>Std AUROC</th>
     </tr>
   </thead>
   <tbody>
     <tr>
       <th>0</th>
-      <td>{'contamination': 0.3, 'method': 'mean', 'metr...</td>
-      <td>0.955196</td>
-      <td>0.022237</td>
+      <td>{'contamination': 0.1, 'method': 'mean', 'metr...</td>
+      <td>0.994130</td>
+      <td>0.006216</td>
     </tr>
     <tr>
       <th>1</th>
-      <td>{'contamination': 0.3, 'method': 'mean', 'metr...</td>
-      <td>0.955196</td>
-      <td>0.022237</td>
+      <td>{'contamination': 0.1, 'method': 'mean', 'metr...</td>
+      <td>0.994130</td>
+      <td>0.006216</td>
     </tr>
     <tr>
       <th>2</th>
-      <td>{'contamination': 0.3, 'method': 'mean', 'metr...</td>
-      <td>0.943851</td>
-      <td>0.022956</td>
+      <td>{'contamination': 0.1, 'method': 'mean', 'metr...</td>
+      <td>0.994117</td>
+      <td>0.006213</td>
     </tr>
     <tr>
       <th>3</th>
-      <td>{'contamination': 0.3, 'method': 'mean', 'metr...</td>
-      <td>0.943738</td>
-      <td>0.020793</td>
+      <td>{'contamination': 0.1, 'method': 'mean', 'metr...</td>
+      <td>0.992182</td>
+      <td>0.008964</td>
     </tr>
     <tr>
       <th>4</th>
-      <td>{'contamination': 0.3, 'method': 'mean', 'metr...</td>
-      <td>0.943738</td>
-      <td>0.020793</td>
+      <td>{'contamination': 0.1, 'method': 'mean', 'metr...</td>
+      <td>0.992182</td>
+      <td>0.008964</td>
     </tr>
     <tr>
       <th>5</th>
-      <td>{'contamination': 0.3, 'method': 'mean', 'metr...</td>
-      <td>0.935262</td>
-      <td>0.022335</td>
+      <td>{'contamination': 0.1, 'method': 'mean', 'metr...</td>
+      <td>0.988662</td>
+      <td>0.011338</td>
     </tr>
     <tr>
       <th>6</th>
-      <td>{'contamination': 0.3, 'method': 'mean', 'metr...</td>
-      <td>0.935262</td>
-      <td>0.022335</td>
+      <td>{'contamination': 0.1, 'method': 'mean', 'metr...</td>
+      <td>0.987506</td>
+      <td>0.011271</td>
     </tr>
     <tr>
       <th>7</th>
-      <td>{'contamination': 0.3, 'method': 'mean', 'metr...</td>
-      <td>0.934351</td>
-      <td>0.021058</td>
+      <td>{'contamination': 0.1, 'method': 'mean', 'metr...</td>
+      <td>0.986870</td>
+      <td>0.011794</td>
     </tr>
     <tr>
       <th>8</th>
-      <td>{'contamination': 0.3, 'method': 'mean', 'metr...</td>
-      <td>0.925899</td>
-      <td>0.023090</td>
+      <td>{'contamination': 0.1, 'method': 'mean', 'metr...</td>
+      <td>0.986870</td>
+      <td>0.011794</td>
     </tr>
     <tr>
       <th>9</th>
-      <td>{'contamination': 0.3, 'method': 'largest', 'm...</td>
-      <td>0.910048</td>
-      <td>0.027892</td>
+      <td>{'contamination': 0.1, 'method': 'largest', 'm...</td>
+      <td>0.921584</td>
+      <td>0.041228</td>
     </tr>
     <tr>
       <th>10</th>
-      <td>{'contamination': 0.3, 'method': 'largest', 'm...</td>
-      <td>0.910048</td>
-      <td>0.027892</td>
+      <td>{'contamination': 0.1, 'method': 'largest', 'm...</td>
+      <td>0.921584</td>
+      <td>0.041228</td>
     </tr>
     <tr>
       <th>11</th>
-      <td>{'contamination': 0.3, 'method': 'largest', 'm...</td>
-      <td>0.910048</td>
-      <td>0.027892</td>
+      <td>{'contamination': 0.1, 'method': 'largest', 'm...</td>
+      <td>0.921584</td>
+      <td>0.041228</td>
     </tr>
     <tr>
       <th>12</th>
-      <td>{'contamination': 0.3, 'method': 'largest', 'm...</td>
-      <td>0.888018</td>
-      <td>0.028322</td>
+      <td>{'contamination': 0.1, 'method': 'largest', 'm...</td>
+      <td>0.918364</td>
+      <td>0.046519</td>
     </tr>
     <tr>
       <th>13</th>
-      <td>{'contamination': 0.3, 'method': 'largest', 'm...</td>
-      <td>0.888018</td>
-      <td>0.028322</td>
+      <td>{'contamination': 0.1, 'method': 'largest', 'm...</td>
+      <td>0.918364</td>
+      <td>0.046519</td>
     </tr>
     <tr>
       <th>14</th>
-      <td>{'contamination': 0.3, 'method': 'largest', 'm...</td>
-      <td>0.888018</td>
-      <td>0.028322</td>
+      <td>{'contamination': 0.1, 'method': 'largest', 'm...</td>
+      <td>0.918364</td>
+      <td>0.046519</td>
     </tr>
     <tr>
       <th>15</th>
-      <td>{'contamination': 0.3, 'method': 'largest', 'm...</td>
-      <td>0.876476</td>
-      <td>0.031751</td>
+      <td>{'contamination': 0.1, 'method': 'largest', 'm...</td>
+      <td>0.893351</td>
+      <td>0.031344</td>
     </tr>
     <tr>
       <th>16</th>
-      <td>{'contamination': 0.3, 'method': 'largest', 'm...</td>
-      <td>0.876476</td>
-      <td>0.031751</td>
+      <td>{'contamination': 0.1, 'method': 'largest', 'm...</td>
+      <td>0.893351</td>
+      <td>0.031344</td>
     </tr>
     <tr>
       <th>17</th>
-      <td>{'contamination': 0.3, 'method': 'largest', 'm...</td>
-      <td>0.876476</td>
-      <td>0.031751</td>
+      <td>{'contamination': 0.1, 'method': 'largest', 'm...</td>
+      <td>0.893351</td>
+      <td>0.031344</td>
     </tr>
   </tbody>
 </table>
@@ -6744,17 +6558,17 @@ model_knn = KNN(**best_knn_params)
 # of the optimal K-Nearest Neighbors Outlier Score 
 # using the train data
 ##################################
-model_knn.fit(X_train)
-model_knn.decision_scores_ = model_knn.decision_function(X_train.values)
-evaluate_supervised_outlier_detection_model(model_knn, X_train, y_train, "KNN")
+supervised_model_knn.fit(X_train)
+supervised_model_knn.decision_scores_ = supervised_model_knn.decision_function(X_train.values)
+evaluate_supervised_outlier_detection_model(supervised_model_knn, X_train, y_train, "Supervised Outlier Detection Using KNN (Training Performance)")
 
 ```
 
     ----------------------------------------
-     KNN
-      ROC AUC       : 0.967
-      Precision@N   : 0.806
-      F1-score      : 0.304
+     Supervised Outlier Detection Using KNN (Training Performance)
+      AUROC       : 0.994
+      Precision@N   : 0.864
+      F1-score      : 0.463
     ----------------------------------------
     
 
@@ -6765,17 +6579,17 @@ evaluate_supervised_outlier_detection_model(model_knn, X_train, y_train, "KNN")
 # of the optimal K-Nearest Neighbors Outlier Score
 # using the validation data
 ##################################
-model_knn.fit(X_train)
-model_knn.decision_scores_ = model_knn.decision_function(X_validation.values)
-evaluate_supervised_outlier_detection_model(model_knn, X_validation, y_validation, "KNN")
+supervised_model_knn.fit(X_train)
+supervised_model_knn.decision_scores_ = supervised_model_knn.decision_function(X_validation.values)
+evaluate_supervised_outlier_detection_model(supervised_model_knn, X_validation, y_validation, "Supervised Outlier Detection Using KNN (Validation Performance)")
 
 ```
 
     ----------------------------------------
-     KNN
-      ROC AUC       : 0.968
-      Precision@N   : 0.826
-      F1-score      : 0.296
+     Supervised Outlier Detection Using KNN (Validation Performance)
+      AUROC       : 0.994
+      Precision@N   : 1.000
+      F1-score      : 0.452
     ----------------------------------------
     
 
@@ -6791,7 +6605,7 @@ hbos_grid = {
     "alpha": [0.1, 0.2],
     "n_bins": [5, 10, 15],
     "tol": [0.25, 0.50, 0.75],
-    "contamination": [0.30]
+    "contamination": [0.10]
 }
 
 ```
@@ -6804,14 +6618,14 @@ hbos_grid = {
 # and identifying the optimal hyperparamter combination
 # based on Histogram-Based Outlier Score
 ##################################
-best_hbos_params, hbos_results_df = monte_carlo_cv(HBOS, hbos_grid, X_train, y_train, model_name="HBOS")
-model_hbos = HBOS(**best_hbos_params)
+best_supervised_model_hbos_params, supervised_model_hbos_results_df = run_monte_carlo_cv_supervised_outlier_detection_model(HBOS, hbos_grid, X_train, y_train, model_name="HBOS")
+supervised_model_hbos = HBOS(**best_supervised_model_hbos_params)
 
 ```
 
-    Best HBOS params: {'alpha': 0.1, 'contamination': 0.3, 'n_bins': 15, 'tol': 0.75} with ROC AUC: 0.815
+    Best HBOS params: {'alpha': 0.1, 'contamination': 0.1, 'n_bins': 10, 'tol': 0.5} with AUROC: 0.978
     
-    Top Hyperparameter Combinations Ranked by Mean ROC AUC:
+    Top Hyperparameter Combinations Ranked by Mean AUROC:
     
 
 
@@ -6834,118 +6648,118 @@ model_hbos = HBOS(**best_hbos_params)
     <tr style="text-align: right;">
       <th></th>
       <th>Params</th>
-      <th>Mean ROC AUC</th>
-      <th>Std ROC AUC</th>
+      <th>Mean AUROC</th>
+      <th>Std AUROC</th>
     </tr>
   </thead>
   <tbody>
     <tr>
       <th>0</th>
-      <td>{'alpha': 0.1, 'contamination': 0.3, 'n_bins':...</td>
-      <td>0.815375</td>
-      <td>0.041409</td>
+      <td>{'alpha': 0.1, 'contamination': 0.1, 'n_bins':...</td>
+      <td>0.978403</td>
+      <td>0.015647</td>
     </tr>
     <tr>
       <th>1</th>
-      <td>{'alpha': 0.1, 'contamination': 0.3, 'n_bins':...</td>
-      <td>0.815375</td>
-      <td>0.041409</td>
+      <td>{'alpha': 0.1, 'contamination': 0.1, 'n_bins':...</td>
+      <td>0.978403</td>
+      <td>0.015647</td>
     </tr>
     <tr>
       <th>2</th>
-      <td>{'alpha': 0.1, 'contamination': 0.3, 'n_bins':...</td>
-      <td>0.815375</td>
-      <td>0.041409</td>
+      <td>{'alpha': 0.1, 'contamination': 0.1, 'n_bins':...</td>
+      <td>0.978403</td>
+      <td>0.015647</td>
     </tr>
     <tr>
       <th>3</th>
-      <td>{'alpha': 0.1, 'contamination': 0.3, 'n_bins':...</td>
-      <td>0.815298</td>
-      <td>0.041490</td>
+      <td>{'alpha': 0.1, 'contamination': 0.1, 'n_bins':...</td>
+      <td>0.978338</td>
+      <td>0.015646</td>
     </tr>
     <tr>
       <th>4</th>
-      <td>{'alpha': 0.1, 'contamination': 0.3, 'n_bins':...</td>
-      <td>0.815298</td>
-      <td>0.041490</td>
+      <td>{'alpha': 0.1, 'contamination': 0.1, 'n_bins':...</td>
+      <td>0.978338</td>
+      <td>0.015646</td>
     </tr>
     <tr>
       <th>5</th>
-      <td>{'alpha': 0.1, 'contamination': 0.3, 'n_bins':...</td>
-      <td>0.815298</td>
-      <td>0.041490</td>
+      <td>{'alpha': 0.1, 'contamination': 0.1, 'n_bins':...</td>
+      <td>0.978338</td>
+      <td>0.015646</td>
     </tr>
     <tr>
       <th>6</th>
-      <td>{'alpha': 0.2, 'contamination': 0.3, 'n_bins':...</td>
-      <td>0.815065</td>
-      <td>0.041436</td>
+      <td>{'alpha': 0.2, 'contamination': 0.1, 'n_bins':...</td>
+      <td>0.978299</td>
+      <td>0.015657</td>
     </tr>
     <tr>
       <th>7</th>
-      <td>{'alpha': 0.2, 'contamination': 0.3, 'n_bins':...</td>
-      <td>0.815065</td>
-      <td>0.041436</td>
+      <td>{'alpha': 0.2, 'contamination': 0.1, 'n_bins':...</td>
+      <td>0.978299</td>
+      <td>0.015657</td>
     </tr>
     <tr>
       <th>8</th>
-      <td>{'alpha': 0.2, 'contamination': 0.3, 'n_bins':...</td>
-      <td>0.815065</td>
-      <td>0.041436</td>
+      <td>{'alpha': 0.2, 'contamination': 0.1, 'n_bins':...</td>
+      <td>0.978299</td>
+      <td>0.015657</td>
     </tr>
     <tr>
       <th>9</th>
-      <td>{'alpha': 0.2, 'contamination': 0.3, 'n_bins':...</td>
-      <td>0.814857</td>
-      <td>0.041273</td>
+      <td>{'alpha': 0.2, 'contamination': 0.1, 'n_bins':...</td>
+      <td>0.978221</td>
+      <td>0.015617</td>
     </tr>
     <tr>
       <th>10</th>
-      <td>{'alpha': 0.2, 'contamination': 0.3, 'n_bins':...</td>
-      <td>0.814857</td>
-      <td>0.041273</td>
+      <td>{'alpha': 0.2, 'contamination': 0.1, 'n_bins':...</td>
+      <td>0.978221</td>
+      <td>0.015617</td>
     </tr>
     <tr>
       <th>11</th>
-      <td>{'alpha': 0.2, 'contamination': 0.3, 'n_bins':...</td>
-      <td>0.814857</td>
-      <td>0.041273</td>
+      <td>{'alpha': 0.2, 'contamination': 0.1, 'n_bins':...</td>
+      <td>0.978221</td>
+      <td>0.015617</td>
     </tr>
     <tr>
       <th>12</th>
-      <td>{'alpha': 0.1, 'contamination': 0.3, 'n_bins':...</td>
-      <td>0.814833</td>
-      <td>0.041295</td>
+      <td>{'alpha': 0.1, 'contamination': 0.1, 'n_bins':...</td>
+      <td>0.978143</td>
+      <td>0.015645</td>
     </tr>
     <tr>
       <th>13</th>
-      <td>{'alpha': 0.1, 'contamination': 0.3, 'n_bins':...</td>
-      <td>0.814833</td>
-      <td>0.041295</td>
+      <td>{'alpha': 0.1, 'contamination': 0.1, 'n_bins':...</td>
+      <td>0.978143</td>
+      <td>0.015645</td>
     </tr>
     <tr>
       <th>14</th>
-      <td>{'alpha': 0.1, 'contamination': 0.3, 'n_bins':...</td>
-      <td>0.814833</td>
-      <td>0.041295</td>
+      <td>{'alpha': 0.1, 'contamination': 0.1, 'n_bins':...</td>
+      <td>0.978143</td>
+      <td>0.015645</td>
     </tr>
     <tr>
       <th>15</th>
-      <td>{'alpha': 0.2, 'contamination': 0.3, 'n_bins':...</td>
-      <td>0.814208</td>
-      <td>0.041381</td>
+      <td>{'alpha': 0.2, 'contamination': 0.1, 'n_bins':...</td>
+      <td>0.977390</td>
+      <td>0.015677</td>
     </tr>
     <tr>
       <th>16</th>
-      <td>{'alpha': 0.2, 'contamination': 0.3, 'n_bins':...</td>
-      <td>0.814208</td>
-      <td>0.041381</td>
+      <td>{'alpha': 0.2, 'contamination': 0.1, 'n_bins':...</td>
+      <td>0.977390</td>
+      <td>0.015677</td>
     </tr>
     <tr>
       <th>17</th>
-      <td>{'alpha': 0.2, 'contamination': 0.3, 'n_bins':...</td>
-      <td>0.814208</td>
-      <td>0.041381</td>
+      <td>{'alpha': 0.2, 'contamination': 0.1, 'n_bins':...</td>
+      <td>0.977390</td>
+      <td>0.015677</td>
     </tr>
   </tbody>
 </table>
@@ -6959,17 +6773,17 @@ model_hbos = HBOS(**best_hbos_params)
 # of the optimal Histogram-Based Outlier Score
 # using the train data
 ##################################
-model_hbos.fit(X_train)
-model_hbos.decision_scores_ = model_hbos.decision_function(X_train.values)
-evaluate_supervised_outlier_detection_model(model_hbos, X_train, y_train, "HBOS")
+supervised_model_hbos.fit(X_train)
+supervised_model_hbos.decision_scores_ = supervised_model_hbos.decision_function(X_train.values)
+evaluate_supervised_outlier_detection_model(supervised_model_hbos, X_train, y_train, "Supervised Outlier Detection Using HBOS (Training Performance)")
 
 ```
 
     ----------------------------------------
-     HBOS
-      ROC AUC       : 0.810
-      Precision@N   : 0.582
-      F1-score      : 0.128
+     Supervised Outlier Detection Using HBOS (Training Performance)
+      AUROC       : 0.981
+      Precision@N   : 0.864
+      F1-score      : 0.530
     ----------------------------------------
     
 
@@ -6980,17 +6794,17 @@ evaluate_supervised_outlier_detection_model(model_hbos, X_train, y_train, "HBOS"
 # of the optimal Histogram-Based Outlier Score
 # using the validation data
 ##################################
-model_hbos.fit(X_train)
-model_hbos.decision_scores_ = model_hbos.decision_function(X_validation.values)
-evaluate_supervised_outlier_detection_model(model_hbos, X_validation, y_validation, "HBOS")
+supervised_model_hbos.fit(X_train)
+supervised_model_hbos.decision_scores_ = supervised_model_hbos.decision_function(X_validation.values)
+evaluate_supervised_outlier_detection_model(supervised_model_hbos, X_validation, y_validation, "Supervised Outlier Detection Using HBOS (Validation Performance)")
 
 ```
 
     ----------------------------------------
-     HBOS
-      ROC AUC       : 0.757
-      Precision@N   : 0.522
-      F1-score      : 0.148
+     Supervised Outlier Detection Using HBOS (Validation Performance)
+      AUROC       : 0.959
+      Precision@N   : 0.714
+      F1-score      : 0.500
     ----------------------------------------
     
 
@@ -7001,605 +6815,410 @@ evaluate_supervised_outlier_detection_model(model_hbos, X_validation, y_validati
 
 ```python
 ##################################
-# Formulating an unsupervised learning model
+# Formulating a hyperparameter tuning grid
 # based on Isolation Forest 
 ##################################
-model_if = IsolationForest(random_state=42)
-model_if.fit(X_train)
+iforest_grid = {
+    "n_estimators": [100, 200],
+    "max_samples": [0.5, 0.8, 1.0],
+    "max_features": [0.5, 0.8, 1.0],
+    "contamination": [0.10],
+    "random_state": [42]
+}
+
 ```
 
 
-
-
-<style>#sk-container-id-1 {
-  /* Definition of color scheme common for light and dark mode */
-  --sklearn-color-text: #000;
-  --sklearn-color-text-muted: #666;
-  --sklearn-color-line: gray;
-  /* Definition of color scheme for unfitted estimators */
-  --sklearn-color-unfitted-level-0: #fff5e6;
-  --sklearn-color-unfitted-level-1: #f6e4d2;
-  --sklearn-color-unfitted-level-2: #ffe0b3;
-  --sklearn-color-unfitted-level-3: chocolate;
-  /* Definition of color scheme for fitted estimators */
-  --sklearn-color-fitted-level-0: #f0f8ff;
-  --sklearn-color-fitted-level-1: #d4ebff;
-  --sklearn-color-fitted-level-2: #b3dbfd;
-  --sklearn-color-fitted-level-3: cornflowerblue;
-
-  /* Specific color for light theme */
-  --sklearn-color-text-on-default-background: var(--sg-text-color, var(--theme-code-foreground, var(--jp-content-font-color1, black)));
-  --sklearn-color-background: var(--sg-background-color, var(--theme-background, var(--jp-layout-color0, white)));
-  --sklearn-color-border-box: var(--sg-text-color, var(--theme-code-foreground, var(--jp-content-font-color1, black)));
-  --sklearn-color-icon: #696969;
-
-  @media (prefers-color-scheme: dark) {
-    /* Redefinition of color scheme for dark theme */
-    --sklearn-color-text-on-default-background: var(--sg-text-color, var(--theme-code-foreground, var(--jp-content-font-color1, white)));
-    --sklearn-color-background: var(--sg-background-color, var(--theme-background, var(--jp-layout-color0, #111)));
-    --sklearn-color-border-box: var(--sg-text-color, var(--theme-code-foreground, var(--jp-content-font-color1, white)));
-    --sklearn-color-icon: #878787;
-  }
-}
-
-#sk-container-id-1 {
-  color: var(--sklearn-color-text);
-}
-
-#sk-container-id-1 pre {
-  padding: 0;
-}
-
-#sk-container-id-1 input.sk-hidden--visually {
-  border: 0;
-  clip: rect(1px 1px 1px 1px);
-  clip: rect(1px, 1px, 1px, 1px);
-  height: 1px;
-  margin: -1px;
-  overflow: hidden;
-  padding: 0;
-  position: absolute;
-  width: 1px;
-}
-
-#sk-container-id-1 div.sk-dashed-wrapped {
-  border: 1px dashed var(--sklearn-color-line);
-  margin: 0 0.4em 0.5em 0.4em;
-  box-sizing: border-box;
-  padding-bottom: 0.4em;
-  background-color: var(--sklearn-color-background);
-}
-
-#sk-container-id-1 div.sk-container {
-  /* jupyter's `normalize.less` sets `[hidden] { display: none; }`
-     but bootstrap.min.css set `[hidden] { display: none !important; }`
-     so we also need the `!important` here to be able to override the
-     default hidden behavior on the sphinx rendered scikit-learn.org.
-     See: https://github.com/scikit-learn/scikit-learn/issues/21755 */
-  display: inline-block !important;
-  position: relative;
-}
-
-#sk-container-id-1 div.sk-text-repr-fallback {
-  display: none;
-}
-
-div.sk-parallel-item,
-div.sk-serial,
-div.sk-item {
-  /* draw centered vertical line to link estimators */
-  background-image: linear-gradient(var(--sklearn-color-text-on-default-background), var(--sklearn-color-text-on-default-background));
-  background-size: 2px 100%;
-  background-repeat: no-repeat;
-  background-position: center center;
-}
-
-/* Parallel-specific style estimator block */
-
-#sk-container-id-1 div.sk-parallel-item::after {
-  content: "";
-  width: 100%;
-  border-bottom: 2px solid var(--sklearn-color-text-on-default-background);
-  flex-grow: 1;
-}
-
-#sk-container-id-1 div.sk-parallel {
-  display: flex;
-  align-items: stretch;
-  justify-content: center;
-  background-color: var(--sklearn-color-background);
-  position: relative;
-}
-
-#sk-container-id-1 div.sk-parallel-item {
-  display: flex;
-  flex-direction: column;
-}
-
-#sk-container-id-1 div.sk-parallel-item:first-child::after {
-  align-self: flex-end;
-  width: 50%;
-}
-
-#sk-container-id-1 div.sk-parallel-item:last-child::after {
-  align-self: flex-start;
-  width: 50%;
-}
-
-#sk-container-id-1 div.sk-parallel-item:only-child::after {
-  width: 0;
-}
-
-/* Serial-specific style estimator block */
-
-#sk-container-id-1 div.sk-serial {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  background-color: var(--sklearn-color-background);
-  padding-right: 1em;
-  padding-left: 1em;
-}
-
-
-/* Toggleable style: style used for estimator/Pipeline/ColumnTransformer box that is
-clickable and can be expanded/collapsed.
-- Pipeline and ColumnTransformer use this feature and define the default style
-- Estimators will overwrite some part of the style using the `sk-estimator` class
-*/
-
-/* Pipeline and ColumnTransformer style (default) */
-
-#sk-container-id-1 div.sk-toggleable {
-  /* Default theme specific background. It is overwritten whether we have a
-  specific estimator or a Pipeline/ColumnTransformer */
-  background-color: var(--sklearn-color-background);
-}
-
-/* Toggleable label */
-#sk-container-id-1 label.sk-toggleable__label {
-  cursor: pointer;
-  display: flex;
-  width: 100%;
-  margin-bottom: 0;
-  padding: 0.5em;
-  box-sizing: border-box;
-  text-align: center;
-  align-items: start;
-  justify-content: space-between;
-  gap: 0.5em;
-}
-
-#sk-container-id-1 label.sk-toggleable__label .caption {
-  font-size: 0.6rem;
-  font-weight: lighter;
-  color: var(--sklearn-color-text-muted);
-}
-
-#sk-container-id-1 label.sk-toggleable__label-arrow:before {
-  /* Arrow on the left of the label */
-  content: "▸";
-  float: left;
-  margin-right: 0.25em;
-  color: var(--sklearn-color-icon);
-}
-
-#sk-container-id-1 label.sk-toggleable__label-arrow:hover:before {
-  color: var(--sklearn-color-text);
-}
-
-/* Toggleable content - dropdown */
-
-#sk-container-id-1 div.sk-toggleable__content {
-  max-height: 0;
-  max-width: 0;
-  overflow: hidden;
-  text-align: left;
-  /* unfitted */
-  background-color: var(--sklearn-color-unfitted-level-0);
-}
-
-#sk-container-id-1 div.sk-toggleable__content.fitted {
-  /* fitted */
-  background-color: var(--sklearn-color-fitted-level-0);
-}
-
-#sk-container-id-1 div.sk-toggleable__content pre {
-  margin: 0.2em;
-  border-radius: 0.25em;
-  color: var(--sklearn-color-text);
-  /* unfitted */
-  background-color: var(--sklearn-color-unfitted-level-0);
-}
-
-#sk-container-id-1 div.sk-toggleable__content.fitted pre {
-  /* unfitted */
-  background-color: var(--sklearn-color-fitted-level-0);
-}
-
-#sk-container-id-1 input.sk-toggleable__control:checked~div.sk-toggleable__content {
-  /* Expand drop-down */
-  max-height: 200px;
-  max-width: 100%;
-  overflow: auto;
-}
-
-#sk-container-id-1 input.sk-toggleable__control:checked~label.sk-toggleable__label-arrow:before {
-  content: "▾";
-}
-
-/* Pipeline/ColumnTransformer-specific style */
-
-#sk-container-id-1 div.sk-label input.sk-toggleable__control:checked~label.sk-toggleable__label {
-  color: var(--sklearn-color-text);
-  background-color: var(--sklearn-color-unfitted-level-2);
-}
-
-#sk-container-id-1 div.sk-label.fitted input.sk-toggleable__control:checked~label.sk-toggleable__label {
-  background-color: var(--sklearn-color-fitted-level-2);
-}
-
-/* Estimator-specific style */
-
-/* Colorize estimator box */
-#sk-container-id-1 div.sk-estimator input.sk-toggleable__control:checked~label.sk-toggleable__label {
-  /* unfitted */
-  background-color: var(--sklearn-color-unfitted-level-2);
-}
-
-#sk-container-id-1 div.sk-estimator.fitted input.sk-toggleable__control:checked~label.sk-toggleable__label {
-  /* fitted */
-  background-color: var(--sklearn-color-fitted-level-2);
-}
-
-#sk-container-id-1 div.sk-label label.sk-toggleable__label,
-#sk-container-id-1 div.sk-label label {
-  /* The background is the default theme color */
-  color: var(--sklearn-color-text-on-default-background);
-}
-
-/* On hover, darken the color of the background */
-#sk-container-id-1 div.sk-label:hover label.sk-toggleable__label {
-  color: var(--sklearn-color-text);
-  background-color: var(--sklearn-color-unfitted-level-2);
-}
-
-/* Label box, darken color on hover, fitted */
-#sk-container-id-1 div.sk-label.fitted:hover label.sk-toggleable__label.fitted {
-  color: var(--sklearn-color-text);
-  background-color: var(--sklearn-color-fitted-level-2);
-}
-
-/* Estimator label */
-
-#sk-container-id-1 div.sk-label label {
-  font-family: monospace;
-  font-weight: bold;
-  display: inline-block;
-  line-height: 1.2em;
-}
-
-#sk-container-id-1 div.sk-label-container {
-  text-align: center;
-}
-
-/* Estimator-specific */
-#sk-container-id-1 div.sk-estimator {
-  font-family: monospace;
-  border: 1px dotted var(--sklearn-color-border-box);
-  border-radius: 0.25em;
-  box-sizing: border-box;
-  margin-bottom: 0.5em;
-  /* unfitted */
-  background-color: var(--sklearn-color-unfitted-level-0);
-}
-
-#sk-container-id-1 div.sk-estimator.fitted {
-  /* fitted */
-  background-color: var(--sklearn-color-fitted-level-0);
-}
-
-/* on hover */
-#sk-container-id-1 div.sk-estimator:hover {
-  /* unfitted */
-  background-color: var(--sklearn-color-unfitted-level-2);
-}
-
-#sk-container-id-1 div.sk-estimator.fitted:hover {
-  /* fitted */
-  background-color: var(--sklearn-color-fitted-level-2);
-}
-
-/* Specification for estimator info (e.g. "i" and "?") */
-
-/* Common style for "i" and "?" */
-
-.sk-estimator-doc-link,
-a:link.sk-estimator-doc-link,
-a:visited.sk-estimator-doc-link {
-  float: right;
-  font-size: smaller;
-  line-height: 1em;
-  font-family: monospace;
-  background-color: var(--sklearn-color-background);
-  border-radius: 1em;
-  height: 1em;
-  width: 1em;
-  text-decoration: none !important;
-  margin-left: 0.5em;
-  text-align: center;
-  /* unfitted */
-  border: var(--sklearn-color-unfitted-level-1) 1pt solid;
-  color: var(--sklearn-color-unfitted-level-1);
-}
-
-.sk-estimator-doc-link.fitted,
-a:link.sk-estimator-doc-link.fitted,
-a:visited.sk-estimator-doc-link.fitted {
-  /* fitted */
-  border: var(--sklearn-color-fitted-level-1) 1pt solid;
-  color: var(--sklearn-color-fitted-level-1);
-}
-
-/* On hover */
-div.sk-estimator:hover .sk-estimator-doc-link:hover,
-.sk-estimator-doc-link:hover,
-div.sk-label-container:hover .sk-estimator-doc-link:hover,
-.sk-estimator-doc-link:hover {
-  /* unfitted */
-  background-color: var(--sklearn-color-unfitted-level-3);
-  color: var(--sklearn-color-background);
-  text-decoration: none;
-}
-
-div.sk-estimator.fitted:hover .sk-estimator-doc-link.fitted:hover,
-.sk-estimator-doc-link.fitted:hover,
-div.sk-label-container:hover .sk-estimator-doc-link.fitted:hover,
-.sk-estimator-doc-link.fitted:hover {
-  /* fitted */
-  background-color: var(--sklearn-color-fitted-level-3);
-  color: var(--sklearn-color-background);
-  text-decoration: none;
-}
-
-/* Span, style for the box shown on hovering the info icon */
-.sk-estimator-doc-link span {
-  display: none;
-  z-index: 9999;
-  position: relative;
-  font-weight: normal;
-  right: .2ex;
-  padding: .5ex;
-  margin: .5ex;
-  width: min-content;
-  min-width: 20ex;
-  max-width: 50ex;
-  color: var(--sklearn-color-text);
-  box-shadow: 2pt 2pt 4pt #999;
-  /* unfitted */
-  background: var(--sklearn-color-unfitted-level-0);
-  border: .5pt solid var(--sklearn-color-unfitted-level-3);
-}
-
-.sk-estimator-doc-link.fitted span {
-  /* fitted */
-  background: var(--sklearn-color-fitted-level-0);
-  border: var(--sklearn-color-fitted-level-3);
-}
-
-.sk-estimator-doc-link:hover span {
-  display: block;
-}
-
-/* "?"-specific style due to the `<a>` HTML tag */
-
-#sk-container-id-1 a.estimator_doc_link {
-  float: right;
-  font-size: 1rem;
-  line-height: 1em;
-  font-family: monospace;
-  background-color: var(--sklearn-color-background);
-  border-radius: 1rem;
-  height: 1rem;
-  width: 1rem;
-  text-decoration: none;
-  /* unfitted */
-  color: var(--sklearn-color-unfitted-level-1);
-  border: var(--sklearn-color-unfitted-level-1) 1pt solid;
-}
-
-#sk-container-id-1 a.estimator_doc_link.fitted {
-  /* fitted */
-  border: var(--sklearn-color-fitted-level-1) 1pt solid;
-  color: var(--sklearn-color-fitted-level-1);
-}
-
-/* On hover */
-#sk-container-id-1 a.estimator_doc_link:hover {
-  /* unfitted */
-  background-color: var(--sklearn-color-unfitted-level-3);
-  color: var(--sklearn-color-background);
-  text-decoration: none;
-}
-
-#sk-container-id-1 a.estimator_doc_link.fitted:hover {
-  /* fitted */
-  background-color: var(--sklearn-color-fitted-level-3);
-}
-</style><div id="sk-container-id-1" class="sk-top-container"><div class="sk-text-repr-fallback"><pre>IsolationForest(random_state=42)</pre><b>In a Jupyter environment, please rerun this cell to show the HTML representation or trust the notebook. <br />On GitHub, the HTML representation is unable to render, please try loading this page with nbviewer.org.</b></div><div class="sk-container" hidden><div class="sk-item"><div class="sk-estimator fitted sk-toggleable"><input class="sk-toggleable__control sk-hidden--visually" id="sk-estimator-id-1" type="checkbox" checked><label for="sk-estimator-id-1" class="sk-toggleable__label fitted sk-toggleable__label-arrow"><div><div>IsolationForest</div></div><div><a class="sk-estimator-doc-link fitted" rel="noreferrer" target="_blank" href="https://scikit-learn.org/1.6/modules/generated/sklearn.ensemble.IsolationForest.html">?<span>Documentation for IsolationForest</span></a><span class="sk-estimator-doc-link fitted">i<span>Fitted</span></span></div></label><div class="sk-toggleable__content fitted"><pre>IsolationForest(random_state=42)</pre></div> </div></div></div></div>
-
+```python
+##################################
+# Conducting hyperparameter tuning
+# using a Monte Carlo cross-validation setup
+# and identifying the optimal hyperparamter combination
+# based on Isolation Forest 
+##################################
+best_unsupervisded_model_iforest_params, unsupervisded_model_iforest_results_df = run_monte_carlo_cv_unsupervised_outlier_detection_model(IForest, iforest_grid, X_train, model_name="Isolation Forest")
+unsupervised_model_iforest = IForest(**best_unsupervisded_model_iforest_params)
+
+```
+
+    Best Isolation Forest params: {'contamination': 0.1, 'max_features': 1.0, 'max_samples': 0.5, 'n_estimators': 200, 'random_state': 42} with Silhouette: 0.670
+    
+    Top Hyperparameter Combinations Ranked by Mean Silhouette Score:
+    
+
+
+<div>
+<style scoped>
+    .dataframe tbody tr th:only-of-type {
+        vertical-align: middle;
+    }
+
+    .dataframe tbody tr th {
+        vertical-align: top;
+    }
+
+    .dataframe thead th {
+        text-align: right;
+    }
+</style>
+<table border="1" class="dataframe">
+  <thead>
+    <tr style="text-align: right;">
+      <th></th>
+      <th>Params</th>
+      <th>Mean Silhouette</th>
+      <th>Std Silhouette</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th>0</th>
+      <td>{'contamination': 0.1, 'max_features': 1.0, 'm...</td>
+      <td>0.669798</td>
+      <td>0.037598</td>
+    </tr>
+    <tr>
+      <th>1</th>
+      <td>{'contamination': 0.1, 'max_features': 1.0, 'm...</td>
+      <td>0.669306</td>
+      <td>0.041447</td>
+    </tr>
+    <tr>
+      <th>2</th>
+      <td>{'contamination': 0.1, 'max_features': 1.0, 'm...</td>
+      <td>0.657352</td>
+      <td>0.037453</td>
+    </tr>
+    <tr>
+      <th>3</th>
+      <td>{'contamination': 0.1, 'max_features': 1.0, 'm...</td>
+      <td>0.656550</td>
+      <td>0.039295</td>
+    </tr>
+    <tr>
+      <th>4</th>
+      <td>{'contamination': 0.1, 'max_features': 1.0, 'm...</td>
+      <td>0.650613</td>
+      <td>0.040109</td>
+    </tr>
+    <tr>
+      <th>5</th>
+      <td>{'contamination': 0.1, 'max_features': 1.0, 'm...</td>
+      <td>0.650267</td>
+      <td>0.040119</td>
+    </tr>
+    <tr>
+      <th>6</th>
+      <td>{'contamination': 0.1, 'max_features': 0.8, 'm...</td>
+      <td>0.630875</td>
+      <td>0.034092</td>
+    </tr>
+    <tr>
+      <th>7</th>
+      <td>{'contamination': 0.1, 'max_features': 0.5, 'm...</td>
+      <td>0.629509</td>
+      <td>0.036945</td>
+    </tr>
+    <tr>
+      <th>8</th>
+      <td>{'contamination': 0.1, 'max_features': 0.5, 'm...</td>
+      <td>0.629159</td>
+      <td>0.037197</td>
+    </tr>
+    <tr>
+      <th>9</th>
+      <td>{'contamination': 0.1, 'max_features': 0.5, 'm...</td>
+      <td>0.628077</td>
+      <td>0.034480</td>
+    </tr>
+    <tr>
+      <th>10</th>
+      <td>{'contamination': 0.1, 'max_features': 0.5, 'm...</td>
+      <td>0.627933</td>
+      <td>0.036287</td>
+    </tr>
+    <tr>
+      <th>11</th>
+      <td>{'contamination': 0.1, 'max_features': 0.5, 'm...</td>
+      <td>0.627624</td>
+      <td>0.034228</td>
+    </tr>
+    <tr>
+      <th>12</th>
+      <td>{'contamination': 0.1, 'max_features': 0.5, 'm...</td>
+      <td>0.627348</td>
+      <td>0.032344</td>
+    </tr>
+    <tr>
+      <th>13</th>
+      <td>{'contamination': 0.1, 'max_features': 0.8, 'm...</td>
+      <td>0.627154</td>
+      <td>0.033102</td>
+    </tr>
+    <tr>
+      <th>14</th>
+      <td>{'contamination': 0.1, 'max_features': 0.8, 'm...</td>
+      <td>0.626339</td>
+      <td>0.031964</td>
+    </tr>
+    <tr>
+      <th>15</th>
+      <td>{'contamination': 0.1, 'max_features': 0.8, 'm...</td>
+      <td>0.625944</td>
+      <td>0.032133</td>
+    </tr>
+    <tr>
+      <th>16</th>
+      <td>{'contamination': 0.1, 'max_features': 0.8, 'm...</td>
+      <td>0.624097</td>
+      <td>0.030366</td>
+    </tr>
+    <tr>
+      <th>17</th>
+      <td>{'contamination': 0.1, 'max_features': 0.8, 'm...</td>
+      <td>0.621525</td>
+      <td>0.031795</td>
+    </tr>
+  </tbody>
+</table>
+</div>
 
 
 
 ```python
 ##################################
-# Evaluating the apparent performance
-# of the unsupervised learning model
-# based on Isolation Forest 
+# Conducting apparent validation
+# of the optimal Isolation Forest 
+# using the train data
 ##################################
-scores = -model_if.decision_function(X_train)
-visualize_unsupervised_outlier_detection_model(X_train, scores, "Isolation Forest")
-unsupervised_results.append(evaluate_unsupervised_outlier_detection_model(scores, "Isolation Forest"))
+unsupervised_model_iforest.fit(X_train)
+unsupervised_model_iforest_training_scores = unsupervised_model_iforest.decision_function(X_train.values)
+evaluate_unsupervised_outlier_detection_model(unsupervised_model_iforest_training_scores, "Unsupervised Outlier Detection Using Isolation Forest (Training Performance)")
+
+```
+
+    ----------------------------------------
+     Unsupervised Outlier Detection Using Isolation Forest (Training Performance)
+      Score Entropy     : 2.060
+      Score Silhouette  : 0.634
+      Score Variance    : 0.008
+    ----------------------------------------
+    
+
+
+```python
+##################################
+# Visualizing the outlier scores
+# by implementing PCA
+# obtained from the optimal Isolation Forest 
+# using the train data
+##################################
+pca_visualize_unsupervised_outlier_detection_model(X_train, X_train, -unsupervised_model_iforest_training_scores, -unsupervised_model_iforest_training_scores, "Unsupervised Outlier Detection Using Isolation Forest (Training Performance)")
 ```
 
 
     
-![png](output_139_0.png)
+![png](output_143_0.png)
     
 
 
+
+```python
+#################################
+# Visualizing the outlier scores
+# by implementing UMAP
+# obtained from the optimal Isolation Forest 
+# using the train data
+##################################
+umap_visualize_unsupervised_outlier_detection_model(X_train, X_train, -unsupervised_model_iforest_training_scores, -unsupervised_model_iforest_training_scores, "Unsupervised Outlier Detection Using Isolation Forest (Training Performance)")
+```
+
+
+    
+![png](output_144_0.png)
+    
+
+
+
+```python
+##################################
+# Conducting apparent validation
+# of the optimal Isolation Forest 
+# using the train data
+##################################
+unsupervised_model_iforest.fit(X_train)
+unsupervised_model_iforest_validation_scores = unsupervised_model_iforest.decision_function(X_validation.values)
+evaluate_unsupervised_outlier_detection_model(unsupervised_model_iforest_validation_scores, "Unsupervised Outlier Detection Using Isolation Forest (Validation Performance)")
+
+```
+
     ----------------------------------------
-     Isolation Forest
-      Score Entropy     : 2.281
-      Score Silhouette  : 0.619
-      Score Variance    : 0.008
+     Unsupervised Outlier Detection Using Isolation Forest (Validation Performance)
+      Score Entropy     : 1.981
+      Score Silhouette  : 0.683
+      Score Variance    : 0.009
     ----------------------------------------
     
+
+
+```python
+##################################
+# Visualizing the outlier scores
+# by implementing PCA
+# obtained from the optimal Isolation Forest 
+# using the validation data
+##################################
+pca_visualize_unsupervised_outlier_detection_model(X_train, X_validation, -unsupervised_model_iforest_training_scores, -unsupervised_model_iforest_validation_scores, "Unsupervised Outlier Detection Using Isolation Forest (Validation Performance)")
+```
+
+
+    
+![png](output_146_0.png)
+    
+
+
+
+```python
+##################################
+# Visualizing the outlier scores
+# by implementing UMAP
+# obtained from the optimal Isolation Forest 
+# using the validation data
+##################################
+umap_visualize_unsupervised_outlier_detection_model(X_train, X_validation, -unsupervised_model_iforest_training_scores, -unsupervised_model_iforest_validation_scores, "Unsupervised Outlier Detection Using Isolation Forest (Validation Performance)")
+```
+
+
+    
+![png](output_147_0.png)
+    
+
 
 ### 1.8.2 Local Outlier Factor <a class="anchor" id="1.8.2"></a>
 
 
 ```python
-##################################
-# Formulating an unsupervised learning model
-# based on Local Outlier Factor
-##################################
-model_cblof = CBLOF()
-model_cblof.fit(X_train)
 
 ```
-
-
-
-
-    CBLOF(alpha=0.9, beta=5, check_estimator=False, clustering_estimator=None,
-       contamination=0.1, n_clusters=8, n_jobs=None, random_state=None,
-       use_weights=False)
-
-
 
 
 ```python
-##################################
-# Evaluating the apparent performance
-# of the unsupervised learning model
-# based on Local Outlier Factor 
-##################################
-scores = model_cblof.decision_scores_
-visualize_unsupervised_outlier_detection_model(X_train, scores, "CBLOF")
-unsupervised_results.append(evaluate_unsupervised_outlier_detection_model(scores, "CBLOF"))
 
 ```
 
 
-    
-![png](output_142_0.png)
-    
+```python
+
+```
 
 
-    ----------------------------------------
-     CBLOF
-      Score Entropy     : 2.138
-      Score Silhouette  : 0.617
-      Score Variance    : 0.194
-    ----------------------------------------
-    
+```python
+
+```
+
+
+```python
+
+```
+
+
+```python
+
+```
+
+
+```python
+
+```
+
+
+```python
+
+```
 
 ### 1.8.3 K-Nearest Neighbors Outlier Score <a class="anchor" id="1.8.3"></a>
 
 
 ```python
-##################################
-# Formulating an unsupervised learning model
-# based on K-Nearest Neighbors Outlier Score
-##################################
-model_knn = KNN()
-model_knn.fit(X_train)
 
 ```
-
-
-
-
-    KNN(algorithm='auto', contamination=0.1, leaf_size=30, method='largest',
-      metric='minkowski', metric_params=None, n_jobs=1, n_neighbors=5, p=2,
-      radius=1.0)
-
-
 
 
 ```python
-##################################
-# Evaluating the apparent performance
-# of the unsupervised learning model
-# based on K-Nearest Neighbors Outlier Score
-##################################
-scores = model_knn.decision_scores_
-visualize_unsupervised_outlier_detection_model(X_train, scores, "KNN")
-unsupervised_results.append(evaluate_unsupervised_outlier_detection_model(scores, "KNN"))
 
 ```
 
 
-    
-![png](output_145_0.png)
-    
+```python
+
+```
 
 
-    ----------------------------------------
-     KNN
-      Score Entropy     : 1.332
-      Score Silhouette  : 0.831
-      Score Variance    : 0.364
-    ----------------------------------------
-    
+```python
+
+```
+
+
+```python
+
+```
+
+
+```python
+
+```
+
+
+```python
+
+```
+
+
+```python
+
+```
 
 ### 1.8.4 Histogram-Based Outlier Score <a class="anchor" id="1.8.4"></a>
 
 
 ```python
-##################################
-# Formulating an unsupervised learning model
-# based on Histogram-Based Outlier Score 
-##################################
-model_hbos = HBOS()
-model_hbos.fit(X_train)
 
 ```
-
-
-
-
-    HBOS(alpha=0.1, contamination=0.1, n_bins=10, tol=0.5)
-
-
 
 
 ```python
-##################################
-# Evaluating the apparent performance
-# of the unsupervised learning model
-# based on Histogram-Based Outlier Score 
-##################################
-scores = model_hbos.decision_scores_
-visualize_unsupervised_outlier_detection_model(X_train, scores, "HBOS")
-unsupervised_results.append(evaluate_unsupervised_outlier_detection_model(scores, "HBOS"))
 
 ```
 
 
-    
-![png](output_148_0.png)
-    
+```python
+
+```
 
 
-    ----------------------------------------
-     HBOS
-      Score Entropy     : 1.869
-      Score Silhouette  : 0.668
-      Score Variance    : 14.089
-    ----------------------------------------
-    
+```python
+
+```
+
+
+```python
+
+```
+
+
+```python
+
+```
+
+
+```python
+
+```
+
+
+```python
+
+```
 
 # 2. Summary <a class="anchor" id="Summary"></a>
 
