@@ -6346,12 +6346,12 @@ supervised_model_cblof = CBLOF(**best_supervised_model_cblof_params)
 ##################################
 supervised_model_cblof.fit(X_train)
 supervised_model_cblof.decision_scores_ = supervised_model_cblof.decision_function(X_train.values)
-evaluate_supervised_outlier_detection_model(supervised_model_cblof, X_train, y_train, "Supervised Outlier Detection Using CBLOF (Training Performance)")
+evaluate_supervised_outlier_detection_model(supervised_model_cblof, X_train, y_train, "Supervised Outlier Detection Using Local Outlier Factor (Training Performance)")
 
 ```
 
     ----------------------------------------
-     Supervised Outlier Detection Using CBLOF (Training Performance)
+     Supervised Outlier Detection Using Local Outlier Factor (Training Performance)
       AUROC       : 0.985
       Precision@N   : 0.773
       F1-score      : 0.463
@@ -6367,12 +6367,12 @@ evaluate_supervised_outlier_detection_model(supervised_model_cblof, X_train, y_t
 ##################################
 supervised_model_cblof.fit(X_train)
 supervised_model_cblof.decision_scores_ = supervised_model_cblof.decision_function(X_validation.values)
-evaluate_supervised_outlier_detection_model(supervised_model_cblof, X_validation, y_validation, "Supervised Outlier Detection Using CBLOF (Validation Performance)")
+evaluate_supervised_outlier_detection_model(supervised_model_cblof, X_validation, y_validation, "Supervised Outlier Detection Using Local Outlier Factor (Validation Performance)")
 
 ```
 
     ----------------------------------------
-     Supervised Outlier Detection Using CBLOF (Validation Performance)
+     Supervised Outlier Detection Using Local Outlier Factor (Validation Performance)
       AUROC       : 0.965
       Precision@N   : 0.571
       F1-score      : 0.483
@@ -6561,12 +6561,12 @@ supervised_model_knn = KNN(**best_supervised_model_knn_params)
 ##################################
 supervised_model_knn.fit(X_train)
 supervised_model_knn.decision_scores_ = supervised_model_knn.decision_function(X_train.values)
-evaluate_supervised_outlier_detection_model(supervised_model_knn, X_train, y_train, "Supervised Outlier Detection Using KNN (Training Performance)")
+evaluate_supervised_outlier_detection_model(supervised_model_knn, X_train, y_train, "Supervised Outlier Detection Using K-Nearest Neighbors Outlier Score (Training Performance)")
 
 ```
 
     ----------------------------------------
-     Supervised Outlier Detection Using KNN (Training Performance)
+     Supervised Outlier Detection Using K-Nearest Neighbors Outlier Score (Training Performance)
       AUROC       : 0.994
       Precision@N   : 0.864
       F1-score      : 0.463
@@ -6582,12 +6582,12 @@ evaluate_supervised_outlier_detection_model(supervised_model_knn, X_train, y_tra
 ##################################
 supervised_model_knn.fit(X_train)
 supervised_model_knn.decision_scores_ = supervised_model_knn.decision_function(X_validation.values)
-evaluate_supervised_outlier_detection_model(supervised_model_knn, X_validation, y_validation, "Supervised Outlier Detection Using KNN (Validation Performance)")
+evaluate_supervised_outlier_detection_model(supervised_model_knn, X_validation, y_validation, "Supervised Outlier Detection Using K-Nearest Neighbors Outlier Score (Validation Performance)")
 
 ```
 
     ----------------------------------------
-     Supervised Outlier Detection Using KNN (Validation Performance)
+     Supervised Outlier Detection Using K-Nearest Neighbors Outlier Score (Validation Performance)
       AUROC       : 0.994
       Precision@N   : 1.000
       F1-score      : 0.452
@@ -6776,12 +6776,12 @@ supervised_model_hbos = HBOS(**best_supervised_model_hbos_params)
 ##################################
 supervised_model_hbos.fit(X_train)
 supervised_model_hbos.decision_scores_ = supervised_model_hbos.decision_function(X_train.values)
-evaluate_supervised_outlier_detection_model(supervised_model_hbos, X_train, y_train, "Supervised Outlier Detection Using HBOS (Training Performance)")
+evaluate_supervised_outlier_detection_model(supervised_model_hbos, X_train, y_train, "Supervised Outlier Detection Using Histogram-Based Outlier Score (Training Performance)")
 
 ```
 
     ----------------------------------------
-     Supervised Outlier Detection Using HBOS (Training Performance)
+     Supervised Outlier Detection Using Histogram-Based Outlier Score (Training Performance)
       AUROC       : 0.981
       Precision@N   : 0.864
       F1-score      : 0.530
@@ -6797,12 +6797,12 @@ evaluate_supervised_outlier_detection_model(supervised_model_hbos, X_train, y_tr
 ##################################
 supervised_model_hbos.fit(X_train)
 supervised_model_hbos.decision_scores_ = supervised_model_hbos.decision_function(X_validation.values)
-evaluate_supervised_outlier_detection_model(supervised_model_hbos, X_validation, y_validation, "Supervised Outlier Detection Using HBOS (Validation Performance)")
+evaluate_supervised_outlier_detection_model(supervised_model_hbos, X_validation, y_validation, "Supervised Outlier Detection Using Histogram-Based Outlier Score (Validation Performance)")
 
 ```
 
     ----------------------------------------
-     Supervised Outlier Detection Using HBOS (Validation Performance)
+     Supervised Outlier Detection Using Histogram-Based Outlier Score (Validation Performance)
       AUROC       : 0.959
       Precision@N   : 0.714
       F1-score      : 0.500
@@ -6842,7 +6842,7 @@ unsupervised_model_iforest = IForest(**best_unsupervisded_model_iforest_params)
 
 ```
 
-    Best Isolation Forest params: {'contamination': 0.1, 'max_features': 1.0, 'max_samples': 0.5, 'n_estimators': 100, 'random_state': 42} with Silhouette: 0.669
+    Best Isolation Forest params: {'contamination': 0.1, 'max_features': 1.0, 'max_samples': 0.5, 'n_estimators': 200, 'random_state': 42} with Silhouette: 0.670
     
     Top Hyperparameter Combinations Ranked by Mean Silhouette Score:
     
@@ -6875,110 +6875,110 @@ unsupervised_model_iforest = IForest(**best_unsupervisded_model_iforest_params)
     <tr>
       <th>0</th>
       <td>{'contamination': 0.1, 'max_features': 1.0, 'm...</td>
-      <td>0.669133</td>
-      <td>0.041711</td>
+      <td>0.670265</td>
+      <td>0.036819</td>
     </tr>
     <tr>
       <th>1</th>
       <td>{'contamination': 0.1, 'max_features': 1.0, 'm...</td>
-      <td>0.669007</td>
-      <td>0.039016</td>
+      <td>0.669532</td>
+      <td>0.041323</td>
     </tr>
     <tr>
       <th>2</th>
       <td>{'contamination': 0.1, 'max_features': 1.0, 'm...</td>
-      <td>0.656995</td>
-      <td>0.038485</td>
+      <td>0.657458</td>
+      <td>0.037550</td>
     </tr>
     <tr>
       <th>3</th>
       <td>{'contamination': 0.1, 'max_features': 1.0, 'm...</td>
-      <td>0.656230</td>
-      <td>0.040042</td>
+      <td>0.656565</td>
+      <td>0.039306</td>
     </tr>
     <tr>
       <th>4</th>
       <td>{'contamination': 0.1, 'max_features': 1.0, 'm...</td>
-      <td>0.650436</td>
-      <td>0.040536</td>
+      <td>0.650388</td>
+      <td>0.040495</td>
     </tr>
     <tr>
       <th>5</th>
       <td>{'contamination': 0.1, 'max_features': 1.0, 'm...</td>
-      <td>0.650042</td>
-      <td>0.040553</td>
+      <td>0.650327</td>
+      <td>0.040746</td>
     </tr>
     <tr>
       <th>6</th>
       <td>{'contamination': 0.1, 'max_features': 0.8, 'm...</td>
-      <td>0.630162</td>
-      <td>0.035802</td>
+      <td>0.630931</td>
+      <td>0.033991</td>
     </tr>
     <tr>
       <th>7</th>
       <td>{'contamination': 0.1, 'max_features': 0.5, 'm...</td>
-      <td>0.629351</td>
-      <td>0.037408</td>
+      <td>0.629608</td>
+      <td>0.036801</td>
     </tr>
     <tr>
       <th>8</th>
       <td>{'contamination': 0.1, 'max_features': 0.5, 'm...</td>
-      <td>0.629321</td>
-      <td>0.037246</td>
+      <td>0.629290</td>
+      <td>0.037107</td>
     </tr>
     <tr>
       <th>9</th>
       <td>{'contamination': 0.1, 'max_features': 0.5, 'm...</td>
-      <td>0.628254</td>
-      <td>0.034318</td>
+      <td>0.627988</td>
+      <td>0.034808</td>
     </tr>
     <tr>
       <th>10</th>
       <td>{'contamination': 0.1, 'max_features': 0.5, 'm...</td>
-      <td>0.627839</td>
-      <td>0.031853</td>
+      <td>0.627664</td>
+      <td>0.032128</td>
     </tr>
     <tr>
       <th>11</th>
       <td>{'contamination': 0.1, 'max_features': 0.5, 'm...</td>
-      <td>0.627396</td>
-      <td>0.035017</td>
+      <td>0.627214</td>
+      <td>0.034796</td>
     </tr>
     <tr>
       <th>12</th>
-      <td>{'contamination': 0.1, 'max_features': 0.5, 'm...</td>
-      <td>0.627368</td>
-      <td>0.035398</td>
+      <td>{'contamination': 0.1, 'max_features': 0.8, 'm...</td>
+      <td>0.626782</td>
+      <td>0.033268</td>
     </tr>
     <tr>
       <th>13</th>
-      <td>{'contamination': 0.1, 'max_features': 0.8, 'm...</td>
-      <td>0.627272</td>
-      <td>0.033461</td>
+      <td>{'contamination': 0.1, 'max_features': 0.5, 'm...</td>
+      <td>0.626691</td>
+      <td>0.037970</td>
     </tr>
     <tr>
       <th>14</th>
       <td>{'contamination': 0.1, 'max_features': 0.8, 'm...</td>
-      <td>0.626482</td>
-      <td>0.032226</td>
+      <td>0.626569</td>
+      <td>0.032222</td>
     </tr>
     <tr>
       <th>15</th>
       <td>{'contamination': 0.1, 'max_features': 0.8, 'm...</td>
-      <td>0.625186</td>
-      <td>0.033510</td>
+      <td>0.625874</td>
+      <td>0.032237</td>
     </tr>
     <tr>
       <th>16</th>
       <td>{'contamination': 0.1, 'max_features': 0.8, 'm...</td>
-      <td>0.624010</td>
-      <td>0.030554</td>
+      <td>0.624294</td>
+      <td>0.030260</td>
     </tr>
     <tr>
       <th>17</th>
       <td>{'contamination': 0.1, 'max_features': 0.8, 'm...</td>
-      <td>0.621930</td>
-      <td>0.030964</td>
+      <td>0.621779</td>
+      <td>0.031155</td>
     </tr>
   </tbody>
 </table>
@@ -7000,8 +7000,8 @@ evaluate_unsupervised_outlier_detection_model(unsupervised_model_iforest_trainin
 
     ----------------------------------------
      Unsupervised Outlier Detection Using Isolation Forest (Training Performance)
-      Score Entropy     : 2.052
-      Score Silhouette  : 0.637
+      Score Entropy     : 2.060
+      Score Silhouette  : 0.634
       Score Variance    : 0.008
     ----------------------------------------
     
@@ -7057,8 +7057,8 @@ evaluate_unsupervised_outlier_detection_model(unsupervised_model_iforest_validat
 
     ----------------------------------------
      Unsupervised Outlier Detection Using Isolation Forest (Validation Performance)
-      Score Entropy     : 1.979
-      Score Silhouette  : 0.688
+      Score Entropy     : 1.981
+      Score Silhouette  : 0.683
       Score Variance    : 0.009
     ----------------------------------------
     
@@ -7175,8 +7175,8 @@ unsupervised_model_cblof = CBLOF(**best_unsupervisded_model_cblof_params)
     <tr>
       <th>2</th>
       <td>{'alpha': 0.8, 'beta': 5, 'contamination': 0.1...</td>
-      <td>0.818480</td>
-      <td>0.035515</td>
+      <td>0.818636</td>
+      <td>0.035181</td>
     </tr>
     <tr>
       <th>3</th>
@@ -7205,8 +7205,8 @@ unsupervised_model_cblof = CBLOF(**best_unsupervisded_model_cblof_params)
     <tr>
       <th>7</th>
       <td>{'alpha': 0.8, 'beta': 15, 'contamination': 0....</td>
-      <td>0.782661</td>
-      <td>0.035828</td>
+      <td>0.782618</td>
+      <td>0.035875</td>
     </tr>
     <tr>
       <th>8</th>
@@ -7217,20 +7217,20 @@ unsupervised_model_cblof = CBLOF(**best_unsupervisded_model_cblof_params)
     <tr>
       <th>9</th>
       <td>{'alpha': 0.9, 'beta': 5, 'contamination': 0.1...</td>
-      <td>0.774619</td>
-      <td>0.040676</td>
+      <td>0.774597</td>
+      <td>0.040663</td>
     </tr>
     <tr>
       <th>10</th>
-      <td>{'alpha': 0.9, 'beta': 10, 'contamination': 0....</td>
+      <td>{'alpha': 0.9, 'beta': 15, 'contamination': 0....</td>
       <td>0.774521</td>
       <td>0.040836</td>
     </tr>
     <tr>
       <th>11</th>
-      <td>{'alpha': 0.9, 'beta': 15, 'contamination': 0....</td>
-      <td>0.774489</td>
-      <td>0.040867</td>
+      <td>{'alpha': 0.9, 'beta': 10, 'contamination': 0....</td>
+      <td>0.774374</td>
+      <td>0.041115</td>
     </tr>
     <tr>
       <th>12</th>
@@ -7241,8 +7241,8 @@ unsupervised_model_cblof = CBLOF(**best_unsupervisded_model_cblof_params)
     <tr>
       <th>13</th>
       <td>{'alpha': 0.9, 'beta': 10, 'contamination': 0....</td>
-      <td>0.749794</td>
-      <td>0.046823</td>
+      <td>0.749799</td>
+      <td>0.046811</td>
     </tr>
     <tr>
       <th>14</th>
@@ -7253,14 +7253,14 @@ unsupervised_model_cblof = CBLOF(**best_unsupervisded_model_cblof_params)
     <tr>
       <th>15</th>
       <td>{'alpha': 0.8, 'beta': 15, 'contamination': 0....</td>
-      <td>0.746539</td>
-      <td>0.046456</td>
+      <td>0.746314</td>
+      <td>0.046893</td>
     </tr>
     <tr>
       <th>16</th>
       <td>{'alpha': 0.8, 'beta': 10, 'contamination': 0....</td>
-      <td>0.746314</td>
-      <td>0.046893</td>
+      <td>0.746255</td>
+      <td>0.047057</td>
     </tr>
     <tr>
       <th>17</th>
@@ -7391,85 +7391,573 @@ umap_visualize_unsupervised_outlier_detection_model(X_train, X_validation, -unsu
 
 
 ```python
-
+##################################
+# Formulating a hyperparameter tuning grid
+# based on K-Nearest Neighbors Outlier Score
+##################################
+knn_grid = {
+    "method": ["largest", "mean"],
+    "n_neighbors": [5, 10, 15],
+    "metric": ["minkowski", "euclidean", "manhattan"],
+    "contamination": [0.10]
+}
 ```
 
 
 ```python
+#################################
+# Conducting hyperparameter tuning
+# using a Monte Carlo cross-validation setup
+# and identifying the optimal hyperparamter combination
+# based on K-Nearest Neighbors Outlier Score
+##################################
+best_unsupervisded_model_knn_params, unsupervisded_model_knn_results_df = run_monte_carlo_cv_unsupervised_outlier_detection_model(KNN, knn_grid, X_train, model_name="KNN")
+unsupervised_model_knn = KNN(**best_unsupervisded_model_knn_params)
 
 ```
+
+    Best KNN params: {'contamination': 0.1, 'method': 'largest', 'metric': 'minkowski', 'n_neighbors': 5} with Silhouette: 0.974
+    
+    Top Hyperparameter Combinations Ranked by Mean Silhouette Score:
+    
+
+
+<div>
+<style scoped>
+    .dataframe tbody tr th:only-of-type {
+        vertical-align: middle;
+    }
+
+    .dataframe tbody tr th {
+        vertical-align: top;
+    }
+
+    .dataframe thead th {
+        text-align: right;
+    }
+</style>
+<table border="1" class="dataframe">
+  <thead>
+    <tr style="text-align: right;">
+      <th></th>
+      <th>Params</th>
+      <th>Mean Silhouette</th>
+      <th>Std Silhouette</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th>0</th>
+      <td>{'contamination': 0.1, 'method': 'largest', 'm...</td>
+      <td>0.974186</td>
+      <td>0.014496</td>
+    </tr>
+    <tr>
+      <th>1</th>
+      <td>{'contamination': 0.1, 'method': 'largest', 'm...</td>
+      <td>0.974186</td>
+      <td>0.014496</td>
+    </tr>
+    <tr>
+      <th>2</th>
+      <td>{'contamination': 0.1, 'method': 'largest', 'm...</td>
+      <td>0.945479</td>
+      <td>0.018007</td>
+    </tr>
+    <tr>
+      <th>3</th>
+      <td>{'contamination': 0.1, 'method': 'largest', 'm...</td>
+      <td>0.945479</td>
+      <td>0.018007</td>
+    </tr>
+    <tr>
+      <th>4</th>
+      <td>{'contamination': 0.1, 'method': 'largest', 'm...</td>
+      <td>0.945241</td>
+      <td>0.030751</td>
+    </tr>
+    <tr>
+      <th>5</th>
+      <td>{'contamination': 0.1, 'method': 'largest', 'm...</td>
+      <td>0.907555</td>
+      <td>0.020800</td>
+    </tr>
+    <tr>
+      <th>6</th>
+      <td>{'contamination': 0.1, 'method': 'largest', 'm...</td>
+      <td>0.907555</td>
+      <td>0.020800</td>
+    </tr>
+    <tr>
+      <th>7</th>
+      <td>{'contamination': 0.1, 'method': 'largest', 'm...</td>
+      <td>0.882615</td>
+      <td>0.039191</td>
+    </tr>
+    <tr>
+      <th>8</th>
+      <td>{'contamination': 0.1, 'method': 'mean', 'metr...</td>
+      <td>0.830621</td>
+      <td>0.043829</td>
+    </tr>
+    <tr>
+      <th>9</th>
+      <td>{'contamination': 0.1, 'method': 'mean', 'metr...</td>
+      <td>0.830621</td>
+      <td>0.043829</td>
+    </tr>
+    <tr>
+      <th>10</th>
+      <td>{'contamination': 0.1, 'method': 'mean', 'metr...</td>
+      <td>0.817601</td>
+      <td>0.046286</td>
+    </tr>
+    <tr>
+      <th>11</th>
+      <td>{'contamination': 0.1, 'method': 'largest', 'm...</td>
+      <td>0.800989</td>
+      <td>0.045877</td>
+    </tr>
+    <tr>
+      <th>12</th>
+      <td>{'contamination': 0.1, 'method': 'mean', 'metr...</td>
+      <td>0.738154</td>
+      <td>0.049814</td>
+    </tr>
+    <tr>
+      <th>13</th>
+      <td>{'contamination': 0.1, 'method': 'mean', 'metr...</td>
+      <td>0.738154</td>
+      <td>0.049814</td>
+    </tr>
+    <tr>
+      <th>14</th>
+      <td>{'contamination': 0.1, 'method': 'mean', 'metr...</td>
+      <td>0.702704</td>
+      <td>0.050741</td>
+    </tr>
+    <tr>
+      <th>15</th>
+      <td>{'contamination': 0.1, 'method': 'mean', 'metr...</td>
+      <td>0.698095</td>
+      <td>0.045841</td>
+    </tr>
+    <tr>
+      <th>16</th>
+      <td>{'contamination': 0.1, 'method': 'mean', 'metr...</td>
+      <td>0.697819</td>
+      <td>0.046136</td>
+    </tr>
+    <tr>
+      <th>17</th>
+      <td>{'contamination': 0.1, 'method': 'mean', 'metr...</td>
+      <td>0.643565</td>
+      <td>0.049477</td>
+    </tr>
+  </tbody>
+</table>
+</div>
+
 
 
 ```python
+##################################
+# Conducting apparent validation
+# of the optimal K-Nearest Neighbors Outlier Score
+# using the train data
+##################################
+unsupervised_model_knn.fit(X_train)
+unsupervised_model_knn_training_scores = unsupervised_model_knn.decision_function(X_train.values)
+evaluate_unsupervised_outlier_detection_model(unsupervised_model_knn_training_scores, "Unsupervised Outlier Detection Using K-Nearest Neighbors Outlier Score (Training Performance)")
 
 ```
+
+    ----------------------------------------
+     Unsupervised Outlier Detection Using K-Nearest Neighbors Outlier Score (Training Performance)
+      Score Entropy     : 0.594
+      Score Silhouette  : 0.987
+      Score Variance    : 0.188
+    ----------------------------------------
+    
 
 
 ```python
+##################################
+# Visualizing the outlier scores
+# by implementing PCA
+# obtained from the optimal K-Nearest Neighbors Outlier Score
+# using the train data
+##################################
+pca_visualize_unsupervised_outlier_detection_model(X_train, X_train, -unsupervised_model_knn_training_scores, -unsupervised_model_knn_training_scores, "Unsupervised Outlier Detection Using K-Nearest Neighbors Outlier Score (Training Performance)")
 
 ```
+
+
+    
+![png](output_161_0.png)
+    
+
 
 
 ```python
+#################################
+# Visualizing the outlier scores
+# by implementing UMAP
+# obtained from the optimal K-Nearest Neighbors Outlier Score
+# using the train data
+##################################
+umap_visualize_unsupervised_outlier_detection_model(X_train, X_train, -unsupervised_model_knn_training_scores, -unsupervised_model_knn_training_scores, "Unsupervised Outlier Detection Using K-Nearest Neighbors Outlier Score (Training Performance)")
 
 ```
+
+
+    
+![png](output_162_0.png)
+    
+
 
 
 ```python
+##################################
+# Conducting apparent validation
+# of the optimal K-Nearest Neighbors Outlier Score
+# using the train data
+##################################
+unsupervised_model_knn.fit(X_train)
+unsupervised_model_knn_validation_scores = unsupervised_model_knn.decision_function(X_validation.values)
+evaluate_unsupervised_outlier_detection_model(unsupervised_model_knn_validation_scores, "Unsupervised Outlier Detection Using K-Nearest Neighbors Outlier Score (Validation Performance)")
 
 ```
+
+    ----------------------------------------
+     Unsupervised Outlier Detection Using K-Nearest Neighbors Outlier Score (Validation Performance)
+      Score Entropy     : 0.542
+      Score Silhouette  : 1.000
+      Score Variance    : 0.178
+    ----------------------------------------
+    
 
 
 ```python
+##################################
+# Visualizing the outlier scores
+# by implementing PCA
+# obtained from the optimal K-Nearest Neighbors Outlier Score
+# using the validation data
+##################################
+pca_visualize_unsupervised_outlier_detection_model(X_train, X_validation, -unsupervised_model_knn_training_scores, -unsupervised_model_knn_validation_scores, "Unsupervised Outlier Detection Using K-Nearest Neighbors Outlier Score (Validation Performance)")
 
 ```
+
+
+    
+![png](output_164_0.png)
+    
+
 
 
 ```python
+##################################
+# Visualizing the outlier scores
+# by implementing UMAP
+# obtained from the optimal K-Nearest Neighbors Outlier Score
+# using the validation data
+##################################
+umap_visualize_unsupervised_outlier_detection_model(X_train, X_validation, -unsupervised_model_knn_training_scores, -unsupervised_model_knn_validation_scores, "Unsupervised Outlier Detection Using K-Nearest Neighbors Outlier Score (Validation Performance)")
 
 ```
+
+
+    
+![png](output_165_0.png)
+    
+
 
 ### 1.8.4 Histogram-Based Outlier Score <a class="anchor" id="1.8.4"></a>
 
 
 ```python
-
+##################################
+# Formulating a hyperparameter tuning grid
+# based on Histogram-Based Outlier Score
+##################################
+hbos_grid = {
+    "alpha": [0.1, 0.2],
+    "n_bins": [5, 10, 15],
+    "tol": [0.25, 0.50, 0.75],
+    "contamination": [0.10]
+}
 ```
 
 
 ```python
+#################################
+# Conducting hyperparameter tuning
+# using a Monte Carlo cross-validation setup
+# and identifying the optimal hyperparamter combination
+# based on Histogram-Based Outlier Score
+##################################
+best_unsupervisded_model_hbos_params, unsupervisded_model_hbos_results_df = run_monte_carlo_cv_unsupervised_outlier_detection_model(HBOS, hbos_grid, X_train, model_name="HBOS")
+unsupervised_model_hbos = HBOS(**best_unsupervisded_model_hbos_params)
 
 ```
+
+    Best HBOS params: {'alpha': 0.1, 'contamination': 0.1, 'n_bins': 10, 'tol': 0.5} with Silhouette: 0.630
+    
+    Top Hyperparameter Combinations Ranked by Mean Silhouette Score:
+    
+
+
+<div>
+<style scoped>
+    .dataframe tbody tr th:only-of-type {
+        vertical-align: middle;
+    }
+
+    .dataframe tbody tr th {
+        vertical-align: top;
+    }
+
+    .dataframe thead th {
+        text-align: right;
+    }
+</style>
+<table border="1" class="dataframe">
+  <thead>
+    <tr style="text-align: right;">
+      <th></th>
+      <th>Params</th>
+      <th>Mean Silhouette</th>
+      <th>Std Silhouette</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th>0</th>
+      <td>{'alpha': 0.1, 'contamination': 0.1, 'n_bins':...</td>
+      <td>0.630161</td>
+      <td>0.033447</td>
+    </tr>
+    <tr>
+      <th>1</th>
+      <td>{'alpha': 0.2, 'contamination': 0.1, 'n_bins':...</td>
+      <td>0.630140</td>
+      <td>0.032947</td>
+    </tr>
+    <tr>
+      <th>2</th>
+      <td>{'alpha': 0.2, 'contamination': 0.1, 'n_bins':...</td>
+      <td>0.630063</td>
+      <td>0.033637</td>
+    </tr>
+    <tr>
+      <th>3</th>
+      <td>{'alpha': 0.1, 'contamination': 0.1, 'n_bins':...</td>
+      <td>0.630045</td>
+      <td>0.033657</td>
+    </tr>
+    <tr>
+      <th>4</th>
+      <td>{'alpha': 0.1, 'contamination': 0.1, 'n_bins':...</td>
+      <td>0.629939</td>
+      <td>0.033246</td>
+    </tr>
+    <tr>
+      <th>5</th>
+      <td>{'alpha': 0.1, 'contamination': 0.1, 'n_bins':...</td>
+      <td>0.629925</td>
+      <td>0.033625</td>
+    </tr>
+    <tr>
+      <th>6</th>
+      <td>{'alpha': 0.1, 'contamination': 0.1, 'n_bins':...</td>
+      <td>0.629911</td>
+      <td>0.033526</td>
+    </tr>
+    <tr>
+      <th>7</th>
+      <td>{'alpha': 0.2, 'contamination': 0.1, 'n_bins':...</td>
+      <td>0.629813</td>
+      <td>0.032660</td>
+    </tr>
+    <tr>
+      <th>8</th>
+      <td>{'alpha': 0.2, 'contamination': 0.1, 'n_bins':...</td>
+      <td>0.629792</td>
+      <td>0.033634</td>
+    </tr>
+    <tr>
+      <th>9</th>
+      <td>{'alpha': 0.1, 'contamination': 0.1, 'n_bins':...</td>
+      <td>0.629725</td>
+      <td>0.033575</td>
+    </tr>
+    <tr>
+      <th>10</th>
+      <td>{'alpha': 0.2, 'contamination': 0.1, 'n_bins':...</td>
+      <td>0.629693</td>
+      <td>0.032748</td>
+    </tr>
+    <tr>
+      <th>11</th>
+      <td>{'alpha': 0.2, 'contamination': 0.1, 'n_bins':...</td>
+      <td>0.629682</td>
+      <td>0.033549</td>
+    </tr>
+    <tr>
+      <th>12</th>
+      <td>{'alpha': 0.1, 'contamination': 0.1, 'n_bins':...</td>
+      <td>0.629659</td>
+      <td>0.034116</td>
+    </tr>
+    <tr>
+      <th>13</th>
+      <td>{'alpha': 0.2, 'contamination': 0.1, 'n_bins':...</td>
+      <td>0.629645</td>
+      <td>0.033549</td>
+    </tr>
+    <tr>
+      <th>14</th>
+      <td>{'alpha': 0.2, 'contamination': 0.1, 'n_bins':...</td>
+      <td>0.629640</td>
+      <td>0.033676</td>
+    </tr>
+    <tr>
+      <th>15</th>
+      <td>{'alpha': 0.1, 'contamination': 0.1, 'n_bins':...</td>
+      <td>0.629611</td>
+      <td>0.033881</td>
+    </tr>
+    <tr>
+      <th>16</th>
+      <td>{'alpha': 0.1, 'contamination': 0.1, 'n_bins':...</td>
+      <td>0.629595</td>
+      <td>0.033597</td>
+    </tr>
+    <tr>
+      <th>17</th>
+      <td>{'alpha': 0.2, 'contamination': 0.1, 'n_bins':...</td>
+      <td>0.629261</td>
+      <td>0.032886</td>
+    </tr>
+  </tbody>
+</table>
+</div>
+
 
 
 ```python
+##################################
+# Conducting apparent validation
+# of the optimal Histogram-Based Outlier Score
+# using the train data
+##################################
+unsupervised_model_hbos.fit(X_train)
+unsupervised_model_hbos_training_scores = unsupervised_model_hbos.decision_function(X_train.values)
+evaluate_unsupervised_outlier_detection_model(unsupervised_model_hbos_training_scores, "Unsupervised Outlier Detection Using Histogram-Based Outlier Score (Training Performance)")
 
 ```
+
+    ----------------------------------------
+     Unsupervised Outlier Detection Using Histogram-Based Outlier Score (Training Performance)
+      Score Entropy     : 1.809
+      Score Silhouette  : 0.625
+      Score Variance    : 3.519
+    ----------------------------------------
+    
 
 
 ```python
+##################################
+# Visualizing the outlier scores
+# by implementing PCA
+# obtained from the optimal Histogram-Based Outlier Score
+# using the train data
+##################################
+pca_visualize_unsupervised_outlier_detection_model(X_train, X_train, -unsupervised_model_hbos_training_scores, -unsupervised_model_hbos_training_scores, "Unsupervised Outlier Detection Using Histogram-Based Outlier Score (Training Performance)")
 
 ```
+
+
+    
+![png](output_170_0.png)
+    
+
 
 
 ```python
+#################################
+# Visualizing the outlier scores
+# by implementing UMAP
+# obtained from the optimal Histogram-Based Outlier Score
+# using the train data
+##################################
+umap_visualize_unsupervised_outlier_detection_model(X_train, X_train, -unsupervised_model_hbos_training_scores, -unsupervised_model_hbos_training_scores, "Unsupervised Outlier Detection Using Histogram-Based Outlier Score (Training Performance)")
 
 ```
+
+
+    
+![png](output_171_0.png)
+    
+
 
 
 ```python
+##################################
+# Conducting apparent validation
+# of the optimal Histogram-Based Outlier Score
+# using the train data
+##################################
+unsupervised_model_hbos.fit(X_train)
+unsupervised_model_hbos_validation_scores = unsupervised_model_hbos.decision_function(X_validation.values)
+evaluate_unsupervised_outlier_detection_model(unsupervised_model_hbos_validation_scores, "Unsupervised Outlier Detection Using Histogram-Based Outlier Score (Validation Performance)")
 
 ```
+
+    ----------------------------------------
+     Unsupervised Outlier Detection Using Histogram-Based Outlier Score (Validation Performance)
+      Score Entropy     : 2.113
+      Score Silhouette  : 0.667
+      Score Variance    : 2.924
+    ----------------------------------------
+    
 
 
 ```python
+##################################
+# Visualizing the outlier scores
+# by implementing PCA
+# obtained from the optimal Histogram-Based Outlier Score
+# using the validation data
+##################################
+pca_visualize_unsupervised_outlier_detection_model(X_train, X_validation, -unsupervised_model_hbos_training_scores, -unsupervised_model_hbos_validation_scores, "Unsupervised Outlier Detection Using Histogram-Based Outlier Score (Validation Performance)")
 
 ```
+
+
+    
+![png](output_173_0.png)
+    
+
 
 
 ```python
+##################################
+# Visualizing the outlier scores
+# by implementing UMAP
+# obtained from the optimal Histogram-Based Outlier Score
+# using the validation data
+##################################
+umap_visualize_unsupervised_outlier_detection_model(X_train, X_validation, -unsupervised_model_hbos_training_scores, -unsupervised_model_hbos_validation_scores, "Unsupervised Outlier Detection Using Histogram-Based Outlier Score (Validation Performance)")
 
 ```
+
+
+    
+![png](output_174_0.png)
+    
+
 
 # 2. Summary <a class="anchor" id="Summary"></a>
 
