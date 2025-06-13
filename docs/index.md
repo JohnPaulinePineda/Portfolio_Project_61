@@ -157,6 +157,7 @@ import prince
 
 import warnings
 warnings.filterwarnings("ignore", category=FutureWarning, module="sklearn")
+warnings.filterwarnings("ignore", category=UserWarning, module="umap")
 
 ```
 
@@ -5932,7 +5933,7 @@ def pca_visualize_unsupervised_outlier_detection_model(X_train, X_val, train_sco
 ##################################
 def umap_visualize_unsupervised_outlier_detection_model(X_train, X_val, train_scores, val_scores, method_name):
     # Implemeting UMAP from the training data
-    reducer = umap.UMAP(n_components=2)
+    reducer = umap.UMAP(n_components=2, random_state=42)
     X_train_2d = reducer.fit_transform(X_train)
     X_val_2d = reducer.transform(X_val)
 
@@ -6841,7 +6842,7 @@ unsupervised_model_iforest = IForest(**best_unsupervisded_model_iforest_params)
 
 ```
 
-    Best Isolation Forest params: {'contamination': 0.1, 'max_features': 1.0, 'max_samples': 0.5, 'n_estimators': 200, 'random_state': 42} with Silhouette: 0.670
+    Best Isolation Forest params: {'contamination': 0.1, 'max_features': 1.0, 'max_samples': 0.5, 'n_estimators': 100, 'random_state': 42} with Silhouette: 0.669
     
     Top Hyperparameter Combinations Ranked by Mean Silhouette Score:
     
@@ -6874,110 +6875,110 @@ unsupervised_model_iforest = IForest(**best_unsupervisded_model_iforest_params)
     <tr>
       <th>0</th>
       <td>{'contamination': 0.1, 'max_features': 1.0, 'm...</td>
-      <td>0.669798</td>
-      <td>0.037598</td>
+      <td>0.669133</td>
+      <td>0.041711</td>
     </tr>
     <tr>
       <th>1</th>
       <td>{'contamination': 0.1, 'max_features': 1.0, 'm...</td>
-      <td>0.669306</td>
-      <td>0.041447</td>
+      <td>0.669007</td>
+      <td>0.039016</td>
     </tr>
     <tr>
       <th>2</th>
       <td>{'contamination': 0.1, 'max_features': 1.0, 'm...</td>
-      <td>0.657352</td>
-      <td>0.037453</td>
+      <td>0.656995</td>
+      <td>0.038485</td>
     </tr>
     <tr>
       <th>3</th>
       <td>{'contamination': 0.1, 'max_features': 1.0, 'm...</td>
-      <td>0.656550</td>
-      <td>0.039295</td>
+      <td>0.656230</td>
+      <td>0.040042</td>
     </tr>
     <tr>
       <th>4</th>
       <td>{'contamination': 0.1, 'max_features': 1.0, 'm...</td>
-      <td>0.650613</td>
-      <td>0.040109</td>
+      <td>0.650436</td>
+      <td>0.040536</td>
     </tr>
     <tr>
       <th>5</th>
       <td>{'contamination': 0.1, 'max_features': 1.0, 'm...</td>
-      <td>0.650267</td>
-      <td>0.040119</td>
+      <td>0.650042</td>
+      <td>0.040553</td>
     </tr>
     <tr>
       <th>6</th>
       <td>{'contamination': 0.1, 'max_features': 0.8, 'm...</td>
-      <td>0.630875</td>
-      <td>0.034092</td>
+      <td>0.630162</td>
+      <td>0.035802</td>
     </tr>
     <tr>
       <th>7</th>
       <td>{'contamination': 0.1, 'max_features': 0.5, 'm...</td>
-      <td>0.629509</td>
-      <td>0.036945</td>
+      <td>0.629351</td>
+      <td>0.037408</td>
     </tr>
     <tr>
       <th>8</th>
       <td>{'contamination': 0.1, 'max_features': 0.5, 'm...</td>
-      <td>0.629159</td>
-      <td>0.037197</td>
+      <td>0.629321</td>
+      <td>0.037246</td>
     </tr>
     <tr>
       <th>9</th>
       <td>{'contamination': 0.1, 'max_features': 0.5, 'm...</td>
-      <td>0.628077</td>
-      <td>0.034480</td>
+      <td>0.628254</td>
+      <td>0.034318</td>
     </tr>
     <tr>
       <th>10</th>
       <td>{'contamination': 0.1, 'max_features': 0.5, 'm...</td>
-      <td>0.627933</td>
-      <td>0.036287</td>
+      <td>0.627839</td>
+      <td>0.031853</td>
     </tr>
     <tr>
       <th>11</th>
       <td>{'contamination': 0.1, 'max_features': 0.5, 'm...</td>
-      <td>0.627624</td>
-      <td>0.034228</td>
+      <td>0.627396</td>
+      <td>0.035017</td>
     </tr>
     <tr>
       <th>12</th>
       <td>{'contamination': 0.1, 'max_features': 0.5, 'm...</td>
-      <td>0.627348</td>
-      <td>0.032344</td>
+      <td>0.627368</td>
+      <td>0.035398</td>
     </tr>
     <tr>
       <th>13</th>
       <td>{'contamination': 0.1, 'max_features': 0.8, 'm...</td>
-      <td>0.627154</td>
-      <td>0.033102</td>
+      <td>0.627272</td>
+      <td>0.033461</td>
     </tr>
     <tr>
       <th>14</th>
       <td>{'contamination': 0.1, 'max_features': 0.8, 'm...</td>
-      <td>0.626339</td>
-      <td>0.031964</td>
+      <td>0.626482</td>
+      <td>0.032226</td>
     </tr>
     <tr>
       <th>15</th>
       <td>{'contamination': 0.1, 'max_features': 0.8, 'm...</td>
-      <td>0.625944</td>
-      <td>0.032133</td>
+      <td>0.625186</td>
+      <td>0.033510</td>
     </tr>
     <tr>
       <th>16</th>
       <td>{'contamination': 0.1, 'max_features': 0.8, 'm...</td>
-      <td>0.624097</td>
-      <td>0.030366</td>
+      <td>0.624010</td>
+      <td>0.030554</td>
     </tr>
     <tr>
       <th>17</th>
       <td>{'contamination': 0.1, 'max_features': 0.8, 'm...</td>
-      <td>0.621525</td>
-      <td>0.031795</td>
+      <td>0.621930</td>
+      <td>0.030964</td>
     </tr>
   </tbody>
 </table>
@@ -6999,8 +7000,8 @@ evaluate_unsupervised_outlier_detection_model(unsupervised_model_iforest_trainin
 
     ----------------------------------------
      Unsupervised Outlier Detection Using Isolation Forest (Training Performance)
-      Score Entropy     : 2.060
-      Score Silhouette  : 0.634
+      Score Entropy     : 2.052
+      Score Silhouette  : 0.637
       Score Variance    : 0.008
     ----------------------------------------
     
@@ -7014,6 +7015,7 @@ evaluate_unsupervised_outlier_detection_model(unsupervised_model_iforest_trainin
 # using the train data
 ##################################
 pca_visualize_unsupervised_outlier_detection_model(X_train, X_train, -unsupervised_model_iforest_training_scores, -unsupervised_model_iforest_training_scores, "Unsupervised Outlier Detection Using Isolation Forest (Training Performance)")
+
 ```
 
 
@@ -7031,6 +7033,7 @@ pca_visualize_unsupervised_outlier_detection_model(X_train, X_train, -unsupervis
 # using the train data
 ##################################
 umap_visualize_unsupervised_outlier_detection_model(X_train, X_train, -unsupervised_model_iforest_training_scores, -unsupervised_model_iforest_training_scores, "Unsupervised Outlier Detection Using Isolation Forest (Training Performance)")
+
 ```
 
 
@@ -7054,8 +7057,8 @@ evaluate_unsupervised_outlier_detection_model(unsupervised_model_iforest_validat
 
     ----------------------------------------
      Unsupervised Outlier Detection Using Isolation Forest (Validation Performance)
-      Score Entropy     : 1.981
-      Score Silhouette  : 0.683
+      Score Entropy     : 1.979
+      Score Silhouette  : 0.688
       Score Variance    : 0.009
     ----------------------------------------
     
@@ -7069,6 +7072,7 @@ evaluate_unsupervised_outlier_detection_model(unsupervised_model_iforest_validat
 # using the validation data
 ##################################
 pca_visualize_unsupervised_outlier_detection_model(X_train, X_validation, -unsupervised_model_iforest_training_scores, -unsupervised_model_iforest_validation_scores, "Unsupervised Outlier Detection Using Isolation Forest (Validation Performance)")
+
 ```
 
 
@@ -7086,6 +7090,7 @@ pca_visualize_unsupervised_outlier_detection_model(X_train, X_validation, -unsup
 # using the validation data
 ##################################
 umap_visualize_unsupervised_outlier_detection_model(X_train, X_validation, -unsupervised_model_iforest_training_scores, -unsupervised_model_iforest_validation_scores, "Unsupervised Outlier Detection Using Isolation Forest (Validation Performance)")
+
 ```
 
 
@@ -7098,43 +7103,289 @@ umap_visualize_unsupervised_outlier_detection_model(X_train, X_validation, -unsu
 
 
 ```python
+##################################
+# Formulating a hyperparameter tuning grid
+# based on Local Outlier Factor
+##################################
+cblof_grid = {
+    "alpha": [0.9, 0.8],
+    "n_clusters": [8, 12, 16],
+    "beta": [5, 10, 15],
+    "contamination": [0.10],
+    "random_state": [42]
+}
 
 ```
 
 
 ```python
+##################################
+# Conducting hyperparameter tuning
+# using a Monte Carlo cross-validation setup
+# and identifying the optimal hyperparamter combination
+# based on Local Outlier Factor
+##################################
+best_unsupervisded_model_cblof_params, unsupervisded_model_cblof_results_df = run_monte_carlo_cv_unsupervised_outlier_detection_model(CBLOF, cblof_grid, X_train, model_name="CBLOF")
+unsupervised_model_cblof = CBLOF(**best_unsupervisded_model_cblof_params)
 
 ```
+
+    Best CBLOF params: {'alpha': 0.8, 'beta': 15, 'contamination': 0.1, 'n_clusters': 16, 'random_state': 42} with Silhouette: 0.819
+    
+    Top Hyperparameter Combinations Ranked by Mean Silhouette Score:
+    
+
+
+<div>
+<style scoped>
+    .dataframe tbody tr th:only-of-type {
+        vertical-align: middle;
+    }
+
+    .dataframe tbody tr th {
+        vertical-align: top;
+    }
+
+    .dataframe thead th {
+        text-align: right;
+    }
+</style>
+<table border="1" class="dataframe">
+  <thead>
+    <tr style="text-align: right;">
+      <th></th>
+      <th>Params</th>
+      <th>Mean Silhouette</th>
+      <th>Std Silhouette</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th>0</th>
+      <td>{'alpha': 0.8, 'beta': 15, 'contamination': 0....</td>
+      <td>0.818918</td>
+      <td>0.035398</td>
+    </tr>
+    <tr>
+      <th>1</th>
+      <td>{'alpha': 0.8, 'beta': 10, 'contamination': 0....</td>
+      <td>0.818918</td>
+      <td>0.035398</td>
+    </tr>
+    <tr>
+      <th>2</th>
+      <td>{'alpha': 0.8, 'beta': 5, 'contamination': 0.1...</td>
+      <td>0.818480</td>
+      <td>0.035515</td>
+    </tr>
+    <tr>
+      <th>3</th>
+      <td>{'alpha': 0.9, 'beta': 10, 'contamination': 0....</td>
+      <td>0.812227</td>
+      <td>0.040166</td>
+    </tr>
+    <tr>
+      <th>4</th>
+      <td>{'alpha': 0.9, 'beta': 15, 'contamination': 0....</td>
+      <td>0.812227</td>
+      <td>0.040166</td>
+    </tr>
+    <tr>
+      <th>5</th>
+      <td>{'alpha': 0.9, 'beta': 5, 'contamination': 0.1...</td>
+      <td>0.812097</td>
+      <td>0.040081</td>
+    </tr>
+    <tr>
+      <th>6</th>
+      <td>{'alpha': 0.8, 'beta': 10, 'contamination': 0....</td>
+      <td>0.782661</td>
+      <td>0.035828</td>
+    </tr>
+    <tr>
+      <th>7</th>
+      <td>{'alpha': 0.8, 'beta': 15, 'contamination': 0....</td>
+      <td>0.782661</td>
+      <td>0.035828</td>
+    </tr>
+    <tr>
+      <th>8</th>
+      <td>{'alpha': 0.8, 'beta': 5, 'contamination': 0.1...</td>
+      <td>0.781899</td>
+      <td>0.036482</td>
+    </tr>
+    <tr>
+      <th>9</th>
+      <td>{'alpha': 0.9, 'beta': 5, 'contamination': 0.1...</td>
+      <td>0.774619</td>
+      <td>0.040676</td>
+    </tr>
+    <tr>
+      <th>10</th>
+      <td>{'alpha': 0.9, 'beta': 10, 'contamination': 0....</td>
+      <td>0.774521</td>
+      <td>0.040836</td>
+    </tr>
+    <tr>
+      <th>11</th>
+      <td>{'alpha': 0.9, 'beta': 15, 'contamination': 0....</td>
+      <td>0.774489</td>
+      <td>0.040867</td>
+    </tr>
+    <tr>
+      <th>12</th>
+      <td>{'alpha': 0.9, 'beta': 15, 'contamination': 0....</td>
+      <td>0.749799</td>
+      <td>0.046811</td>
+    </tr>
+    <tr>
+      <th>13</th>
+      <td>{'alpha': 0.9, 'beta': 10, 'contamination': 0....</td>
+      <td>0.749794</td>
+      <td>0.046823</td>
+    </tr>
+    <tr>
+      <th>14</th>
+      <td>{'alpha': 0.9, 'beta': 5, 'contamination': 0.1...</td>
+      <td>0.749671</td>
+      <td>0.047051</td>
+    </tr>
+    <tr>
+      <th>15</th>
+      <td>{'alpha': 0.8, 'beta': 15, 'contamination': 0....</td>
+      <td>0.746539</td>
+      <td>0.046456</td>
+    </tr>
+    <tr>
+      <th>16</th>
+      <td>{'alpha': 0.8, 'beta': 10, 'contamination': 0....</td>
+      <td>0.746314</td>
+      <td>0.046893</td>
+    </tr>
+    <tr>
+      <th>17</th>
+      <td>{'alpha': 0.8, 'beta': 5, 'contamination': 0.1...</td>
+      <td>0.745919</td>
+      <td>0.046948</td>
+    </tr>
+  </tbody>
+</table>
+</div>
+
 
 
 ```python
+##################################
+# Conducting apparent validation
+# of the optimal Local Outlier Factor
+# using the train data
+##################################
+unsupervised_model_cblof.fit(X_train)
+unsupervised_model_cblof_training_scores = unsupervised_model_cblof.decision_function(X_train.values)
+evaluate_unsupervised_outlier_detection_model(unsupervised_model_cblof_training_scores, "Unsupervised Outlier Detection Using Local Outlier Factor (Training Performance)")
 
 ```
+
+    ----------------------------------------
+     Unsupervised Outlier Detection Using Local Outlier Factor (Training Performance)
+      Score Entropy     : 1.704
+      Score Silhouette  : 0.766
+      Score Variance    : 0.211
+    ----------------------------------------
+    
 
 
 ```python
+##################################
+# Visualizing the outlier scores
+# by implementing PCA
+# obtained from the optimal Local Outlier Factor
+# using the train data
+##################################
+pca_visualize_unsupervised_outlier_detection_model(X_train, X_train, -unsupervised_model_cblof_training_scores, -unsupervised_model_cblof_training_scores, "Unsupervised Outlier Detection Using Local Outlier Factor (Training Performance)")
 
 ```
+
+
+    
+![png](output_152_0.png)
+    
+
 
 
 ```python
+#################################
+# Visualizing the outlier scores
+# by implementing UMAP
+# obtained from the optimal Local Outlier Factor
+# using the train data
+##################################
+umap_visualize_unsupervised_outlier_detection_model(X_train, X_train, -unsupervised_model_cblof_training_scores, -unsupervised_model_cblof_training_scores, "Unsupervised Outlier Detection Using Local Outlier Factor (Training Performance)")
 
 ```
+
+
+    
+![png](output_153_0.png)
+    
+
 
 
 ```python
+##################################
+# Conducting apparent validation
+# of the optimal Local Outlier Factor
+# using the train data
+##################################
+unsupervised_model_cblof.fit(X_train)
+unsupervised_model_cblof_validation_scores = unsupervised_model_cblof.decision_function(X_validation.values)
+evaluate_unsupervised_outlier_detection_model(unsupervised_model_cblof_validation_scores, "Unsupervised Outlier Detection Using Local Outlier Factor (Validation Performance)")
 
 ```
+
+    ----------------------------------------
+     Unsupervised Outlier Detection Using Local Outlier Factor (Validation Performance)
+      Score Entropy     : 1.758
+      Score Silhouette  : 0.724
+      Score Variance    : 0.174
+    ----------------------------------------
+    
 
 
 ```python
+##################################
+# Visualizing the outlier scores
+# by implementing PCA
+# obtained from the optimal Local Outlier Factor
+# using the validation data
+##################################
+pca_visualize_unsupervised_outlier_detection_model(X_train, X_validation, -unsupervised_model_cblof_training_scores, -unsupervised_model_cblof_validation_scores, "Unsupervised Outlier Detection Using Local Outlier Factor (Validation Performance)")
 
 ```
+
+
+    
+![png](output_155_0.png)
+    
+
 
 
 ```python
+##################################
+# Visualizing the outlier scores
+# by implementing UMAP
+# obtained from the optimal Local Outlier Factor
+# using the validation data
+##################################
+umap_visualize_unsupervised_outlier_detection_model(X_train, X_validation, -unsupervised_model_cblof_training_scores, -unsupervised_model_cblof_validation_scores, "Unsupervised Outlier Detection Using Local Outlier Factor (Validation Performance)")
 
 ```
+
+
+    
+![png](output_156_0.png)
+    
+
 
 ### 1.8.3 K-Nearest Neighbors Outlier Score <a class="anchor" id="1.8.3"></a>
 
